@@ -1,0 +1,63 @@
+<!doctype html>
+
+<html>
+    <head>
+        <style>
+            canvas {
+                border:1px solid black;
+            }
+        </style>
+		<script src="jquery.js"></script>
+        <script src="canvas.js"></script>
+    </head>
+    <body>
+        <div id='layers'>
+            <canvas id="layer0" class="layer" width="750" height="750"></canvas>
+        </div>
+        <script>
+			var down = false;
+            var canvas = $('#layer0').get(0);
+            var can = new DrawingCanvas(canvas);
+            
+            var layers = [can];
+            var currentLayer = 0;
+            
+            function start(x, y) {
+                layers[currentLayer].beginStroke(x, y);
+                layers[currentLayer].doStrokes();
+            }
+            
+            function move(x, y) {
+                layers[currentLayer].strokes[0].addPoint(x, y);
+                layers[currentLayer].doStrokes();
+            }
+            
+            function end() {
+                layers[currentLayer].completeStroke(0);
+                layers[currentLayer].strokes.pop();
+            }
+
+            $('#layers').on('touchstart', function (evt) {
+                start(evt.originalEvent.changedTouches[0].pageX, evt.originalEvent.changedTouches[0].pageY);
+                down = true;
+            }).on('touchmove', function (evt) {
+                if(down){
+                    move(
+                        evt.originalEvent.touches[0].pageX,
+                        evt.originalEvent.touches[0].pageY
+                    );
+                }
+            }).on('mousedown', function(e) {
+                down = true;
+                start(e.offsetX, e.offsetY);
+            }).on('mouseup touchend', function(e) {
+                end();
+                down = false;
+            }).on('mousemove', function(e) {
+                if(down) {
+                    move(e.offsetX, e.offsetY);
+                }
+            });
+		</script>
+    </body>
+</html>

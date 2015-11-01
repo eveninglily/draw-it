@@ -6,6 +6,78 @@
             canvas {
                 border:1px solid black;
             }
+
+            img {
+                width:  48px;
+                height: 48px;
+            }
+
+            #layers {
+                position: relative;
+                left: 400px;
+            }
+
+            .layer {
+                margin: auto;
+                position: absolute;
+                cursor: crosshair;
+                background-color: transparent;
+                padding: 0;
+                overflow: hidden;
+            }
+
+            #layer-controls {
+                border: 1px solid black;
+                width: 366px;
+                position: relative
+            }
+
+            #layer-controls-opacity {
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+
+            #layer-list{
+                font-size: 1.2em;
+                border-collapse: collapse;
+                padding: 0;
+                margin: 0;
+                vertical-align:top;
+                width: 366px;
+            }
+
+            #layer-list img {
+                height: 48px;
+                width: 48px;
+                vertical-align:top;
+            }
+
+            #layer-list tr {
+                border: 1px solid black;
+                height: 48px;
+                padding: 0px;
+                margin: 0px;
+            }
+
+            #layer-list td {
+                padding: 0px;
+                margin: 0px;
+                height: 48px;
+            }
+
+            .layer-opacity {
+                text-align: right;
+                padding-right: 10px;
+            }
+
+            .selected {
+                background-color: #DEF2C5;
+                font-weight: bold;
+            }
+
+            .hidden {
+                color: #BABABA;
+            }
         </style>
 		<script src="jquery.js"></script>
         <script src="canvas.js"></script>
@@ -13,6 +85,36 @@
     <body>
         <div id='layers'>
             <canvas id="layer0" class="layer" width="750" height="750"></canvas>
+        </div>
+        <div id="layer-controls">
+                <table>
+                    <tr id='layer-tools'>
+                        <td id='layer-add'><img src='img/icons/layerAdd.png'></td>
+                        <td id='layer-remove'><img src='img/icons/layerRemove.png'></td>
+                        <td id='layer-clear'><img src='img/icons/clear.png'></td>
+                        <td id='layer-save'><img src='img/icons/save.png'></td>
+                        <td id='layer-visible'><img src='img/icons/layervisible.png'></td>
+                        <td id='layer-mergeup'><img src='img/icons/layerMergeUp.png'></td>
+                        <td id='layer-mergedown'><img src='img/icons/layerMergeDown.png'></td>
+                    </tr>
+                </table>
+                <table id="layer-controls-opacity">
+                    <tr>
+                        <td>
+                            Opacity:
+                        </td>
+                        <td>
+                            <input id='layer-opacity' max='100' min='0' value='100' type='range' />
+                        </td>
+                        <td>
+                            <span id='layer-opacity-value'>100%</span>
+                        </td>
+                    </tr>
+                </table>
+                <table id="layer-list">
+                    <tr id='layer0-control' class='selected'><td><img src='img/icons/layervisible.png'/></td><td>Layer 0</td><td class='layer-opacity'>100%</td></tr>
+                </table>
+            </div>
         </div>
         <script>
 			var down = false;
@@ -35,6 +137,7 @@
             function end() {
                 layers[currentLayer].completeStroke(0);
                 layers[currentLayer].strokes.pop();
+                $('.selected').children(':nth-child(1)').html(layers[currentLayer].toImage());
             }
 
             $('#layers').on('touchstart', function (evt) {
@@ -59,5 +162,6 @@
                 }
             });
 		</script>
+        <script src="layers.js"></script>
     </body>
 </html>

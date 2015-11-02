@@ -135,8 +135,8 @@
             }
             
             function end() {
-                layers[currentLayer].completeStroke(0);
-                layers[currentLayer].strokes.pop();
+                layers[currentLayer].completeStroke(layers[currentLayer].strokes[0]);
+                addChange(layers[currentLayer].strokes.pop());
                 $('.selected').children(':nth-child(1)').html(layers[currentLayer].toImage());
             }
 
@@ -163,5 +163,6 @@
             });
 		</script>
         <script src="layers.js"></script>
+        <script src="revision.js"></script>
     </body>
 </html>

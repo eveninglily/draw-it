@@ -17,6 +17,10 @@ class DrawingCanvas {
 		this.ctx.clearRect(0, 0, this.width, this.height);
 	}
 	
+	clearBuffer() {
+		this.backCanvas.getContext('2d').clearRect(0, 0, this.width, this.height);
+	}
+	
 	toFile() {
 		//TODO: Find a clean way to implement this
 		//var filename = prompt('File name:');
@@ -39,7 +43,7 @@ class DrawingCanvas {
 	drawCanvas(otherCanvas) {
 		this.ctx.drawImage(otherCanvas, 0, 0);
 	}
-	
+
 	drawBlob(blob, x, y) {
 		var reader = new FileReader();
 		reader.onload = function () {
@@ -70,8 +74,7 @@ class DrawingCanvas {
 		this.strokes.push(s);
 	}
 	
-	completeStroke(strokeID) {
-		var stroke = this.strokes[strokeID];
+	completeStroke(stroke) {
 		this.clear();
 		//this.ctx.globalAlpha = 1;
 		this.drawCanvas(this.backCanvas);

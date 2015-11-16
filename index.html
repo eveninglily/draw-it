@@ -2,6 +2,7 @@
 
 <html>
     <head>
+        <!-- TODO: Move/clean styles -->
         <style>
             canvas {
                 border:1px solid black;
@@ -78,13 +79,152 @@
             .hidden {
                 color: #BABABA;
             }
+
+            #tools {
+                border: 1px solid black;
+                width: 366px;
+                height: auto;
+                display:flex;
+            }
+
+            #tools table {
+                border: 1px solid black;
+            }
+
+            #tools h1 {
+                padding:0px;
+                margin: 0px;
+                text-align: center
+            }
+
+            #tool-meta {
+                border: 1px solid black;
+                width: auto;
+                flex-grow: 1;
+            }
+
+            .tool {
+                background-color: #81CD29;
+            }
+
+            .active {
+                background-color: #5C931D;
+            }
+
+            .tool-meta:not(.activeTool) {
+                display: none;
+            }
+
+            #wheel, #wheel canvas {
+                position: relative;
+                border: 0px;
+            }
+
+            #brush-settings {
+                text-align: center;
+            }
+
+            #brush-settings table {
+                border: none;
+            }
+
+            #tool-meta h1 {
+                border-bottom: 1px solid black;
+                margin-bottom: 5px;
+            }
+
+            input[type="number"] {
+                min-width: 10px;
+                max-width: 40px;
+                width: auto;
+            }
         </style>
 		<script src="jquery.js"></script>
         <script src="canvas.js"></script>
+        <script src='colorwheel.js/colorwheel.js'></script>
+
+        <link rel='stylesheet' href='colorwheel.js/colorwheel.css'/>
     </head>
     <body>
         <div id='layers'>
             <canvas id="layer0" class="layer" width="750" height="750"></canvas>
+        </div>
+        <div id="tools">
+            <table>
+                <tr><td><img id="pencil" src="img/brush2.jpg" class="active tool" alt="Brush"/></td></tr>
+                <tr><td><img id="eraser" src="img/icons/eraser.png" class="tool" alt="Eraser"/></td></tr>
+                <tr><td><img id="text" src="img/icons/text.png" class="tool" alt="Text "/></td></tr>
+                <tr><td><img id="eyedropper" src="img/icons/eyedropper.png" class="tool" alt="Eyedropper"/></td></tr>
+                <tr><td><img id="color1" src="img/icons/color1.png" class="tool" alt="Color 1 "/></tr></td>
+                <tr><td><img id="color2" src="img/icons/color2.png" class="tool" alt="Color 2"/></tr></td>
+                <tr><td><img id="undo" src="img/icons/undo.png" class="tool" alt="Undo"/></tr></td>
+                <tr><td><img id="redo" src="img/icons/redo.png" class="tool" alt="Redo"/></tr></td>
+                <tr><td><img id="save" src="img/icons/save.png" class="tool" alt="Save"/></tr></td>
+                <tr><td><img id="clear" src="img/icons/clear.png" class="tool" alt="Clear"/></tr></td>
+                <tr><td><img id="invite" src="img/icons/invite.png" class="tool" alt="Invite"/></tr></td>
+            </table>
+            <div id="tool-meta">
+                <div id="brush-settings" class='tool-meta activeTool'>
+                    <h1>Brush settings</h1>
+                    <table>
+                        <tr>
+                            <td>
+                                Brush Radius:
+                            </td>
+                            <td>
+                                <input id='brush-size' max='100' min='0' value='5' type='range' /><br/>
+                            </td>
+                            <td>
+                                <input type='number' id='brush-size-value' value='5'>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Brush Opacity:
+                            </td>
+                            <td>
+                                <input id='brush-opacity' max='100' min='0' value='100' type='range' /><br/>
+                            </td>
+                            <td>
+                                <input type='number' max='100' min='0' id='brush-opacity-value' value='100'>%
+                            </td>
+                        </tr>
+                    </table>
+                    <!-- https://evanmcintire.com/ss/2015-11-02_01-26-55.png -->
+                </div>
+                <div id="eraser-settings" class='tool-meta'>
+                    <h1>Eraser settings</h1>
+                    <table>
+                        <tr>
+                            <td>
+                                Eraser Radius:
+                            </td>
+                            <td>
+                                <input id='eraser-size' max='100' min='0' value='5' type='range' /><br/>
+                            </td>
+                            <td>
+                                <input type='number' id='eraser-size-value' value='5'>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Eraser Opacity:
+                            </td>
+                            <td>
+                                <input id='eraser-opacity' max='100' min='0' value='100' type='range' /><br/>
+                            </td>
+                            <td>
+                                <input type='number' max='100' min='0' id='eraser-opacity-value' value='100'>%
+                            </td>
+                        </tr>
+                    </table>
+                    <!-- https://evanmcintire.com/ss/2015-11-02_01-26-55.png -->
+                </div>
+                <div id="text-settings" class='tool-meta'>
+                    <h1>Text settings</h1>
+
+                </div>
+            </div>
         </div>
         <div id="layer-controls">
                 <table>
@@ -117,6 +257,7 @@
             </div>
         </div>
         <script src="core.js"></script>
+        <script src="tools.js"></script>
         <script src="layers.js"></script>
         <script src="revision.js"></script>
     </body>

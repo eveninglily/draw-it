@@ -1,0 +1,3 @@
+[submodule "colorwheel.js"]
+	path = colorwheel.js
+	url = git@github.com:McIntireEvan/colorwheel.js.git

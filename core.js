@@ -1,20 +1,27 @@
 var down = false;
 var canvas = $('#layer0').get(0);
 var can = new DrawingCanvas(canvas);
-            
+
 var layers = [can];
 var currentLayer = 0;
-            
+
+var currTool = pencil;
+
 function start(x, y) {
-	layers[currentLayer].beginStroke(x, y);
-    layers[currentLayer].doStrokes();
+	if(currTool.type == "pencil" || currTool.type == "eraser") {
+		layers[currentLayer].beginStroke(currTool, x, y);
+		layers[currentLayer].doStrokes();
+	} else {
+		layers[currentLayer].createText(prompt("Text:"), currTool, x, y);
+		down = false;
+	}
 }
-            
+
 function move(x, y) {
 	layers[currentLayer].strokes[0].addPoint(x, y);
     layers[currentLayer].doStrokes();
 }
-            
+
 function end() {
 	layers[currentLayer].completeStroke(layers[currentLayer].strokes[0]);
     addChange(layers[currentLayer].strokes.pop());

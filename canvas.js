@@ -21,13 +21,9 @@ class DrawingCanvas {
 		this.backCanvas.getContext('2d').clearRect(0, 0, this.width, this.height);
 	}
 
-	toFile() {
-		//TODO: Find a clean way to implement this
-		//var filename = prompt('File name:');
-    	//if(!(filename == '') && !(filename == null)) {
-        	//$('<a href="' + canvas.toDataURL() + '" download="' + filename + '"></a>')[0].click();
-    	//}
-		alert('Saving to a file is being rewritten');
+	saveToDisk() {
+		var data = this.toImage().src.replace('image/png','image/octet-stream');
+		window.location.href = data;
 	}
 
 	toLocalStorage() {
@@ -79,7 +75,7 @@ class DrawingCanvas {
 	}
 
 	beginStroke(tool, x, y) {
-		var s = new Stroke(tool);
+		var s = new Stroke($.extend({}, tool));
 		s.addPoint(x, y);
 		this.strokes.push(s);
 	}

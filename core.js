@@ -7,8 +7,15 @@ var currentLayer = 0;
 
 var currTool = pencil;
 
+$('#layers').on('mouseleave', function() {
+	if(down) {
+		end();
+		down = false;
+	}
+});
+
 function start(x, y) {
-	if(currTool.type == "pencil" || currTool.type == "eraser") {
+	if(currTool.name == "Pencil" || currTool.name == "Eraser") {
 		layers[currentLayer].beginStroke(currTool, x, y);
 		layers[currentLayer].doStrokes();
 	} else {
@@ -46,6 +53,11 @@ $('#layers').on('touchstart', function (evt) {
     down = false;
 }).on('mousemove', function(e) {
 	if(down) {
+		window.getSelection().removeAllRanges()
+		e.preventDefault();
     	move(e.offsetX, e.offsetY);
 	}
 });
+$(document).on('mousemove', function() {
+	window.getSelection().removeAllRanges();
+})

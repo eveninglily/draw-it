@@ -37,14 +37,14 @@ $('#redo').on('click', function(e) {
 	redo();
 });
 
+
+
 var colorWheel = new ColorWheel('wheel', 300);
 
 $('#wheel').insertAfter('#brush-settings h1');
 
-$('.colorwheel-outer, .colorwheel-inner').on('mouseup', function() {
-	//TODO: Add getRGB(), getHex(), getHSL() to ColorWheel
-	var newColor = colorWheel.getColor();
-	currTool.color = 'rgb(' + newColor.r + ',' + newColor.g + ',' + newColor.b + ')';
+$('#wheel').on('mouseup', function() {
+	currTool.color = "#"+colorWheel.getHex();
 });
 
 //TODO: Write common function?

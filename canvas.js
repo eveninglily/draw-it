@@ -60,7 +60,7 @@ class DrawingCanvas {
 		if (this.ctx.strokeStyle != tool.color) { this.ctx.strokeStyle = tool.color };
 		if (this.ctx.fillStyle != tool.color) { this.ctx.fillStyle = tool.color; }
 		if (this.ctx.globalCompositeOperation != tool.globalCompositeOperation) {
-			this.ctx.globalCompositeOperation = tool.globalCompositeOperation;
+			this.ctx.globalCompositeOperation = tool.meta;
 		}
 	}
 
@@ -99,13 +99,8 @@ class DrawingCanvas {
 	drawStroke(stroke) {
 		this.ctx.save();
 		this.setContextValues(stroke.tool);
-        if (stroke.tool.name == 'Eraser') { //TODO: Fix this hacky bs
-			if (this.ctx.globalCompositeOperation != 'xor') {
-				this.ctx.globalCompositeOperation = 'xor';
-			}
-		}
 
-		this.ctx.beginPath();
+        this.ctx.beginPath();
 		if(stroke.path.length > 2) {
 				var i;
 				//Draw bezier curve to the midpoint of stroke[i] and stroke[i + 1], using stroke[i] as a control point

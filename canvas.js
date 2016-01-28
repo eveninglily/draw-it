@@ -7,7 +7,7 @@ class DrawingCanvas {
 		this.ctx = canvas.getContext('2d');
 		this.width = canvas.width;
 		this.height = canvas.height;
-		this.strokes = [];
+		this.strokes = {};
 		this.backCanvas = document.createElement('canvas');
 		this.backCanvas.width = canvas.width;
 		this.backCanvas.height = canvas.height;
@@ -74,10 +74,11 @@ class DrawingCanvas {
 		this.backCanvas.getContext('2d').fillText(text, x, y);
 	}
 
-	beginStroke(tool, x, y) {
+	beginStroke(tool, x, y, id) {
 		var s = new Stroke($.extend({}, tool));
+        console.log(tool);
 		s.addPoint(x, y);
-		this.strokes.push(s);
+		this.strokes[id] = s;
 	}
 
 	completeStroke(stroke) {
@@ -89,10 +90,10 @@ class DrawingCanvas {
 		this.backCanvas.getContext('2d').drawImage(this.canvas, 0, 0);
 	}
 
-	doStrokes() {
+	doStrokes(id) {
 		this.clear();
 		this.drawCanvas(this.backCanvas);
-		this.drawStroke(this.strokes[0]);
+		this.drawStroke(this.strokes[id]);
 	}
 
 	drawStroke(stroke) {

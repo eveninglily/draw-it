@@ -16,8 +16,8 @@ $('#layers').on('mouseleave', function() {
 
 function start(x, y) {
 	if(currTool.name == "Pencil" || currTool.name == "Eraser") {
-		layers[currentLayer].beginStroke(currTool, x, y);
-		layers[currentLayer].doStrokes();
+		layers[currentLayer].beginStroke(currTool, x, y, 'local');
+		layers[currentLayer].doStrokes('local');
 	} else {
 		layers[currentLayer].createText(prompt("Text:"), currTool, x, y);
 		down = false;
@@ -25,13 +25,13 @@ function start(x, y) {
 }
 
 function move(x, y) {
-	layers[currentLayer].strokes[0].addPoint(x, y);
-    layers[currentLayer].doStrokes();
+	layers[currentLayer].strokes['local'].addPoint(x, y);
+    layers[currentLayer].doStrokes('local');
 }
 
 function end() {
-	layers[currentLayer].completeStroke(layers[currentLayer].strokes[0]);
-    addChange(layers[currentLayer].strokes.pop());
+	layers[currentLayer].completeStroke(layers[currentLayer].strokes['local']);
+    addChange(layers[currentLayer].strokes['local']);
     $('.selected').children(':nth-child(1)').html(layers[currentLayer].toImage());
 }
 

@@ -37,8 +37,6 @@ $('#redo').on('click', function(e) {
 	redo();
 });
 
-
-
 var colorWheel = new ColorWheel('wheel', 300);
 
 $('#wheel').insertAfter('#brush-settings h1');

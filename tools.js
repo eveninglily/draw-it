@@ -45,33 +45,34 @@ $('#wheel').on('mouseup', function() {
 	currTool.color = "#"+colorWheel.getHex();
 });
 
-//TODO: Write common function?
-$('#brush-opacity').on('input', function () {
-	$('#brush-opacity-value').val($(this).val());
-	currTool.opacity = ($(this).val() / 100);
-});
+//TODO: combine these 2 functions?
+function initSize(id) {
+    var id2 = id + "-value"
+    $(id).on('input', function () {
+	   $(id2).val($(this).val());
+	   currTool.size = $(this).val();
+    });
 
-$('#brush-opacity-value').on('input', function () {
-	$('#brush-opacity').val($(this).val());
-	currTool.opacity = ($(this).val() / 100);
-});
+    $(id2).on('input', function () {
+	   $(id).val($(this).val());
+	   currTool.size = $(this).val();
+    });
+}
 
-$('#brush-size').on('input', function () {
-	$('#brush-size-value').val($(this).val());
-	currTool.size = $(this).val();
-});
+function initOpacity(id) {
+    var id2 = id + "-value"
+    $(id).on('input', function () {
+	   $(id2).val($(this).val());
+	   currTool.opacity = ($(this).val() / 100);
+    });
 
-$('#brush-size-value').on('input', function () {
-	$('#brush-size').val($(this).val());
-	currTool.size = $(this).val();
-});
+    $(id2).on('input', function () {
+	   $(id).val($(this).val());
+	   currTool.opacity = ($(this).val() / 100);
+    });
+}
 
-$('#eraser-size').on('input', function () {
-	$('#eraser-size-value').val($(this).val());
-	currTool.size = $(this).val();
-});
-
-$('#eraser-size-value').on('input', function () {
-	$('#eraser-size').val($(this).val());
-	currTool.size = $(this).val();
-});
+initSize('#brush-size');
+initSize('#eraser-size');
+initOpacity('#brush-opacity');
+initOpacity('#eraser-opacity');

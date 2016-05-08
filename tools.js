@@ -37,6 +37,20 @@ $('#redo').on('click', function(e) {
 	redo();
 });
 
+$("#save").on('click', function(e) {
+
+});
+
+$("#clear").on('click', function(e) {
+    if(confirm("Clear all layers?")) {
+        for(var i = 0; i < layers.length; i++) {
+            layers[i].clear();
+            layers[i].clearBuffer();
+            $('#layer-list tr').children(':nth-child(1)').html(layers[i].toImage());
+        }
+    }
+});
+
 var colorWheel = new ColorWheel('wheel', 300);
 
 $('#wheel').insertAfter('#brush-settings h1');

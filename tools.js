@@ -30,6 +30,14 @@ $("#text").on('click', function() {
 	$('#wheel').insertAfter('#text-settings h1');
 });
 
+$("#eyedropper").on('click', function(e) {
+    currTool = eyedropper;
+    $('.active').removeClass('active');
+	$(this).addClass('active');
+
+	$('.activeTool').removeClass('activeTool');
+});
+
 $('#undo').on('click', function(e) {
 	undo();
 });

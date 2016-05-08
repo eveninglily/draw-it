@@ -19,7 +19,13 @@ function start(x, y) {
 		layers[currentLayer].beginStroke(currTool, x, y, 'local');
 		layers[currentLayer].doStrokes('local');
 	} else {
-		layers[currentLayer].createText(prompt("Text:"), currTool, x, y);
+        if(currTool.name == "Eyedropper") {
+                var c = layers[currentLayer].ctx.getImageData(x, y, 1, 1).data;
+                var nC = 'rgb(' + c[0] +', ' + c[1] + ', ' + c[2] + ')';
+                pencil.color = nC;
+        } else {
+		      layers[currentLayer].createText(prompt("Text:"), currTool, x, y);
+        }
 		down = false;
 	}
 }

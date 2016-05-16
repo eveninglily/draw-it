@@ -105,10 +105,10 @@ $('#layer-list').on('mousemove', function(e) {
 		var r = $('.selected');
 		e.preventDefault();
 		document.getSelection().removeAllRanges();
-		var y = e.pageY;
+		var y = e.pageY - $('#layer-list').offset().top;
 		if(!(r.index() == 0)) {
 			var prev = r.prev();
-			if(y < (prev.position().top + (prev.height() / 2))) {
+			if(y < (prev.position().top - (prev.height()))) {
 				r.insertBefore(prev);
 				layers.splice(currentLayer + 1, 0, layers.splice(currentLayer, 1)[0]);
 				$(layers[currentLayer].canvas).css('z-index', currentLayer);
@@ -118,7 +118,7 @@ $('#layer-list').on('mousemove', function(e) {
 
 		if(!(r.index() == layers.length - 1)) {
 			var next = r.next();
-			if(y > (next.position().top + (next.height() / 2))) {
+			if(y > (next.position().top - (next.height()))) {
 				r.insertAfter(next);
 				layers.splice(currentLayer - 1, 0, layers.splice(currentLayer, 1)[0]);
 				$(layers[currentLayer].canvas).css('z-index', currentLayer);

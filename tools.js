@@ -38,6 +38,16 @@ $("#eyedropper").on('click', function(e) {
 	$('.activeTool').removeClass('activeTool');
 });
 
+$("#color1").on('click', function() {
+	$('.active').removeClass('active');
+	$(this).addClass('active');
+
+	$('.activeTool').removeClass('activeTool');
+
+	$('#color-settings').addClass('activeTool');
+	$('#wheel').insertAfter('#color-settings h1');
+});
+
 $('#undo').on('click', function(e) {
 	undo();
 });
@@ -65,6 +75,63 @@ $('#wheel').insertAfter('#brush-settings h1');
 
 $('#wheel').on('mouseup', function() {
 	currTool.color = "#"+colorWheel.getHex();
+    $("#color1").css({background: currTool.color});
+});
+
+$('#savePalette').on('click', savePalette);
+
+function savePalette() {
+    var data = {};
+    $('.color').each(function(i, obj) {
+        //Turns out, the ctx treats color as hex, so setting the style to the rgb() we get converts it
+        var rgb = $(obj).css('background-color');
+        layers[currentLayer].ctx.strokeStyle = rgb;
+        data[i] = layers[currentLayer].ctx.strokeStyle;
+    });
+
+    var blob = new Blob([JSON.stringify(data)], {type:"application/json"});
+
+    var url = URL.createObjectURL(blob);
+
+    var a = document.createElement('a');
+    a.download = "palette.json";
+    a.href = url;
+    a.click();
+}
+
+$('#loadPalette').on('change', loadPalette);
+
+function loadPalette() {
+    if(!window.File || !window.FileReader || !window.FileList || !window.Blob) {
+        alert('Sorry, your browser can\'t read this file');
+        return;
+    }
+
+    var file = $('#loadPalette').get(0).files[0];
+    var reader = new FileReader();
+    reader.onload = function() {
+        var json = JSON.parse(reader.result);
+        console.log(json);
+        for(var key in json) {
+            addPaletteItem(json[key]);
+        }
+    }
+    reader.readAsText(file);
+}
+
+function addPaletteItem(color) {
+    $('<div>')
+        .addClass('color')
+        .css({background: color})
+        .appendTo('#color-palette')
+        .on('click', function(e) {
+            var rgb = color;
+            currTool.color = rgb;
+        });
+}
+
+$('#addToPalette').on('click', function(e) {
+    addPaletteItem(currTool.color);
 });
 
 //TODO: combine these 2 functions?

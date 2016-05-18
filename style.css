@@ -8,6 +8,18 @@ img {
     height: 48px;
 }
 
+.context-item {
+    border: 1px solid black;
+    padding: 5px;
+    position: absolute;
+    background: #ffffff;
+}
+
+.context-item:hover {
+    color: white;
+    background: #81CD29;
+}
+
 /* Layers */
 
 #layers {

@@ -52,6 +52,17 @@ function addPaletteItem(color) {
             $(this).data("longClick", setTimeout(function(){
 			    lClick = true;
 		    },200));
+        }).on('contextmenu', function(e) {
+            $("<div>").on('click', function() {
+                paletteItem.remove();
+                $(this).remove();
+            }).html("Delete")
+            .addClass('context-item').css({
+                left: e.pageX,
+                top: e.pageY
+            }).appendTo('body');
+
+            return false;
         });
 
         paletteItem.appendTo('#color-palette');
@@ -60,6 +71,11 @@ function addPaletteItem(color) {
 		    lClick = false;
 	    });
 }
+
+$(document).on('mousedown', function(e) {
+    if(!(e.target.className == "context-item"))
+        $('.context-item').remove();
+});
 
 //TODO: write common function for this type of thing
 $('#color-settings').on('mousemove', function(e) {

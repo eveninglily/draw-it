@@ -145,6 +145,10 @@ input[type="number"] {
     overflow-y: scroll;
 }
 
+#color-palette:active {
+    cursor: -webkit-grabbing !important;
+}
+
 /* Colorwheel hacks */
 
 

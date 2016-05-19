@@ -11,10 +11,10 @@ var changes = [];
 var currentChange = 0;
 
 function addChange(stroke) {
-	currentChange++;
 	if (currentChange != changes.length) {
         changes.splice(currentChange, changes.length - currentChange);
     }
+	currentChange++;
 	changes.push(new Change(stroke, currentLayer));
 }
 

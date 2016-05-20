@@ -55,13 +55,32 @@ $('#layers').on('touchstart', function (evt) {
 	down = true;
     start(e.offsetX, e.offsetY);
 }).on('mouseup touchend', function(e) {
-	end();
-    down = false;
+	if(down) {
+		end();
+		down = false;
+	}
 }).on('mousemove', function(e) {
 	if(down) {
 		window.getSelection().removeAllRanges()
 		e.preventDefault();
     	move(e.offsetX, e.offsetY);
+	}
+	if(currTool.name == "Eyedropper") {
+		$('#eyedropper-holder').css({left: e.pageX - 55, top: e.pageY - 55});
+		var l = $('#layers').position();
+		var c = layers[currentLayer].ctx.getImageData(e.pageX - l.left, e.pageY - l.top, 1, 1).data;
+		var nC = 'rgb(' + c[0] +', ' + c[1] + ', ' + c[2] + ')';
+
+		$('#eyedropper-bottom').css({'border-color': pencil.color});
+		$('#eyedropper-top').css({'border-color': nC});
+	}
+}).on('mouseenter', function() {
+	if(currTool.name == "Eyedropper") {
+		$('.eyedropper-wheel').css({display:'block'});
+	}
+}).on('mouseleave', function() {
+	if(currTool.name == "Eyedropper") {
+		$('.eyedropper-wheel').css({display:'none'});
 	}
 });
 $(document).on('mousemove', function() {

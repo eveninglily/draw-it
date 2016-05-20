@@ -161,6 +161,49 @@ input[type="number"] {
     cursor: -webkit-grabbing !important;
 }
 
+/*TODO: Clean up this CSS*/
+#eyedropper-top {
+    border: 10px solid blue;
+    border-top-left-radius: 90px;
+    border-top-right-radius: 90px;
+    box-sizing: border-box;
+    border-bottom: 0;
+    height: 45px;
+    width: 90px;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+#eyedropper-bottom {
+    border: 10px solid red;
+    border-bottom-left-radius: 90px;
+    border-bottom-right-radius: 90px;
+    box-sizing: border-box;
+    border-top: 0;
+    height: 45px;
+    width: 90px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
+
+#eyedropper-outer {
+    border: 10px solid darkgray;
+    border-radius: 100%;
+    height: 90px;
+    width: 90px;
+    position: absolute;
+    cursor: crosshair;
+}
+
+#eyedropper-holder {
+    position: absolute;
+}
+
+.eyedropper-wheel {
+    pointer-events: none;
+    display: none;
+}
+
 /* Colorwheel hacks */
 
 

@@ -1,8 +1,4 @@
 /* General Styles */
-canvas {
-    border:1px solid black;
-}
-
 img {
     width:  48px;
     height: 48px;
@@ -32,47 +28,27 @@ img {
     position: absolute;
     cursor: crosshair;
     background-color: transparent;
-    padding: 0;
-    overflow: hidden;
+    border: 1px solid black;
 }
 
 #layer-controls {
     border: 1px solid black;
     width: 366px;
-    position: relative
 }
 
 #layer-controls-opacity {
-    margin-left: auto !important;
-    margin-right: auto !important;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-#layer-list{
+#layer-list {
     font-size: 1.2em;
     border-collapse: collapse;
-    padding: 0;
-    margin: 0;
-    vertical-align:top;
     width: 366px;
-}
-
-#layer-list img {
-    height: 48px;
-    width: 48px;
-    vertical-align:top;
 }
 
 #layer-list tr {
     border: 1px solid black;
-    height: 48px;
-    padding: 0px;
-    margin: 0px;
-}
-
-#layer-list td {
-    padding: 0px;
-    margin: 0px;
-    height: 48px;
 }
 
 .layer-opacity {
@@ -98,12 +74,7 @@ img {
     display:flex;
 }
 
-#tools table {
-    border: 1px solid black;
-}
-
 #tools h1 {
-    padding:0px;
     margin: 0px;
     text-align: center
 }
@@ -145,8 +116,6 @@ input[type="number"] {
     width: auto;
 }
 .color {
-    width: 48px;
-    height: 48px;
     display: inline-block;
     margin: 3px;
     border: 1px solid black;
@@ -158,32 +127,33 @@ input[type="number"] {
 }
 
 #color-palette:active {
-    cursor: -webkit-grabbing !important;
+    cursor: -webkit-grabbing;
+}
+
+#color-palette div {
+    width: 48px;
+    height: 48px;
 }
 
 /*TODO: Clean up this CSS*/
 #eyedropper-top {
     border: 10px solid blue;
-    border-top-left-radius: 90px;
-    border-top-right-radius: 90px;
-    box-sizing: border-box;
     border-bottom: 0;
-    height: 45px;
-    width: 90px;
-    margin-top: 10px;
-    margin-left: 10px;
+    border-radius: 90px 90px 0px 0px;
+    margin: 10px 0px 0px 10px;
 }
 
 #eyedropper-bottom {
     border: 10px solid red;
-    border-bottom-left-radius: 90px;
-    border-bottom-right-radius: 90px;
-    box-sizing: border-box;
     border-top: 0;
+    border-radius: 0px 0px 90px 90px;
+    margin: 0px 0px 10px 10px;
+}
+
+.eyedropper-inner {
     height: 45px;
     width: 90px;
-    margin-bottom: 10px;
-    margin-left: 10px;
+    box-sizing: border-box;
 }
 
 #eyedropper-outer {
@@ -206,15 +176,7 @@ input[type="number"] {
 
 /* Colorwheel hacks */
 
-
 #wheel {
     position: relative;
-    border: 0px;
-    margin: 0px;
-    padding: 0px;
     text-align: left;
-}
-
-#wheel canvas {
-    border: 0px;
 }

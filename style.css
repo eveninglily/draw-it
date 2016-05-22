@@ -85,7 +85,7 @@ img {
     flex-grow: 1;
 }
 
-.tool, #layer-tools td {
+.tool, .action, #layer-tools td {
     background-color: #81CD29;
 }
 
@@ -115,6 +115,7 @@ input[type="number"] {
     max-width: 40px;
     width: auto;
 }
+
 .color {
     display: inline-block;
     margin: 3px;

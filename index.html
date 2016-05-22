@@ -10,6 +10,13 @@
         <link rel='stylesheet' href='colorwheel.js/colorwheel.css'/>
     </head>
     <body>
+        <div id="actions">
+            <img id="undo" src="img/icons/undo.png" class="action" alt="Undo"/>
+            <img id="redo" src="img/icons/redo.png" class="action" alt="Redo"/>
+            <img id="save" src="img/icons/save.png" class="action" alt="Save"/>
+            <img id="clear" src="img/icons/clear.png" class="action" alt="Clear"/>
+            <img id="invite" src="img/icons/invite.png" class="action" alt="Invite"/>
+        </div>
         <div id='layers'>
             <canvas id="layer0" class="layer" width="750" height="750"></canvas>
         </div>
@@ -17,15 +24,10 @@
             <table>
                 <tr><td><img id="pencil" src="img/icons/brush.png" class="active tool" alt="Brush"/></td></tr>
                 <tr><td><img id="eraser" src="img/icons/eraser.png" class="tool" alt="Eraser"/></td></tr>
-                <tr><td><img id="text" src="img/icons/text.png" class="tool" alt="Text "/></td></tr>
                 <tr><td><img id="eyedropper" src="img/icons/eyedropper.png" class="tool" alt="Eyedropper"/></td></tr>
+                <tr><td><img id="text" src="img/icons/text.png" class="tool" alt="Text "/></td></tr>
                 <tr><td><img id="color1" src="img/icons/color1.png" class="tool" alt="Color 1 "/></tr></td>
                 <tr><td><img id="color2" src="img/icons/color2.png" class="tool" alt="Color 2"/></tr></td>
-                <tr><td><img id="undo" src="img/icons/undo.png" class="tool" alt="Undo"/></tr></td>
-                <tr><td><img id="redo" src="img/icons/redo.png" class="tool" alt="Redo"/></tr></td>
-                <tr><td><img id="save" src="img/icons/save.png" class="tool" alt="Save"/></tr></td>
-                <tr><td><img id="clear" src="img/icons/clear.png" class="tool" alt="Clear"/></tr></td>
-                <tr><td><img id="invite" src="img/icons/invite.png" class="tool" alt="Invite"/></tr></td>
             </table>
             <div id="tool-meta">
                 <div id="brush-settings" class='tool-meta activeTool'>
@@ -36,7 +38,7 @@
                                 Brush Radius:
                             </td>
                             <td>
-                                <input id='brush-size' max='100' min='0' value='5' type='range' /><br/>
+                                <input id='brush-size' max='50' min='1' value='5' type='range' /><br/>
                             </td>
                             <td>
                                 <input type='number' id='brush-size-value' value='5'>
@@ -54,7 +56,6 @@
                             </td>
                         </tr>
                     </table>
-                    <!-- https://evanmcintire.com/ss/2015-11-02_01-26-55.png -->
                 </div>
                 <div id="eraser-settings" class='tool-meta'>
                     <h1>Eraser settings</h1>
@@ -82,7 +83,6 @@
                             </td>
                         </tr>
                     </table>
-                    <!-- https://evanmcintire.com/ss/2015-11-02_01-26-55.png -->
                 </div>
                 <div id="text-settings" class='tool-meta'>
                     <h1>Text settings</h1>

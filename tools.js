@@ -1,56 +1,39 @@
-$("#pencil").on('click', function() {
-	currTool = pencil;
+$('.tool').on('click', function() {
 	$('.active').removeClass('active');
 	$(this).addClass('active');
-
 	$('.activeTool').removeClass('activeTool');
+});
+
+$("#pencil").on('click', function() {
+	currTool = pencil;
 
 	$('#brush-settings').addClass('activeTool');
-	$('#wheel').insertAfter('#brush-settings h1');
 });
 
 $("#eraser").on('click', function() {
 	currTool = eraser;
-	$('.active').removeClass('active');
-	$(this).addClass('active');
-
-	$('.activeTool').removeClass('activeTool');
 
 	$('#eraser-settings').addClass('activeTool');
 });
 
 $("#text").on('click', function() {
 	currTool = text;
-	$('.active').removeClass('active');
-	$(this).addClass('active');
-
-	$('.activeTool').removeClass('activeTool');
 
 	$('#text-settings').addClass('activeTool');
-	$('#wheel').insertAfter('#text-settings h1');
 });
 
 $("#eyedropper").on('click', function(e) {
     currTool = eyedropper;
-    $('.active').removeClass('active');
-	$(this).addClass('active');
-
-	$('.activeTool').removeClass('activeTool');
 });
 
-$("#color1").on('click', function() {
-	$('.active').removeClass('active');
-	$(this).addClass('active');
-
-	$('.activeTool').removeClass('activeTool');
-
+$("#color1, #color2").on('click', function() {
 	$('#color-settings').addClass('activeTool');
-	$('#wheel').insertAfter('#color-settings h1');
 });
 
 $('#undo').on('click', function(e) {
 	undo();
 });
+
 $('#redo').on('click', function(e) {
 	redo();
 });
@@ -71,9 +54,9 @@ $("#clear").on('click', function(e) {
 
 var colorWheel = new ColorWheel('wheel', 300);
 
-$('#wheel').insertAfter('#brush-settings h1');
+$('#wheel').insertBefore('#brush-settings');
 
-$('#wheel').on('mouseup', function() {
+$('#wheel').on('mousemove', function() {
 	currTool.color = "#"+colorWheel.getHex();
     $("#color1").css({background: currTool.color});
 });

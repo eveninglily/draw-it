@@ -42,11 +42,13 @@ class DrawingCanvas {
 
 	drawBlob(blob, x, y) {
 		var reader = new FileReader();
+		var _t = this;
 		reader.onload = function () {
 			var img = new Image();
 			img.src = reader.result;
 			img.onload = function () {
-				this.ctx.drawImage(img, x, y);
+				_t.ctx.drawImage(img, x, y);
+				_t.backCanvas.getContext('2d').drawImage(img, x, y);
 			}
 		}
 		reader.readAsDataURL(blob);

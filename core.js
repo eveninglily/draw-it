@@ -23,6 +23,7 @@ function start(x, y) {
                 var c = layers[currentLayer].ctx.getImageData(x, y, 1, 1).data;
                 var nC = 'rgb(' + c[0] +', ' + c[1] + ', ' + c[2] + ')';
                 pencil.color = nC;
+                colorWheel.setColor(c[0], c[1], c[2]);
         } else {
 		      layers[currentLayer].createText(prompt("Text:"), currTool, x, y);
         }

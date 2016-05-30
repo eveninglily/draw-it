@@ -56,39 +56,34 @@ var colorWheel = new ColorWheel('wheel', 300);
 
 $('#wheel').insertBefore('#brush-settings');
 
+
+//TODO: replace
 $('#wheel').on('mousemove', function() {
 	currTool.color = "#"+colorWheel.getHex();
     $("#color1").css({background: currTool.color});
 });
 
-//TODO: combine these 2 functions?
-function initSize(id) {
-    var id2 = id + "-value"
-    $(id).on('input', function () {
-	   $(id2).val($(this).val());
+function initSliders(toolName) {
+	$('#' + toolName + '-size').on('input', function () {
+	   $('#' + toolName + '-size-value').val($(this).val());
 	   currTool.size = $(this).val();
     });
 
-    $(id2).on('input', function () {
-	   $(id).val($(this).val());
+	$('#' + toolName + '-size-value').on('input', function () {
+	   $('#' + toolName + '-size').val($(this).val());
 	   currTool.size = $(this).val();
     });
-}
 
-function initOpacity(id) {
-    var id2 = id + "-value"
-    $(id).on('input', function () {
-	   $(id2).val($(this).val());
+	$('#' + toolName + '-opacity').on('input', function () {
+	   $('#' + toolName + '-size-value').val($(this).val());
 	   currTool.opacity = ($(this).val() / 100);
     });
 
-    $(id2).on('input', function () {
-	   $(id).val($(this).val());
+	$('#' + toolName + '-opacity-value').on('input', function () {
+	   $('#' + toolName + '-size').val($(this).val());
 	   currTool.opacity = ($(this).val() / 100);
     });
 }
 
-initSize('#brush-size');
-initSize('#eraser-size');
-initOpacity('#brush-opacity');
-initOpacity('#eraser-opacity');
+initSliders('brush');
+initSliders('eraser');

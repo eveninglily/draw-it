@@ -97,17 +97,13 @@ img {
     display: none;
 }
 
-#brush-settings {
-    text-align: center;
-}
-
-#brush-settings table {
-    border: none;
-}
-
 #tool-meta h1 {
     border-bottom: 1px solid black;
     margin-bottom: 5px;
+}
+
+#brush-settings div, #eraser-settings div{
+    padding: 10px;
 }
 
 input[type="number"] {

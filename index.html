@@ -32,57 +32,21 @@
             <div id="tool-meta">
                 <div id="brush-settings" class='tool-meta activeTool'>
                     <h1>Brush settings</h1>
-                    <table>
-                        <tr>
-                            <td>
-                                Brush Radius:
-                            </td>
-                            <td>
-                                <input id='brush-size' max='50' min='1' value='5' type='range' /><br/>
-                            </td>
-                            <td>
-                                <input type='number' id='brush-size-value' value='5'>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Brush Opacity:
-                            </td>
-                            <td>
-                                <input id='brush-opacity' max='100' min='0' value='100' type='range' /><br/>
-                            </td>
-                            <td>
-                                <input type='number' max='100' min='0' id='brush-opacity-value' value='100'>%
-                            </td>
-                        </tr>
-                    </table>
+                    <div>
+                        <label> Size <input type='number' id='brush-size-value' value='5'> </label><br/>
+                        <input id='brush-size' max='50' min='1' value='5' type='range' /><br/>
+                        <label> Opacity: <input type='number' max='100' min='0' id='brush-opacity-value' value='100'> </label><br/>
+                        <input id='brush-opacity' max='100' min='0' value='100' type='range' /><br/>
+                    </div>
                 </div>
                 <div id="eraser-settings" class='tool-meta'>
                     <h1>Eraser settings</h1>
-                    <table>
-                        <tr>
-                            <td>
-                                Eraser Radius:
-                            </td>
-                            <td>
-                                <input id='eraser-size' max='100' min='0' value='5' type='range' /><br/>
-                            </td>
-                            <td>
-                                <input type='number' id='eraser-size-value' value='5'>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Eraser Opacity:
-                            </td>
-                            <td>
-                                <input id='eraser-opacity' max='100' min='0' value='100' type='range' /><br/>
-                            </td>
-                            <td>
-                                <input type='number' max='100' min='0' id='eraser-opacity-value' value='100'>%
-                            </td>
-                        </tr>
-                    </table>
+                    <div>
+                        <label> Size <input type='number' id='eraser-size-value' value='5'> </label><br/>
+                        <input id='eraser-size' max='50' min='1' value='5' type='range' /><br/>
+                        <label> Opacity: <input type='number' max='100' min='0' id='eraser-opacity-value' value='100'> </label><br/>
+                        <input id='eraser-opacity' max='100' min='0' value='100' type='range' /><br/>
+                    </div>
                 </div>
                 <div id="text-settings" class='tool-meta'>
                     <h1>Text settings</h1>

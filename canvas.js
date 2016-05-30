@@ -192,7 +192,7 @@ class Tool {
 	}
 }
 
-var pencil = new Tool("Pencil", 5, "source-over", "#FF0000");
+var pencil = new Tool("Pencil", 5, "source-over", "#000000");
 var eraser = new Tool("Eraser", 3, "destination-out", "rgba(255,255,255,1)");
 var text = new Tool("Text", "32px serif", "", "#FF0000");
 var eyedropper = new Tool("Eyedropper");

@@ -1,3 +1,7 @@
+var color1 = '#000000';
+var color2 = '#ffffff';
+var activeColor = 1;
+
 $('.tool').on('click', function() {
 	$('.active').removeClass('active');
 	$(this).addClass('active');
@@ -26,10 +30,6 @@ $("#eyedropper").on('click', function(e) {
     currTool = eyedropper;
 });
 
-$("#color1, #color2").on('click', function() {
-	$('#color-settings').addClass('activeTool');
-});
-
 $('#undo').on('click', function(e) {
 	undo();
 });
@@ -50,17 +50,6 @@ $("#clear").on('click', function(e) {
             $('#layer-list tr').children(':nth-child(1)').html(layers[i].toImage());
         }
     }
-});
-
-var colorWheel = new ColorWheel('wheel', 300);
-
-$('#wheel').insertBefore('#brush-settings');
-
-
-//TODO: replace
-$('#wheel').on('mousemove', function() {
-	currTool.color = "#"+colorWheel.getHex();
-    $("#color1").css({background: currTool.color});
 });
 
 function initSliders(toolName) {

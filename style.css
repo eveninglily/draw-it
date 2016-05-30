@@ -1,4 +1,11 @@
 /* General Styles */
+body {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 img {
     width:  48px;
     height: 48px;
@@ -176,4 +183,8 @@ input[type="number"] {
 #wheel {
     position: relative;
     text-align: left;
+}
+
+#hexValue {
+    width: 5em;
 }

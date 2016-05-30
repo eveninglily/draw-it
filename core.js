@@ -84,6 +84,3 @@ $('#layers').on('touchstart', function (evt) {
 		$('.eyedropper-wheel').css({display:'none'});
 	}
 });
-$(document).on('mousemove', function() {
-	window.getSelection().removeAllRanges();
-})

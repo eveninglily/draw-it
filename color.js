@@ -1,3 +1,69 @@
+var colorWheel = new ColorWheel('wheel', 300);
+colorWheel.setColorHex(color1);
+$('#wheel').insertBefore('#color1');
+$("#color1").css({background: color1});
+$("#color2").css({background: color2});
+
+$('#wheel').on('mousemove', function() {
+	currTool.color = "#"+colorWheel.getHex();
+    $('#hexValue').val("#"+colorWheel.getHex());
+	if(activeColor == 1) {
+        $("#color1").css({background: currTool.color});
+        color1 = currTool.color;
+	} else {
+		$("#color2").css({background: currTool.color});
+        color2 = currTool.color;
+	}
+});
+
+$('#hexValue').on('keypress', function(e) {
+    var char = String.fromCharCode(e.which);
+    if(!char.match(/([a-f]|[0-9])+/ig)) {
+        e.preventDefault();
+        return false;
+    }
+
+    if($(this).val().replace('#', '').length == 6) {
+        e.preventDefault();
+        return false;
+    }
+})
+
+$('#hexValue').on('blur', function() {
+    var str = $(this).val().replace('#','');
+    if(!str.match(/([a-f]|[0-9])+$/ig)) {
+        $(this).val(currTool.color);
+    }
+
+    if(str.length != 6) {
+        $(this).val(currTool.color);
+    }
+
+    colorWheel.setColorHex('#' + str);
+    currTool.color = '#' + str;
+    if(activeColor == 1) {
+        $("#color1").css({background: currTool.color});
+        color1 = currTool.color;
+	} else {
+		$("#color2").css({background: currTool.color});
+        color2 = currTool.color;
+	}
+});
+
+$("#color1").on('click', function() {
+	activeColor = 1;
+	currTool.color = color1;
+	colorWheel.setColorHex(color1);
+    $('#hexValue').val("#"+colorWheel.getHex());
+});
+
+$("#color2").on('click', function() {
+	activeColor = 2;
+	currTool.color = color2;
+	colorWheel.setColorHex(color2);
+    $('#hexValue').val("#"+colorWheel.getHex());
+});
+
 $('#savePalette').on('click', savePalette);
 
 function savePalette() {

@@ -19,9 +19,8 @@
             <img id="save" src="img/icons/save.png" class="action" alt="Save"/>
             <img id="clear" src="img/icons/clear.png" class="action" alt="Clear"/>
             <img id="invite" src="img/icons/invite.png" class="action" alt="Invite"/>
-        </div>
-        <div id='layers'>
-            <canvas id="layer0" class="layer" width="750" height="750"></canvas>
+            <img id="settings" src="img/icons/settings.png" class="action" alt="Settings"/>
+            <img id="help" src="img/icons/help.png" class="action" alt="Help"/>
         </div>
         <div id="tools">
             <table>
@@ -80,35 +79,37 @@
                 </div>
             </div>
         </div>
+        <div id='layers'>
+            <canvas id="layer0" class="layer" width="750" height="750"></canvas>
+        </div>
         <div id="layer-controls">
-                <table>
-                    <tr id='layer-tools'>
-                        <td id='layer-add'><img src='img/icons/layerAdd.png'></td>
-                        <td id='layer-remove'><img src='img/icons/layerRemove.png'></td>
-                        <td id='layer-clear'><img src='img/icons/layerErase.png'></td>
-                        <td id='layer-save'><img src='img/icons/save.png'></td>
-                        <td id='layer-visible'><img src='img/icons/layervisible.png'></td>
-                        <td id='layer-mergeup'><img src='img/icons/layerMergeUp.png'></td>
-                        <td id='layer-mergedown'><img src='img/icons/layerMergeDown.png'></td>
-                    </tr>
-                </table>
-                <table id="layer-controls-opacity">
-                    <tr>
-                        <td>
-                            Opacity:
-                        </td>
-                        <td>
-                            <input id='layer-opacity' max='100' min='0' value='100' type='range' />
-                        </td>
-                        <td>
-                            <span id='layer-opacity-value'>100%</span>
-                        </td>
-                    </tr>
-                </table>
-                <table id="layer-list">
-                    <tr id='layer0-control' class='selected'><td><img src='img/icons/layervisible.png'/></td><td>Layer 0</td><td class='layer-opacity'>100%</td></tr>
-                </table>
-            </div>
+            <table id="layer-controls-opacity">
+                <tr>
+                    <td>
+                        Opacity:
+                    </td>
+                    <td>
+                        <input id='layer-opacity' max='100' min='0' value='100' type='range' />
+                    </td>
+                    <td>
+                        <span id='layer-opacity-value'>100%</span>
+                    </td>
+                </tr>
+            </table>
+            <table id="layer-list">
+                <tr id='layer0-control' class='selected'><td><img src='img/icons/layervisible.png'/></td><td class='layer-info'><span class='layer-name'>Layer 0</span><div class='layer-opacity'>100%</div></td></tr>
+            </table>
+            <table>
+                <tr id='layer-tools'>
+                    <td id='layer-add'><img src='img/icons/layerAdd.png'></td>
+                    <td id='layer-remove'><img src='img/icons/layerRemove.png'></td>
+                    <td id='layer-clear'><img src='img/icons/layerErase.png'></td>
+                    <td id='layer-save'><img src='img/icons/save.png'></td>
+                    <td id='layer-visible'><img src='img/icons/layervisible.png'></td>
+                    <td id='layer-mergeup'><img src='img/icons/layerMergeUp.png'></td>
+                    <td id='layer-mergedown'><img src='img/icons/layerMergeDown.png'></td>
+                </tr>
+            </table>
         </div>
         <div id="eyedropper-holder" class="eyedropper-wheel">
             <div id="eyedropper-outer" class="eyedropper-wheel">&nbsp</div>

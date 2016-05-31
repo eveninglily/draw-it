@@ -27,11 +27,14 @@ img {
 
 #layers {
     position: relative;
-    left: 400px;
+    width: 750px;
+    height: 750px;
+    display: inline-block;
+    vertical-align: top;
 }
 
 .layer {
-    margin: auto;
+    margin: 0;
     position: absolute;
     cursor: crosshair;
     background-color: transparent;
@@ -41,6 +44,8 @@ img {
 #layer-controls {
     border: 1px solid black;
     width: 366px;
+    display: inline-block;
+    vertical-align: bottom;
 }
 
 #layer-controls-opacity {
@@ -51,7 +56,7 @@ img {
 #layer-list {
     font-size: 1.2em;
     border-collapse: collapse;
-    width: 366px;
+    width: 100%;
 }
 
 #layer-list tr {
@@ -59,8 +64,7 @@ img {
 }
 
 .layer-opacity {
-    text-align: right;
-    padding-right: 10px;
+    font-size: .8em;
 }
 
 .selected {
@@ -78,7 +82,8 @@ img {
     border: 1px solid black;
     width: 366px;
     height: auto;
-    display:flex;
+    display: inline-flex;
+    vertical-align: top;
 }
 
 #tools h1 {

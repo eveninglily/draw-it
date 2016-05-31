@@ -22,7 +22,7 @@ function addLayer(id, width, height) {
 		'id': 'layer' + id + '-control',
 		'class': 'selected'
 	});
-	row.children(':nth-child(2)')
+	row.children('.layer-info').children('.layer-name')
 			.html("Layer " + layers.length)
 			.on('dblclick', function() {
 				if ($('#newName').length != 0) {

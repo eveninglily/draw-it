@@ -203,3 +203,23 @@ $('#color-settings').on('mousemove', function(e) {
 $('#addToPalette').on('click', function(e) {
     addPaletteItem(currTool.color);
 });
+
+$('#colorwheel-toggle').on('click', function() {
+    $('#wheel').toggle();
+});
+
+$('#hsv-toggle').on('click', function() {
+    $('#hsv-settings').toggle();
+});
+
+$('#gradient-toggle').on('click', function() {
+
+});
+
+$('#palette-toggle').on('click', function() {
+    $('#color-settings').toggle();
+});
+
+var hue = new SliderVar('hue');
+var hue = new SliderVar('saturation');
+var hue = new SliderVar('value');

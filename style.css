@@ -178,7 +178,7 @@ input[type="number"] {
     display: none;
 }
 
-/* Colorwheel hacks */
+/* Color settings */
 
 #wheel {
     position: relative;
@@ -187,4 +187,8 @@ input[type="number"] {
 
 #hexValue {
     width: 5em;
+}
+
+#color-settings, #hsv-settings {
+    display: none;
 }

@@ -2,6 +2,9 @@
 
 <html>
     <head>
+        <title> AmiDraw ❤ </title>
+        <meta charset="utf-8" />
+
         <link rel="stylesheet" href='style.css' />
 		<script src="jquery.js"></script>
         <script src="canvas.js"></script>
@@ -31,6 +34,28 @@
                 <img id="color1" src="img/icons/color1.png" alt="Color 1 "/>
                 <img id="color2" src="img/icons/color2.png" alt="Color 2"/>
                 <input type="text" id="hexValue"/>
+                <button id="colorwheel-toggle">C</button>
+                <button id="hsv-toggle">H</button>
+                <button id="gradient-toggle">G</button>
+                <button id="palette-toggle">P</button>
+                <div id="color-settings">
+                    <h3>Palette</h3>
+                    <button id="addToPalette">Add</button>
+                    <button id="savePalette">Save</button>
+                    <br/>
+                    Load: <input id="loadPalette" type='file' accept='.json'>
+                    <div id="color-palette"></div>
+                </div>
+                <div id='hsv-settings'>
+                    <label> H <input id='hue' max='360' min='0' value='0' type='range' /> </label>
+                    <input type='number' id='hue-value' value='0' max='360'><br/>
+
+                    <label> S <input id='saturation' max='100' min='0' value='0' type='range' /> </label>
+                    <input type='number' id='saturation-value' value='0' max='360'><br/>
+
+                    <label> V <input id='value' max='100' min='0' value='0' type='range' /> </label>
+                    <input type='number' id='value-value' value='0' max='100'><br/>
+                </div>
                 <div id="brush-settings" class='tool-meta activeTool'>
                     <h1>Brush settings</h1>
                     <div>
@@ -52,13 +77,6 @@
                 <div id="text-settings" class='tool-meta'>
                     <h1>Text settings</h1>
 
-                </div>
-                <div id="color-settings" class='tool-meta'>
-                    <button id="addToPalette">Add to Palette</button>
-                    <button id="savePalette">Save Palette</button>
-                    <br/>
-                    Load Palette: <input id="loadPalette" type='file' accept='.json'>
-                    <div id="color-palette"></div>
                 </div>
             </div>
         </div>
@@ -102,6 +120,7 @@
         <script src="tools.js"></script>
         <script src="layers.js"></script>
         <script src="revision.js"></script>
+        <script src="ui.js"></script>
         <script src="color.js"></script>
         <script src="keybinds.js"></script>
     </body>

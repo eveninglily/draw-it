@@ -30,16 +30,21 @@ $("#eyedropper").on('click', function(e) {
     currTool = eyedropper;
 });
 
-$('#undo').on('click', function(e) {
-	undo();
-});
+$('#undo').on('click', function() {	undo(); });
 
-$('#redo').on('click', function(e) {
-	redo();
-});
+$('#redo').on('click', function() { redo(); });
 
+//TODO: REPLACE MAGIC NUMBERS
 $("#save").on('click', function(e) {
+	var merged = $('<canvas>').attr({'width': 750, 'height': 750});
+	for(var i = 0; i < layers.length; i++) {
+		merged.get(0).getContext('2d').drawImage(layers[i].canvas, 0, 0);
+	}
 
+	var a = document.createElement('a');
+    a.download = "amidraw.png";
+    a.href = merged.get(0).toDataURL('image/png').replace('image/png', 'image/octet-stream');
+    a.click();
 });
 
 $("#clear").on('click', function(e) {

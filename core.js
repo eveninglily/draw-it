@@ -16,7 +16,7 @@ function start(x, y) {
 		layers[currentLayer].doStrokes('local');
 	} else {
         if(currTool.name == "Eyedropper") {
-                var c = layers[currentLayer].ctx.getImageData(x, y, 1, 1).data;
+                var c = $('#mergedLayer').get(0).getContext('2d').getImageData(x, y, 1, 1).data;
                 var nC = 'rgb(' + c[0] +', ' + c[1] + ', ' + c[2] + ')';
                 pencil.color = nC;
                 colorWheel.setColor(c[0], c[1], c[2]);
@@ -60,7 +60,7 @@ $('#layers').on('touchstart', function (evt) {
 	if(currTool.name == "Eyedropper") {
 		$('#eyedropper-holder').css({left: e.pageX - 55, top: e.pageY - 55});
 		var l = $('#layers').position();
-		var c = layers[currentLayer].ctx.getImageData(e.pageX - l.left, e.pageY - l.top, 1, 1).data;
+		var c = $('#mergedLayer').get(0).getContext('2d').getImageData(e.pageX - l.left, e.pageY - l.top, 1, 1).data;
 		var nC = 'rgb(' + c[0] +', ' + c[1] + ', ' + c[2] + ')';
 
 		$('#eyedropper-bottom').css({'border-color': pencil.color});

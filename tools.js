@@ -6,6 +6,7 @@ $('.tool').on('click', function() {
 	$('.active').removeClass('active');
 	$(this).addClass('active');
 	$('.activeTool').removeClass('activeTool');
+	$('#mergedLayer').remove();
 });
 
 $("#pencil").on('click', function() {
@@ -26,8 +27,11 @@ $("#text").on('click', function() {
 	$('#text-settings').addClass('activeTool');
 });
 
+//TODO: There might be some complications with multi-user stuff here
 $("#eyedropper").on('click', function(e) {
     currTool = eyedropper;
+	var merged = getMergedLayer().attr({'class':'layer','id':'mergedLayer'}).css({'z-index': 999});
+	$('#layers').append(merged);
 });
 
 $('#undo').on('click', function() {	undo(); });
@@ -35,16 +39,20 @@ $('#undo').on('click', function() {	undo(); });
 $('#redo').on('click', function() { redo(); });
 
 $("#save").on('click', function(e) {
+	var a = document.createElement('a');
+    a.download = "amidraw.png";
+    a.href = getMergedLayer().get(0).toDataURL('image/png').replace('image/png', 'image/octet-stream');
+    a.click();
+});
+
+//TODO: Find a better name
+function getMergedLayer() {
 	var merged = $('<canvas>').attr({'width': width, 'height': height});
 	for(var i = 0; i < layers.length; i++) {
 		merged.get(0).getContext('2d').drawImage(layers[i].canvas, 0, 0);
 	}
-
-	var a = document.createElement('a');
-    a.download = "amidraw.png";
-    a.href = merged.get(0).toDataURL('image/png').replace('image/png', 'image/octet-stream');
-    a.click();
-});
+	return merged;
+}
 
 $("#clear").on('click', function(e) {
     if(confirm("Clear all layers? This can not be undone. All history will be lost.")) {

@@ -59,6 +59,12 @@ img {
     width: 100%;
 }
 
+#layer-scroll {
+    height: 20em;
+    max-height: 20em;
+    overflow-y: auto;
+}
+
 #layer-list tr {
     border: 1px solid black;
 }
@@ -176,6 +182,7 @@ input[type="number"] {
 
 #eyedropper-holder {
     position: absolute;
+    z-index: 1000;
 }
 
 .eyedropper-wheel {

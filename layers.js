@@ -23,7 +23,7 @@ function addLayer(id, width, height) {
 		'class': 'selected'
 	});
 	row.children('.layer-info').children('.layer-name')
-			.html("Layer " + layers.length)
+			.html("Layer " + nLayer)
 			.on('dblclick', function() {
 				if ($('#newName').length != 0) {
 					return;
@@ -130,7 +130,7 @@ $('#layer-list').on('mousemove', function(e) {
 });
 
 $('#layer-add').on('click', function() {
-	addLayer(nLayer, 750, 750);
+	addLayer(nLayer, width, height);
 	nLayer++;
 	selectLayer();
 });
@@ -148,7 +148,7 @@ $('#layer-remove').on('click', function() {
 $('#layer-clear').on('click', function() {
 	if(confirm('Clear current layer?'))
 		layers[currentLayer].clear();
-		layers[currentLayer].backCanvas.getContext('2d').clearRect(0, 0, 750, 750);
+		layers[currentLayer].clearBuffer();
 		$('.selected').children(':nth-child(1)').html(layers[currentLayer].toImage());
 });
 

@@ -34,9 +34,8 @@ $('#undo').on('click', function() {	undo(); });
 
 $('#redo').on('click', function() { redo(); });
 
-//TODO: REPLACE MAGIC NUMBERS
 $("#save").on('click', function(e) {
-	var merged = $('<canvas>').attr({'width': 750, 'height': 750});
+	var merged = $('<canvas>').attr({'width': width, 'height': height});
 	for(var i = 0; i < layers.length; i++) {
 		merged.get(0).getContext('2d').drawImage(layers[i].canvas, 0, 0);
 	}
@@ -48,12 +47,14 @@ $("#save").on('click', function(e) {
 });
 
 $("#clear").on('click', function(e) {
-    if(confirm("Clear all layers?")) {
+    if(confirm("Clear all layers? This can not be undone. All history will be lost.")) {
         for(var i = 0; i < layers.length; i++) {
             layers[i].clear();
             layers[i].clearBuffer();
             $('#layer-list tr').children(':nth-child(1)').html(layers[i].toImage());
         }
+		changes = [];
+		currentChange = 0;
     }
 });
 
@@ -69,12 +70,12 @@ function initSliders(toolName) {
     });
 
 	$('#' + toolName + '-opacity').on('input', function () {
-	   $('#' + toolName + '-size-value').val($(this).val());
+	   $('#' + toolName + '-opacity-value').val($(this).val());
 	   currTool.opacity = ($(this).val() / 100);
     });
 
 	$('#' + toolName + '-opacity-value').on('input', function () {
-	   $('#' + toolName + '-size').val($(this).val());
+	   $('#' + toolName + '-opacity').val($(this).val());
 	   currTool.opacity = ($(this).val() / 100);
     });
 }

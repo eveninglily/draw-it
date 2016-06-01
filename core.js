@@ -7,12 +7,8 @@ var currentLayer = 0;
 
 var currTool = pencil;
 
-$('#layers').on('mouseleave', function() {
-	if(down) {
-		end();
-		down = false;
-	}
-});
+var width = 750;
+var height = 750;
 
 function start(x, y) {
 	if(currTool.name == "Pencil" || currTool.name == "Eraser") {
@@ -55,11 +51,6 @@ $('#layers').on('touchstart', function (evt) {
 }).on('mousedown', function(e) {
 	down = true;
     start(e.offsetX, e.offsetY);
-}).on('mouseup touchend', function(e) {
-	if(down) {
-		end();
-		down = false;
-	}
 }).on('mousemove', function(e) {
 	if(down) {
 		window.getSelection().removeAllRanges()
@@ -75,12 +66,25 @@ $('#layers').on('touchstart', function (evt) {
 		$('#eyedropper-bottom').css({'border-color': pencil.color});
 		$('#eyedropper-top').css({'border-color': nC});
 	}
-}).on('mouseenter', function() {
+}).on('mouseenter', function(e) {
 	if(currTool.name == "Eyedropper") {
 		$('.eyedropper-wheel').css({display:'block'});
+	}
+	if(down) {
+		start(e.offsetX, e.offsetY);
 	}
 }).on('mouseleave', function() {
 	if(currTool.name == "Eyedropper") {
 		$('.eyedropper-wheel').css({display:'none'});
 	}
+	if(down) {
+		end();
+	}
 });
+
+$(document).on('mouseup touchend', function(e) {
+	if(down) {
+		end();
+		down = false;
+	}
+})

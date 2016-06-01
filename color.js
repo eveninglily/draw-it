@@ -1,8 +1,15 @@
 var colorWheel = new ColorWheel('wheel', 300);
+
+var color1 = '#000000';
+var color2 = '#ffffff';
+var activeColor = 1;
+
 colorWheel.setColorHex(color1);
 $('#wheel').insertBefore('#color1');
 $("#color1").css({background: color1});
 $("#color2").css({background: color2});
+
+$('#hexValue').val("#"+colorWheel.getHex());
 
 $('#wheel').on('mousemove', function() {
 	currTool.color = "#"+colorWheel.getHex();

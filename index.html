@@ -79,9 +79,7 @@
                 </div>
             </div>
         </div>
-        <div id='layers'>
-            <canvas id="layer0" class="layer" width="750" height="750"></canvas>
-        </div>
+        <div id='layers'></div>
         <div id="layer-controls">
             <table id="layer-controls-opacity">
                 <tr>
@@ -96,11 +94,7 @@
                     </td>
                 </tr>
             </table>
-            <div id="layer-scroll">
-            <table id="layer-list">
-                <tr id='layer0-control' class='selected'><td><img src='img/icons/layervisible.png'/></td><td class='layer-info'><span class='layer-name'>Layer 0</span><div class='layer-opacity'>100%</div></td></tr>
-            </table>
-            </div>
+            <div id="layer-scroll"><table id="layer-list"></table></div>
             <table>
                 <tr id='layer-tools'>
                     <td id='layer-add'><img src='img/icons/layerAdd.png'></td>
@@ -119,9 +113,9 @@
             <div id="eyedropper-bottom" class="eyedropper-inner eyedropper-wheel">&nbsp</div>
         </div>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js'></script>
+        <script src="layers.js"></script>
         <script src="core.js"></script>
         <script src="tools.js"></script>
-        <script src="layers.js"></script>
         <script src="revision.js"></script>
         <script src="ui.js"></script>
         <script src="color.js"></script>

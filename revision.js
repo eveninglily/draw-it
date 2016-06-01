@@ -39,8 +39,8 @@ function redo() {
 
 function updateCanvas() {
 	for(var i = 0; i < layers.length; i++) {
-		layers[changes[i].layer].clear();
-    	layers[changes[i].layer].clearBuffer();
+		layers[i].clear();
+		layers[i].clearBuffer();
 	}
     for(var i = 0; i < currentChange; i++) {
 		layers[changes[i].layer].completeStroke(changes[i].stroke);

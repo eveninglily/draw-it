@@ -1,11 +1,14 @@
 var down = false;
-var canvas = $('#layer0').get(0);
-var can = new DrawingCanvas(canvas);
 
-var layers = [can];
+var layers = [];
 var currentLayer = 0;
-
+var richLayers = [];
 var currTool = pencil;
+
+$(document).ready(function() {
+	richLayers.push(new Layer());
+	currentLayer = 0;
+});
 
 var width = 750;
 var height = 750;
@@ -35,7 +38,7 @@ function move(x, y) {
 function end() {
 	layers[currentLayer].completeStroke(layers[currentLayer].strokes['local']);
     addChange(layers[currentLayer].strokes['local']);
-    $('.selected').children(':nth-child(1)').html(layers[currentLayer].toImage());
+    richLayers[currentLayer].updatePreview();
 }
 
 $('#layers').on('touchstart', function (evt) {

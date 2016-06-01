@@ -1,7 +1,3 @@
-var color1 = '#000000';
-var color2 = '#ffffff';
-var activeColor = 1;
-
 $('.tool').on('click', function() {
 	$('.active').removeClass('active');
 	$(this).addClass('active');

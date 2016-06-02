@@ -1,4 +1,14 @@
-var colorWheel = new ColorWheel('wheel', 300);
+var colorWheel = new ColorWheel('wheel', 300, function() {
+    currTool.color = "#" + colorWheel.getHex();
+    $('#hexValue').val("#" + colorWheel.getHex());
+	if(activeColor == 1) {
+        $("#color1").css({background: currTool.color});
+        color1 = currTool.color;
+	} else {
+		$("#color2").css({background: currTool.color});
+        color2 = currTool.color;
+	}
+});
 
 var color1 = '#000000';
 var color2 = '#ffffff';
@@ -11,39 +21,14 @@ $("#color2").css({background: color2});
 
 $('#hexValue').val("#"+colorWheel.getHex());
 
-$('#wheel').on('mousemove', function() {
-	currTool.color = "#"+colorWheel.getHex();
-    $('#hexValue').val("#"+colorWheel.getHex());
-	if(activeColor == 1) {
-        $("#color1").css({background: currTool.color});
-        color1 = currTool.color;
-	} else {
-		$("#color2").css({background: currTool.color});
-        color2 = currTool.color;
-	}
-});
-
-$('#hexValue').on('keypress', function(e) {
-    var char = String.fromCharCode(e.which);
-    if(!char.match(/([a-f]|[0-9])+/ig)) {
-        e.preventDefault();
-        return false;
-    }
-
-    if($(this).val().replace('#', '').length == 6) {
-        e.preventDefault();
-        return false;
-    }
-})
-
-$('#hexValue').on('blur', function() {
-    var str = $(this).val().replace('#','');
+function updateFromHex() {
+    var str = $('#hexValue').val().replace('#','');
     if(!str.match(/([a-f]|[0-9])+$/ig)) {
-        $(this).val(currTool.color);
+        $('#hexValue').val(currTool.color);
     }
 
     if(str.length != 6) {
-        $(this).val(currTool.color);
+        $('#hexValue').val(currTool.color);
     }
 
     colorWheel.setColorHex('#' + str);
@@ -55,6 +40,27 @@ $('#hexValue').on('blur', function() {
 		$("#color2").css({background: currTool.color});
         color2 = currTool.color;
 	}
+}
+
+$('#hexValue').on('keypress', function(e) {
+    var char = String.fromCharCode(e.which);
+    
+    if(e.which == 13) {
+        updateFromHex();
+    }
+    
+    if(!char.match(/([a-f]|[0-9])+/ig)) {
+        e.preventDefault();
+        return false;
+    }
+
+    if($(this).val().replace('#', '').length == 6) {
+        e.preventDefault();
+        return false;
+    }
+    
+}).on('blur', function() {
+    updateFromHex();
 });
 
 $("#color1").on('click', function() {

@@ -38,11 +38,13 @@ function redo() {
 }
 
 function updateCanvas() {
-	for(var i = 0; i < layers.length; i++) {
-		layers[i].clear();
-		layers[i].clearBuffer();
+	for(var i = currentChange; i < changes.length; i++) {
+		layers[changes[i].layer].clear();
+		layers[changes[i].layer].clearBuffer();
+		richLayers[changes[i].layer].updatePreview();
 	}
     for(var i = 0; i < currentChange; i++) {
 		layers[changes[i].layer].completeStroke(changes[i].stroke);
+		richLayers[changes[i].layer].updatePreview();
 	}
 }

@@ -10,6 +10,8 @@ class Layer {
 		this.id = 'layer' + nLayer;
 		this.ids = [this.id]; //For multiple ID's from merging
 
+		var _this = this;
+
 		var newCan = $('<canvas>').attr({
 			'class' : 'layer',
 			'id'    : this.id,
@@ -59,9 +61,8 @@ class Layer {
 				});
 
 		nRow.on('mousedown', function() {
-			$('.selected').removeClass('selected');
 			currentLayer = layers.length - 1 - $(this).index();
-			selectLayer();
+			_this.select();
 
 			document.getSelection().removeAllRanges();
 
@@ -75,9 +76,6 @@ class Layer {
 			longClick = false;
 		});
 
-		if(nRow.hasClass('hidden')) {
-			nRow.removeClass('hidden');
-		}
 		$('#layer-list').prepend(nRow);
 
 		layers.push(this.canvas);
@@ -90,6 +88,21 @@ class Layer {
 	updatePreview() {
 		$('#' + this.id + '-control' + ' .layer-preview').html(this.canvas.toImage());
 	}
+
+	select() {
+		$('.selected').removeClass('selected');
+		$('#' + this.id + '-control').addClass('selected');
+		if (this.isVisible) {
+			$('#layer-visible').html('<img src="img/icons/layervisible.png" />');
+		} else {
+			$('#layer-visible').html('<img src="img/icons/layerhidden.png" />');
+		};
+
+		var opacity = Math.round($(layers[currentLayer].canvas).css('opacity') * 100);
+		$('.selected .layer-opacity').html(opacity + "%");
+		$('#layer-opacity-value').html(opacity + "%");
+		$('#layer-opacity').val(opacity);
+	}
 }
 
 function removeLayer(pos) {
@@ -99,22 +112,6 @@ function removeLayer(pos) {
 	$('#' + nId + '-control').remove();
 	layers.splice(pos, 1);
 	richLayers.splice(pos, 1);
-}
-
-function selectLayer() {
-	$('#layer-list tbody')
-		.children(':nth-child('+ (layers.length - currentLayer)+')')
-		.addClass('selected');
-	if ($(layers[currentLayer].canvas).is(':visible')) {
-		$('#layer-visible').html('<img src="img/icons/layervisible.png" />');
-    } else {
-    	$('#layer-visible').html('<img src="img/icons/layerhidden.png" />');
-    };
-
-	var opacity = Math.round($(layers[currentLayer].canvas).css('opacity') * 100);
-    $('.selected .layer-opacity').html(opacity + "%");
-    $('#layer-opacity-value').html(opacity + "%");
-	$('#layer-opacity').val(opacity);
 }
 
 $('#layer-list').on('mousemove', function(e) {
@@ -152,7 +149,6 @@ $('#layer-add').on('click', function() {
 	nLayer++;
 	var n = new Layer();
 	richLayers.push(n);
-	selectLayer();
 });
 
 $('#layer-remove').on('click', function() {
@@ -161,7 +157,7 @@ $('#layer-remove').on('click', function() {
 		if(currentLayer >= layers.length) {
 			currentLayer--;
 		}
-		selectLayer();
+		richLayers[currentLayer].select();
 	}
 });
 
@@ -178,10 +174,11 @@ $('#layer-save').on('click', function() {
 
 $('#layer-visible').on('click', function() {
 	var can = layers[currentLayer].canvas;
+	richLayers[currentLayer].isVisible = !richLayers[currentLayer].isVisible; //Todo: Improve this line
 	$(can).toggle();
 	$('.selected').toggleClass('hidden');
 
-    if ($(can).is(':visible')) {
+    if (richLayers[currentLayer].isVisible) {
 		$(this).html('<img src="img/icons/layervisible.png" />');
     } else {
     	$(this).html('<img src="img/icons/layerhidden.png" />');
@@ -193,7 +190,7 @@ $('#layer-mergeup').on('click', function() {
 		layers[currentLayer + 1].drawCanvas(layers[currentLayer].canvas);
 		layers[currentLayer + 1].backCanvas.getContext('2d').drawImage(layers[currentLayer].canvas, 0, 0);
 		removeLayer(currentLayer);
-		selectLayer();
+		richLayers[currentLayer].select();
 		richLayers[currentLayer].updatePreview();
 	}
 });
@@ -204,7 +201,7 @@ $('#layer-mergedown').on('click', function() {
 		layers[currentLayer - 1].backCanvas.getContext('2d').drawImage(layers[currentLayer].canvas, 0, 0);
 		removeLayer(currentLayer);
 		currentLayer--;
-		selectLayer();
+		richLayers[currentLayer].select();
 		richLayers[currentLayer].updatePreview();
 	}
 });

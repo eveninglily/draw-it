@@ -21,6 +21,20 @@ $("#color2").css({background: color2});
 
 $('#hexValue').val("#"+colorWheel.getHex());
 
+function updateColorDisplays(hex) {
+    colorWheel.setColorHex(hex);
+    currTool.color = hex;
+    if(activeColor == 1) {
+        $("#color1").css({background: currTool.color});
+        color1 = currTool.color;
+	} else {
+		$("#color2").css({background: currTool.color});
+        color2 = currTool.color;
+	}
+
+    $('#hexValue').val(currTool.color);
+}
+
 function updateFromHex() {
     var str = $('#hexValue').val().replace('#','');
     if(!str.match(/([a-f]|[0-9])+$/ig)) {
@@ -31,24 +45,16 @@ function updateFromHex() {
         $('#hexValue').val(currTool.color);
     }
 
-    colorWheel.setColorHex('#' + str);
-    currTool.color = '#' + str;
-    if(activeColor == 1) {
-        $("#color1").css({background: currTool.color});
-        color1 = currTool.color;
-	} else {
-		$("#color2").css({background: currTool.color});
-        color2 = currTool.color;
-	}
+    updateColorDisplays('#' + str);
 }
 
 $('#hexValue').on('keypress', function(e) {
     var char = String.fromCharCode(e.which);
-    
+
     if(e.which == 13) {
         updateFromHex();
     }
-    
+
     if(!char.match(/([a-f]|[0-9])+/ig)) {
         e.preventDefault();
         return false;
@@ -58,7 +64,7 @@ $('#hexValue').on('keypress', function(e) {
         e.preventDefault();
         return false;
     }
-    
+
 }).on('blur', function() {
     updateFromHex();
 });
@@ -123,8 +129,8 @@ function addPaletteItem(color) {
         .addClass('color')
         .css({background: color})
         .on('click', function(e) {
-            var rgb = color;
-            currTool.color = rgb;
+            currTool.color = color;
+            updateColorDisplays(color)
         }).on('mousedown', function(e) {
             $('.currColor').removeClass('currColor');
             $(this).addClass('currColor');

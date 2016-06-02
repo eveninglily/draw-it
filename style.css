@@ -146,8 +146,8 @@ input[type="number"] {
 }
 
 #color-palette div {
-    width: 48px;
-    height: 48px;
+    width: 36px;
+    height: 36px;
 }
 
 /*TODO: Clean up this CSS*/

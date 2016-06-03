@@ -90,4 +90,8 @@ $(document).on('mouseup touchend', function(e) {
 		end();
 		down = false;
 	}
-})
+});
+
+$(window).on('beforeunload', function() {
+	return 'Are you sure you want to leave? Your drawing will be lost.';
+});

@@ -38,6 +38,9 @@ class DrawingCanvas {
 
 	drawCanvas(otherCanvas) {
 		this.ctx.drawImage(otherCanvas, 0, 0);
+	}
+	
+	drawCanvasOntoBuffer(otherCanvas) {
 		this.backCanvas.getContext('2d').drawImage(otherCanvas, 0, 0);
 	}
 

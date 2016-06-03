@@ -196,6 +196,7 @@ $('#layer-visible').on('click', function() {
 $('#layer-mergeup').on('click', function() {
 	if(!(currentLayer == layers.length - 1)) {
 		layers[currentLayer + 1].canvas.drawCanvas(layers[currentLayer].canvas.canvas);
+		layers[currentLayer + 1].canvas.drawCanvasOntoBuffer(layers[currentLayer].canvas.canvas);
 		for(var i = 0; i < layers[currentLayer].ids.length; i++) {
 			layers[currentLayer + 1].ids.push(layers[currentLayer].ids[i]);
 		}
@@ -208,6 +209,7 @@ $('#layer-mergeup').on('click', function() {
 $('#layer-mergedown').on('click', function() {
 	if((currentLayer != 0)) {
 		layers[currentLayer - 1].canvas.drawCanvas(layers[currentLayer].canvas.canvas);
+		layers[currentLayer + 1].canvas.drawCanvasOntoBuffer(layers[currentLayer].canvas.canvas);
 		for(var i = 0; i < layers[currentLayer].ids.length; i++) {
 			layers[currentLayer - 1].ids.push(layers[currentLayer].ids[i]);
 		}

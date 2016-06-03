@@ -7,6 +7,8 @@ class Layer {
 		this.isLocked = false; //Unused for now
 		this.isVisible = true;
 
+		this.opacity = 1.0;
+
 		this.id = 'layer' + nLayer;
 		this.ids = [this.id]; //For multiple ID's from merging
 
@@ -110,6 +112,15 @@ function removeLayer(pos) {
 
 	$('#' + nId).remove();
 	$('#' + nId + '-control').remove();
+	var r = 0;
+	for(var i = changes.length - 1; i > 0; i--) {
+		if(changes[i].layer == nId) {
+			changes.splice(i, 1);
+			if(changes.length - 1 - i < currentChange)
+				r++;
+		}
+	}
+	currentChange -= r;
 	layers.splice(pos, 1);
 	richLayers.splice(pos, 1);
 }
@@ -126,7 +137,7 @@ $('#layer-list').on('mousemove', function(e) {
 				r.insertBefore(prev);
 				layers.splice(currentLayer + 1, 0, layers.splice(currentLayer, 1)[0]);
 				richLayers.splice(currentLayer + 1, 0, richLayers.splice(currentLayer, 1)[0]);
-				$(layers[currentLayer].canvas).css('z-index', currentLayer);
+				$(richLayers[currentLayer].id).css('z-index', currentLayer);
 				currentLayer++;
 			}
 		}
@@ -188,7 +199,9 @@ $('#layer-visible').on('click', function() {
 $('#layer-mergeup').on('click', function() {
 	if(!(currentLayer == layers.length - 1)) {
 		layers[currentLayer + 1].drawCanvas(layers[currentLayer].canvas);
-		layers[currentLayer + 1].backCanvas.getContext('2d').drawImage(layers[currentLayer].canvas, 0, 0);
+		for(var i = 0; i < richLayers[currentLayer].ids.length; i++) {
+			richLayers[currentLayer + 1].ids.push(richLayers[currentLayer].ids[i]);
+		}
 		removeLayer(currentLayer);
 		richLayers[currentLayer].select();
 		richLayers[currentLayer].updatePreview();
@@ -198,7 +211,9 @@ $('#layer-mergeup').on('click', function() {
 $('#layer-mergedown').on('click', function() {
 	if((currentLayer != 0)) {
 		layers[currentLayer - 1].drawCanvas(layers[currentLayer].canvas);
-		layers[currentLayer - 1].backCanvas.getContext('2d').drawImage(layers[currentLayer].canvas, 0, 0);
+		for(var i = 0; i < richLayers[currentLayer].ids.length; i++) {
+			richLayers[currentLayer - 1].ids.push(richLayers[currentLayer].ids[i]);
+		}
 		removeLayer(currentLayer);
 		currentLayer--;
 		richLayers[currentLayer].select();
@@ -209,6 +224,6 @@ $('#layer-mergedown').on('click', function() {
 $('#layer-opacity').on('input', function () {
         $('#layer-opacity-value').html($(this).val() + "%");
 		$('.selected .layer-opacity').html($(this).val() + "%");
-        $(layers[currentLayer].canvas).css('opacity', $(this).val() / 100);
-		//$(layers[currentLayer].backCanvas).css('opacity', $(this).val() / 100);
+		richLayers[currentLayer].opacity = $(this).val() / 100;
+        $('#' + richLayers[currentLayer].id).css('opacity', $(this).val() / 100);
 });

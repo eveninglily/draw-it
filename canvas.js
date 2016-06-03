@@ -38,6 +38,7 @@ class DrawingCanvas {
 
 	drawCanvas(otherCanvas) {
 		this.ctx.drawImage(otherCanvas, 0, 0);
+		this.backCanvas.getContext('2d').drawImage(otherCanvas, 0, 0);
 	}
 
 	drawBlob(blob, x, y) {

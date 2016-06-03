@@ -41,13 +41,14 @@ function end() {
 }
 
 $('#layers').on('touchstart', function (evt) {
-	start(evt.originalEvent.changedTouches[0].pageX, evt.originalEvent.changedTouches[0].pageY);
+	start(evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left, evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top);
     down = true;
 }).on('touchmove', function (evt) {
+	evt.preventDefault();
 	if(down){
-    	move(
-        	evt.originalEvent.touches[0].pageX,
-            evt.originalEvent.touches[0].pageY
+		move(
+			evt.originalEvent.touches[0].pageX - $('#layers').offset().left,
+			evt.originalEvent.touches[0].pageY - $('#layers').offset().top
 		);
     }
 }).on('mousedown', function(e) {

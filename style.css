@@ -4,6 +4,8 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+
+  margin: 0px;
 }
 
 img {
@@ -203,4 +205,28 @@ input[type="number"] {
 
 #color-settings, #hsv-settings {
     display: none;
+}
+
+#modal-bg {
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.8);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+#modal {
+    width: 30em;
+    height: 20em;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+    padding: 20px;
 }

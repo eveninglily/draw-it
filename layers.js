@@ -101,6 +101,23 @@ class Layer {
 		$('#layer-opacity-value').html(opacity + "%");
 		$('#layer-opacity').val(opacity);
 	}
+
+	toJSON() {
+		var data = {};
+		data.id = this.id;
+		data.ids = this.ids;
+		data.isVisible = this.isVisible;
+		data.isLocked = this.isLocked;
+		data.opacity = this.opacity;
+
+		data.imageData = this.canvas.canvas.toDataURL();
+
+		return data;
+	}
+
+	static fromJSON() {
+
+	}
 }
 
 function removeLayer(pos) {

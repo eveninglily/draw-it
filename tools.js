@@ -34,11 +34,24 @@ $('#undo').on('click', function() {	undo(); });
 
 $('#redo').on('click', function() { redo(); });
 
+$('#fileName').on('input', function() {
+	var name = $('#fileName').val();
+	if(name.length == 0) {
+		name = "amidraw.png";
+	}
+	$('#dl-link').attr('download', $('#fileName').val() + '.png');
+});
+
+$('#modal-bg').on('click', function(e) {
+	if(e.target.id != "modal")
+		if(e.target.id != "fileName")
+			if(e.target.id != "dl-link")
+				$('#modal-bg').hide();
+}).hide();
+
 $("#save").on('click', function(e) {
-	var a = document.createElement('a');
-    a.download = "amidraw.png";
-    a.href = getMergedLayer().get(0).toDataURL('image/png').replace('image/png', 'image/octet-stream');
-    a.click();
+	$('#modal-bg').show().css('display','flex');
+    $('#dl-link').attr('href', getMergedLayer().get(0).toDataURL('image/png').replace('image/png', 'image/octet-stream'));
 });
 
 //TODO: Find a better name
@@ -48,6 +61,21 @@ function getMergedLayer() {
 		merged.get(0).getContext('2d').drawImage(layers[i].canvas.canvas, 0, 0);
 	}
 	return merged;
+}
+
+function saveToJSON() {
+	var data = {};
+	for(var i = 0; i < layers.length; i++) {
+		data[i] = layers[i].toJSON();
+	}
+	var blob = new Blob([JSON.stringify(data)], {type:"application/json"});
+
+    var url = URL.createObjectURL(blob);
+
+    var a = document.createElement('a');
+    a.download = "amidraw.json";
+    a.href = url;
+    a.click();
 }
 
 $("#clear").on('click', function(e) {

@@ -45,7 +45,7 @@ $("#save").on('click', function(e) {
 function getMergedLayer() {
 	var merged = $('<canvas>').attr({'width': width, 'height': height});
 	for(var i = 0; i < layers.length; i++) {
-		merged.get(0).getContext('2d').drawImage(layers[i].canvas, 0, 0);
+		merged.get(0).getContext('2d').drawImage(layers[i].canvas.canvas, 0, 0);
 	}
 	return merged;
 }
@@ -53,9 +53,9 @@ function getMergedLayer() {
 $("#clear").on('click', function(e) {
     if(confirm("Clear all layers? This can not be undone. All history will be lost.")) {
         for(var i = 0; i < layers.length; i++) {
-            layers[i].clear();
-            layers[i].clearBuffer();
-            $('#layer-list tr').children(':nth-child(1)').html(layers[i].toImage());
+            layers[i].canvas.clear();
+            layers[i].canvas.clearBuffer();
+            $('#layer-list tr').children(':nth-child(1)').html(layers[i].canvas.toImage());
         }
 		changes = [];
 		currentChange = 0;

@@ -90,8 +90,8 @@ function savePalette() {
     $('.color').each(function(i, obj) {
         //Turns out, the ctx treats color as hex, so setting the style to the rgb() we get converts it
         var rgb = $(obj).css('background-color');
-        layers[currentLayer].ctx.strokeStyle = rgb;
-        data[i] = layers[currentLayer].ctx.strokeStyle;
+        layers[currentLayer].canvas.ctx.strokeStyle = rgb;
+        data[i] = layers[currentLayer].canvas.ctx.strokeStyle;
     });
 
     var blob = new Blob([JSON.stringify(data)], {type:"application/json"});

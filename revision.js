@@ -15,7 +15,7 @@ function addChange(stroke) {
         changes.splice(currentChange, changes.length - currentChange);
     }
 	currentChange++;
-	changes.push(new Change(stroke, richLayers[currentLayer].id));
+	changes.push(new Change(stroke, layers[currentLayer].id));
 }
 
 function undo() {
@@ -24,8 +24,8 @@ function undo() {
 		updateCanvas();
 	} else {
 		for(var i = 0; i < layers.length; i++) {
-			richLayers[i].canvas.clear();
-			richLayers[i].canvas.clearBuffer();
+			layers[i].canvas.clear();
+			layers[i].canvas.clearBuffer();
 		}
 	}
 }
@@ -41,16 +41,16 @@ function updateCanvas() {
 	var needsRedraw = [];
 	var layerMap = {};
 
-	for(var i = 0; i < richLayers.length; i++) {
-		for(var j = 0; j < richLayers[i].ids.length; j++) {
-			layerMap[richLayers[i].ids[j]] = i;
+	for(var i = 0; i < layers.length; i++) {
+		for(var j = 0; j < layers[i].ids.length; j++) {
+			layerMap[layers[i].ids[j]] = i;
 		}
 	}
 
 	for(var i = currentChange; i < changes.length; i++) {
 		var l = layerMap[changes[i].layer];
-		richLayers[l].canvas.clear();
-		richLayers[l].canvas.clearBuffer();
+		layers[l].canvas.clear();
+		layers[l].canvas.clearBuffer();
 		needsRedraw.push(l);
 	}
 
@@ -65,11 +65,11 @@ function updateCanvas() {
     for(var i = 0; i < currentChange; i++) {
 		var l = layerMap[changes[i].layer];
 		if(needsRedraw.indexOf(l) != -1) {
-			richLayers[l].canvas.completeStroke(changes[i].stroke);
+			layers[l].canvas.completeStroke(changes[i].stroke);
 		}
 	}
 	//TODO: find a way to implement this without it slowing everything down
 	/*for(var i = 0; i < needsRedraw.length; i++) {
-		richLayers[needsRedraw[i]].updatePreview();
+		layers[needsRedraw[i]].updatePreview();
 	}*/
 }

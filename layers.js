@@ -35,7 +35,7 @@ class Layer {
 		});
 
 		nRow.children('.layer-info').append($('<div>').attr({'class':'layer-name'}))
-									.append($('<div>').attr({'class':'layer-opacity'}))
+									.append($('<div>').attr({'class':'layer-opacity'}).html('100%'))
 
 		nRow.children('.layer-info').children('.layer-name')
 				.html("Layer " + nLayer)
@@ -80,11 +80,7 @@ class Layer {
 
 		$('#layer-list').prepend(nRow);
 
-		layers.push(this.canvas);
 		this.updatePreview();
-
-		nRow.trigger('mousedown');
-		nRow.trigger('mouseup');
 	}
 
 	updatePreview() {
@@ -100,7 +96,7 @@ class Layer {
 			$('#layer-visible').html('<img src="img/icons/layerhidden.png" />');
 		};
 
-		var opacity = Math.round($(layers[currentLayer].canvas).css('opacity') * 100);
+		var opacity = Math.round($('#' + this.id).css('opacity') * 100);
 		$('.selected .layer-opacity').html(opacity + "%");
 		$('#layer-opacity-value').html(opacity + "%");
 		$('#layer-opacity').val(opacity);
@@ -108,7 +104,7 @@ class Layer {
 }
 
 function removeLayer(pos) {
-	var nId = richLayers[pos].id;
+	var nId = layers[pos].id;
 
 	$('#' + nId).remove();
 	$('#' + nId + '-control').remove();
@@ -122,7 +118,6 @@ function removeLayer(pos) {
 	}
 	currentChange -= r;
 	layers.splice(pos, 1);
-	richLayers.splice(pos, 1);
 }
 
 $('#layer-list').on('mousemove', function(e) {
@@ -136,8 +131,7 @@ $('#layer-list').on('mousemove', function(e) {
 			if(y < (prev.position().top + (prev.height() / 2))) {
 				r.insertBefore(prev);
 				layers.splice(currentLayer + 1, 0, layers.splice(currentLayer, 1)[0]);
-				richLayers.splice(currentLayer + 1, 0, richLayers.splice(currentLayer, 1)[0]);
-				$(richLayers[currentLayer].id).css('z-index', currentLayer);
+				$(layers[currentLayer].id).css('z-index', currentLayer);
 				currentLayer++;
 			}
 		}
@@ -147,19 +141,22 @@ $('#layer-list').on('mousemove', function(e) {
 			if(y > (next.position().top + (next.height() / 2))) {
 				r.insertAfter(next);
 				layers.splice(currentLayer - 1, 0, layers.splice(currentLayer, 1)[0]);
-				richLayers.splice(currentLayer - 1, 0, richLayers.splice(currentLayer, 1)[0]);
-				$(layers[currentLayer].canvas).css('z-index', currentLayer);
+				$('#' + layers[currentLayer].id).css('z-index', currentLayer);
 				currentLayer--;
 			}
 		}
-		$(layers[currentLayer].canvas).css('z-index', currentLayer);
+		$('#' + layers[currentLayer].id).css('z-index', currentLayer);
 	}
 });
 
 $('#layer-add').on('click', function() {
 	nLayer++;
 	var n = new Layer();
-	richLayers.push(n);
+	layers.push(n);
+
+
+	$('#' + n.id + '-control').trigger('mousedown');
+	$('#' + n.id + '-control').trigger('mouseup');
 });
 
 $('#layer-remove').on('click', function() {
@@ -168,28 +165,28 @@ $('#layer-remove').on('click', function() {
 		if(currentLayer >= layers.length) {
 			currentLayer--;
 		}
-		richLayers[currentLayer].select();
+		layers[currentLayer].select();
 	}
 });
 
 $('#layer-clear').on('click', function() {
 	if(confirm('Clear current layer?'))
-		layers[currentLayer].clear();
-		layers[currentLayer].clearBuffer();
-		richLayers[currentLayer].updatePreview();
+		layers[currentLayer].canvas.clear();
+		layers[currentLayer].canvas.clearBuffer();
+		layers[currentLayer].updatePreview();
 });
 
 $('#layer-save').on('click', function() {
-	layers[currentLayer].toFile();
+	layers[currentLayer].canvas.toFile();
 });
 
 $('#layer-visible').on('click', function() {
-	var can = layers[currentLayer].canvas;
-	richLayers[currentLayer].isVisible = !richLayers[currentLayer].isVisible; //Todo: Improve this line
+	var can = layers[currentLayer].canvas.canvas;
+	layers[currentLayer].isVisible = !layers[currentLayer].isVisible; //Todo: Improve this line
 	$(can).toggle();
 	$('.selected').toggleClass('hidden');
 
-    if (richLayers[currentLayer].isVisible) {
+    if (layers[currentLayer].isVisible) {
 		$(this).html('<img src="img/icons/layervisible.png" />');
     } else {
     	$(this).html('<img src="img/icons/layerhidden.png" />');
@@ -198,32 +195,32 @@ $('#layer-visible').on('click', function() {
 
 $('#layer-mergeup').on('click', function() {
 	if(!(currentLayer == layers.length - 1)) {
-		layers[currentLayer + 1].drawCanvas(layers[currentLayer].canvas);
-		for(var i = 0; i < richLayers[currentLayer].ids.length; i++) {
-			richLayers[currentLayer + 1].ids.push(richLayers[currentLayer].ids[i]);
+		layers[currentLayer + 1].canvas.drawCanvas(layers[currentLayer].canvas.canvas);
+		for(var i = 0; i < layers[currentLayer].ids.length; i++) {
+			layers[currentLayer + 1].ids.push(layers[currentLayer].ids[i]);
 		}
 		removeLayer(currentLayer);
-		richLayers[currentLayer].select();
-		richLayers[currentLayer].updatePreview();
+		layers[currentLayer].select();
+		layers[currentLayer].updatePreview();
 	}
 });
 
 $('#layer-mergedown').on('click', function() {
 	if((currentLayer != 0)) {
-		layers[currentLayer - 1].drawCanvas(layers[currentLayer].canvas);
-		for(var i = 0; i < richLayers[currentLayer].ids.length; i++) {
-			richLayers[currentLayer - 1].ids.push(richLayers[currentLayer].ids[i]);
+		layers[currentLayer - 1].canvas.drawCanvas(layers[currentLayer].canvas.canvas);
+		for(var i = 0; i < layers[currentLayer].ids.length; i++) {
+			layers[currentLayer - 1].ids.push(layers[currentLayer].ids[i]);
 		}
 		removeLayer(currentLayer);
 		currentLayer--;
-		richLayers[currentLayer].select();
-		richLayers[currentLayer].updatePreview();
+		layers[currentLayer].select();
+		layers[currentLayer].updatePreview();
 	}
 });
 
 $('#layer-opacity').on('input', function () {
         $('#layer-opacity-value').html($(this).val() + "%");
 		$('.selected .layer-opacity').html($(this).val() + "%");
-		richLayers[currentLayer].opacity = $(this).val() / 100;
-        $('#' + richLayers[currentLayer].id).css('opacity', $(this).val() / 100);
+		layers[currentLayer].opacity = $(this).val() / 100;
+        $('#' + layers[currentLayer].id).css('opacity', $(this).val() / 100);
 });

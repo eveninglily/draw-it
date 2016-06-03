@@ -1,12 +1,11 @@
 var down = false;
 
-var layers = [];
 var currentLayer = 0;
-var richLayers = [];
+var layers = [];
 var currTool = pencil;
 
 $(document).ready(function() {
-	richLayers.push(new Layer());
+	layers.push(new Layer());
 	currentLayer = 0;
 });
 
@@ -15,8 +14,8 @@ var height = 750;
 
 function start(x, y) {
 	if(currTool.name == "Pencil" || currTool.name == "Eraser") {
-		layers[currentLayer].beginStroke(currTool, x, y, 'local');
-		layers[currentLayer].doStrokes('local');
+		layers[currentLayer].canvas.beginStroke(currTool, x, y, 'local');
+		layers[currentLayer].canvas.doStrokes('local');
 	} else {
         if(currTool.name == "Eyedropper") {
                 var c = $('#mergedLayer').get(0).getContext('2d').getImageData(x, y, 1, 1).data;
@@ -24,21 +23,21 @@ function start(x, y) {
                 pencil.color = nC;
                 colorWheel.setColor(c[0], c[1], c[2]);
         } else {
-		      layers[currentLayer].createText(prompt("Text:"), currTool, x, y);
+			layers[currentLayer].canvas.createText(prompt("Text:"), currTool, x, y);
         }
 		down = false;
 	}
 }
 
 function move(x, y) {
-	layers[currentLayer].strokes['local'].addPoint(x, y);
-    layers[currentLayer].doStrokes('local');
+	layers[currentLayer].canvas.strokes['local'].addPoint(x, y);
+	layers[currentLayer].canvas.doStrokes('local');
 }
 
 function end() {
-	layers[currentLayer].completeStroke(layers[currentLayer].strokes['local']);
-    addChange(layers[currentLayer].strokes['local']);
-    richLayers[currentLayer].updatePreview();
+	layers[currentLayer].canvas.completeStroke(layers[currentLayer].canvas.strokes['local']);
+	addChange(layers[currentLayer].canvas.strokes['local']);
+	layers[currentLayer].updatePreview();
 }
 
 $('#layers').on('touchstart', function (evt) {

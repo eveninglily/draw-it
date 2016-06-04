@@ -38,13 +38,14 @@ function move(x, y) {
 
 function end() {
 	layers[currentLayer].canvas.completeStroke(layers[currentLayer].canvas.strokes['local']);
-	layers[currentLayer].canvas.doStrokes(activeStrokes);
+	addChange(layers[currentLayer].canvas.strokes['local']);
 	for(var i = 0; i < activeStrokes.length; i++) {
 		if(activeStrokes[i] == 'local') {
 			activeStrokes.splice(i, 1);
 			break;
 		}
 	}
+	layers[currentLayer].canvas.doStrokes(activeStrokes);
 	layers[currentLayer].updatePreview();
 }
 

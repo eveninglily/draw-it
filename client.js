@@ -73,11 +73,25 @@ if(window.location.href.split('#').length == 2) {
 
 $('#layers').on('mousedown', function(e) {
 	c.sendStart(e.offsetX, e.offsetY);
-}).on('mouseup', function(e) {
-	c.sendEnd(e.offsetX, e.offsetY);
 }).on('mousemove', function(e) {
 	if(down) {
 	c.sendMove(e.offsetX, e.offsetY);
 	}
+}).on('touchstart', function (evt) {
+	c.sendStart(evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left, evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top);
+}).on('touchmove', function (evt) {
+		c.sendMove(
+			evt.originalEvent.touches[0].pageX - $('#layers').offset().left,
+			evt.originalEvent.touches[0].pageY - $('#layers').offset().top
+		);
+});
+
+$(document).on('mouseup', function(e) {
+	c.sendEnd(e.offsetX, e.offsetY);
+}).on('touchend', function(){
+	c.sendEnd(
+			evt.originalEvent.touches[0].pageX - $('#layers').offset().left,
+			evt.originalEvent.touches[0].pageY - $('#layers').offset().top
+		);
 });
 }

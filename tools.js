@@ -112,5 +112,9 @@ function initSliders(toolName) {
     });
 }
 
+$('#invite').on('click', function() {
+	connect();
+})
+
 initSliders('brush');
 initSliders('eraser');

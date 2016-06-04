@@ -30,13 +30,13 @@
                 <tr><td><img id="text" src="img/icons/text.png" class="tool" alt="Text "/></td></tr>
             </table>
             <div id="tool-meta">
-                <img id="color1" src="img/icons/color1.png" alt="Color 1 "/>
-                <img id="color2" src="img/icons/color2.png" alt="Color 2"/>
                 <input type="text" id="hexValue"/>
                 <button id="colorwheel-toggle">C</button>
                 <button id="hsv-toggle">H</button>
                 <button id="gradient-toggle">G</button>
                 <button id="palette-toggle">P</button>
+                <img id="color1" src="img/icons/color1.png" alt="Color 1 "/>
+                <img id="color2" src="img/icons/color2.png" alt="Color 2"/>
                 <div id="color-settings">
                     <h3>Palette</h3>
                     <button id="addToPalette">Add</button>
@@ -120,13 +120,14 @@
                 </div>
             </div>
         </div>
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js'></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.6/socket.io.min.js'></script>
         <script src="layers.js"></script>
+        <script src="ui.js"></script>
         <script src="core.js"></script>
         <script src="tools.js"></script>
         <script src="revision.js"></script>
-        <script src="ui.js"></script>
         <script src="color.js"></script>
         <script src="keybinds.js"></script>
+        <script src="client.js"></script>
     </body>
 </html>

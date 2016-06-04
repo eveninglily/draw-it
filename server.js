@@ -11,13 +11,15 @@ var io = require('socket.io')().listen(3000);
 var rooms = [];
 
 io.on('connection', function(socket) {
-    socket.on('join', function(data) {
+    socket.on('join-room', function(data) {
         var id;
-		if(data['id'] == null) {
-			id = genID();
-			//room = new Room(id);
-			//room.clients.push(socket);
-			//rooms.push(room);
+        console.log(data);
+		if(data['id'] == '') {
+			id = genBadID();
+            console.log(id);
+			var room = new Room(id);
+			room.clients.push(socket);
+			rooms.push(room);
             socket.join(id);
 		} else {
             id = data.id;
@@ -43,6 +45,7 @@ io.on('connection', function(socket) {
         socket.broadcast.to(data.id).emit('update', {
             x: data.x,
             y: data.y,
+            id: this.id,
             layer: data.layer,
             cId: socket.id
         });
@@ -52,6 +55,7 @@ io.on('connection', function(socket) {
         socket.broadcast.to(data.id).emit('end', {
             x: data.x,
             y: data.y,
+            id: this.id,
             layer: data.layer,
             cId: socket.id
         });
@@ -59,8 +63,6 @@ io.on('connection', function(socket) {
     });
 });
 
-//Generates a unique enough 6 digit ID
-//TODO: Rewrite
-function genID() {
-    return ("000000" + (Math.random()*Math.pow(36,6) << 0).toString(36)).slice(-6);
+function genBadID() {
+    return ("000000" + (Math.random()*Math.pow(36,6) << 0).toString(36)).slice(-6).toString(16);
 }

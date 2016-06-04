@@ -2,6 +2,7 @@ var down = false;
 
 var currentLayer = 0;
 var layers = [];
+var activeStrokes = [];
 var currTool = pencil;
 
 $(document).ready(function() {
@@ -15,7 +16,8 @@ var height = 750;
 function start(x, y) {
 	if(currTool.name == "Pencil" || currTool.name == "Eraser") {
 		layers[currentLayer].canvas.beginStroke(currTool, x, y, 'local');
-		layers[currentLayer].canvas.doStrokes('local');
+		activeStrokes.push('local');
+		layers[currentLayer].canvas.doStrokes(activeStrokes);
 	} else {
         if(currTool.name == "Eyedropper") {
                 var c = $('#mergedLayer').get(0).getContext('2d').getImageData(x, y, 1, 1).data;
@@ -31,12 +33,18 @@ function start(x, y) {
 
 function move(x, y) {
 	layers[currentLayer].canvas.strokes['local'].addPoint(x, y);
-	layers[currentLayer].canvas.doStrokes('local');
+	layers[currentLayer].canvas.doStrokes(activeStrokes);
 }
 
 function end() {
 	layers[currentLayer].canvas.completeStroke(layers[currentLayer].canvas.strokes['local']);
-	addChange(layers[currentLayer].canvas.strokes['local']);
+	layers[currentLayer].canvas.doStrokes(activeStrokes);
+	for(var i = 0; i < activeStrokes.length; i++) {
+		if(activeStrokes[i] == 'local') {
+			activeStrokes.splice(i, 1);
+			break;
+		}
+	}
 	layers[currentLayer].updatePreview();
 }
 

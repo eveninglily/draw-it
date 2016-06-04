@@ -109,7 +109,7 @@ img {
     background-color: #81CD29;
 }
 
-.active {
+.active, .tool:hover, .action:hover, #layer-tools td:hover {
     background-color: #5C931D;
 }
 
@@ -150,6 +150,10 @@ input[type="number"] {
 #color-palette div {
     width: 36px;
     height: 36px;
+}
+
+#hexValue {
+    display: block;
 }
 
 /*TODO: Clean up this CSS*/

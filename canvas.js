@@ -96,10 +96,13 @@ class DrawingCanvas {
 		this.backCanvas.getContext('2d').drawImage(this.canvas, 0, 0);
 	}
 
-	doStrokes(id) {
+	doStrokes(ids) {
         this.clear();
         this.drawCanvas(this.backCanvas);
-        this.drawStroke(this.strokes[id]);
+		for(var i = 0; i < ids.length; i++)
+		{
+			this.drawStroke(this.strokes[ids[i]]);
+		}
 	}
 
 	drawStroke(stroke) {

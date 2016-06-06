@@ -24,9 +24,12 @@ function start(x, y) {
                 var nC = 'rgb(' + c[0] +', ' + c[1] + ', ' + c[2] + ')';
                 pencil.color = nC;
                 colorWheel.setColor(c[0], c[1], c[2]);
-        } else {
-			layers[currentLayer].canvas.createText(prompt("Text:"), currTool, x, y);
-        }
+		} else {
+			var text = prompt("Text:");
+			if(text != null) {
+				layers[currentLayer].canvas.createText(text, currTool, x, y);
+			}
+		}
 		down = false;
 	}
 }

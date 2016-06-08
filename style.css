@@ -105,11 +105,11 @@ img {
     flex-grow: 1;
 }
 
-.tool, .action, #layer-tools td {
+.tool, .action {
     background-color: #81CD29;
 }
 
-.active, .tool:hover, .action:hover, #layer-tools td:hover {
+.active, .tool:hover, .action:hover {
     background-color: #5C931D;
 }
 

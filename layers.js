@@ -109,7 +109,7 @@ class Layer {
 		data.isVisible = this.isVisible;
 		data.isLocked = this.isLocked;
 		data.opacity = this.opacity;
-
+		data.strokes = this.canvas.strokes;
 		data.imageData = this.canvas.canvas.toDataURL();
 
 		return data;

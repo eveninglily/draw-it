@@ -63,6 +63,9 @@ function getMergedLayer() {
 	return merged;
 }
 
+/**
+ * Creates and saves a JSON file containing all the layer data
+ */
 function saveToJSON() {
 	var data = {};
 	for(var i = 0; i < layers.length; i++) {
@@ -77,6 +80,12 @@ function saveToJSON() {
     a.href = url;
     a.click();
 }
+
+/**
+ * Loads JSON data into the layers
+ * @param {Object} data - The JSON data to load
+ */
+function loadFromJSON(data) {}
 
 $("#clear").on('click', function(e) {
     if(confirm("Clear all layers? This can not be undone. All history will be lost.")) {

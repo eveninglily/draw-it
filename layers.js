@@ -8,6 +8,7 @@ class Layer {
 		this.isVisible = true;
 
 		this.opacity = 1.0;
+		this.name = "";
 
 		this.id = 'layer' + nLayer;
 		this.ids = [this.id]; //For multiple ID's from merging
@@ -109,7 +110,7 @@ class Layer {
 		data.isVisible = this.isVisible;
 		data.isLocked = this.isLocked;
 		data.opacity = this.opacity;
-
+		data.strokes = this.canvas.strokes;
 		data.imageData = this.canvas.canvas.toDataURL();
 
 		return data;
@@ -170,7 +171,6 @@ $('#layer-add').on('click', function() {
 	nLayer++;
 	var n = new Layer();
 	layers.push(n);
-
 
 	$('#' + n.id + '-control').trigger('mousedown');
 	$('#' + n.id + '-control').trigger('mouseup');

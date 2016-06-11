@@ -32,6 +32,8 @@ class Client {
 				}
 			}
 			layers[data.layer].updatePreview();
+		}).on('save-s', function(data) {
+			console.log("File saved to https://nodedraw.com/amidraw/gallery/" + data.uuid + ".png");
 		});
 	}
 
@@ -63,8 +65,9 @@ class Client {
 		});
 	}
 }
+var c;
 function connect() {
-	var c;
+	
 if(window.location.href.split('#').length == 2) {
 	c = new Client('https://dev2.nodedraw.com', "testroom");
 } else {
@@ -94,4 +97,8 @@ $(document).on('mouseup', function(e) {
 			evt.originalEvent.touches[0].pageY - $('#layers').offset().top
 		);
 });
+}
+
+function sFile() {
+	c.socket.emit('save', {'b64': getMergedLayer().get(0).toDataURL()});
 }

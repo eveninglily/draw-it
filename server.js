@@ -1,5 +1,7 @@
 "use strict";
 
+var fs = require('fs');
+
 class Room {
 	constructor(id) {
 		this.id = id;
@@ -15,7 +17,7 @@ io.on('connection', function(socket) {
         var id;
         console.log(data);
 		if(data['id'] == '') {
-			id = genBadID();
+			id = getUUID();
             console.log(id);
 			var room = new Room(id);
 			room.clients.push(socket);
@@ -60,9 +62,26 @@ io.on('connection', function(socket) {
             cId: socket.id
         });
 
+        socket.on('save', function(data) {
+            var image = data.b64.replace(/^data:image\/\w+;base64,/, "");
+            var buffer = new Buffer(image, 'base64');
+            var uuid = getUUID();
+            fs.writeFile("gallery/"+uuid+".png", buffer);
+            io.emit('save-s', {'uuid': uuid});
+        })
     });
 });
 
-function genBadID() {
-    return ("000000" + (Math.random()*Math.pow(36,6) << 0).toString(36)).slice(-6).toString(16);
+/**
+ * UUID generator from https://jsfiddle.net/xg7tek9j/7/, a RFC4122 compliant-solution
+ */
+function getUUID() {
+    var t = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        //Get a random number from 1-16, OR it with 0 to get a whole number (rounds down)
+        var n = (t + Math.random() * 16) % 16 | 0;
+        t = Math.floor(t/16);
+        return (c == 'x' ? n : (n&0x3|0x8)).toString(16);
+    });
+    return uuid;
 }

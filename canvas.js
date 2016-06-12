@@ -1,5 +1,9 @@
 "use strict";
 
+/**
+ * A wrapper class for canvases that make user drawing much easier
+ * Uses a stroke system and a hidden canvas to allow for opacity and smooth drawing
+ */
 class DrawingCanvas {
 	constructor(canvas) {
 		this.name = "";
@@ -13,37 +17,61 @@ class DrawingCanvas {
 		this.backCanvas.height = canvas.height;
 	}
 
+	/**
+	 * Clears the visible drawing canvas
+	 */
 	clear() {
 		this.ctx.clearRect(0, 0, this.width, this.height);
 	}
 
+	/**
+	 * Clears the back canvas
+	 */
 	clearBuffer() {
 		this.backCanvas.getContext('2d').clearRect(0, 0, this.width, this.height);
 	}
 
+	/**
+	 * Saves canvas to disk
+	 */
 	saveToDisk() {
 		var data = this.toImage().src.replace('image/png','image/octet-stream');
 		window.location.href = data;
 	}
 
+	/**
+	 * Saves canvas to localStorage
+	 */
 	toLocalStorage() {
 		localStorage.setItem('canvas-' + this.name, this.canvas.toDataURL());
 	}
 
+	/**
+	 * Returns an image element containing the canvas contents
+	 */
 	toImage() {
 		var image = new Image();
 		image.src = this.canvas.toDataURL();
 		return image;
 	}
 
+	/**
+	 * Draws a canvas onto the visible canvas
+	 */
 	drawCanvas(otherCanvas) {
 		this.ctx.drawImage(otherCanvas, 0, 0);
 	}
-	
+
+	/**
+	 * Draws a canvas onto the buffer canvas
+	 */
 	drawCanvasOntoBuffer(otherCanvas) {
 		this.backCanvas.getContext('2d').drawImage(otherCanvas, 0, 0);
 	}
 
+	/**
+	 * Draws a blob onto the canvas
+	 */
 	drawBlob(blob, x, y) {
 		var reader = new FileReader();
 		var _t = this;
@@ -58,6 +86,10 @@ class DrawingCanvas {
 		reader.readAsDataURL(blob);
 	}
 
+	/**
+	 * Ensures that all the ctx values are what they should be
+	 * Checks before setting as to not affect performance too much
+	 */
 	setContextValues(tool) {
 		if (this.ctx.globalAlpha != tool.opacity) { this.ctx.globalAlpha = tool.opacity; }
 		if (this.ctx.lineJoin != 'round') { this.ctx.lineJoin = 'round'; }
@@ -70,7 +102,11 @@ class DrawingCanvas {
 		}
 	}
 
-	createText(text, tool, x, y) { //TODO: Look at again
+	/**
+	 * Creates text at the given point
+	 * TODO: Improve and document
+	 */
+	createText(text, tool, x, y) {
 		this.ctx.fillStyle = tool.color;
 		this.ctx.font = tool.size;
 		this.ctx.fillText(text, x, y);
@@ -80,15 +116,25 @@ class DrawingCanvas {
 		this.backCanvas.getContext('2d').fillText(text, x, y);
 	}
 
+	/**
+	 * Starts a new stroke
+	 * @param {Object} tool - The tool to use
+	 * @param {number} x - The x coordinate
+	 * @param {number} x - The y coordinate
+	 * @param {string} id - The id of the stroke
+	 */
 	beginStroke(tool, x, y, id) {
 		var s = new Stroke(JSON.parse(JSON.stringify(tool)));
 		s.addPoint(x, y);
 		this.strokes[id] = s;
 	}
 
+	/**
+	 * Finalizes the stroke by drawing it onto the buffer canvas
+	 * @param {Object} stroke - The stroke to finalize
+	 */
 	completeStroke(stroke) {
 		this.clear();
-		//this.ctx.globalAlpha = 1;
 		this.drawCanvas(this.backCanvas);
         this.drawStroke(stroke);
 
@@ -96,6 +142,10 @@ class DrawingCanvas {
 		this.backCanvas.getContext('2d').drawImage(this.canvas, 0, 0);
 	}
 
+	/**
+	 * Updates strokes by their ids
+	 * @param {string[]} - The stroke IDs to draw
+	 */
 	doStrokes(ids) {
         this.clear();
         this.drawCanvas(this.backCanvas);
@@ -105,6 +155,11 @@ class DrawingCanvas {
 		}
 	}
 
+	/**
+	 * Draws a stroke onto the canvas
+	 * TODO: document the inside of this function
+	 * @param {Object} stroke - The Stroke to draw
+	 */
 	drawStroke(stroke) {
 		this.ctx.save();
 		this.setContextValues(stroke.tool);
@@ -143,7 +198,11 @@ class DrawingCanvas {
 		this.ctx.restore();
 	}
 
-	static load(name) {
+	/**
+	 * Loads a canvas from localstorage
+	 * @param {string} name - Name of the canvas
+	 */
+	static loadFromLocalStorage(name) {
 		if (localStorage.getItem('canvas-' + name)) {
             var img = new Image;
             img.src = localStorage.getItem('canvas');
@@ -158,6 +217,11 @@ class DrawingCanvas {
 	}
 }
 
+/**
+ * Holds all the points in a stroke
+ * TODO: Make this calculate the control points as points are added
+ * TODO: Document this
+ */
 class Stroke {
 	constructor(tool) {
 		this.tool = tool;
@@ -189,6 +253,10 @@ class Stroke {
     }
 }
 
+/**
+ * Simple object to hold data about tools in a standard way
+ * TODO: Consider rewrite, implications of rewrite
+ */
 class Tool {
 	constructor(name, size, meta, color) {
 		this.name = name;

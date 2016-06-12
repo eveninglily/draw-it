@@ -1,5 +1,8 @@
 "use strict";
 
+/**
+ * Simple holder class that holds a stroke and the layer it happened on
+ */
 class Change {
 	constructor(stroke, layer) {
 		this.stroke = stroke;
@@ -9,7 +12,7 @@ class Change {
 
 var changes = [];
 var currentChange = 0;
-
+//TODO: Document functions
 function addChange(stroke) {
 	if (currentChange != changes.length) {
         changes.splice(currentChange, changes.length - currentChange);

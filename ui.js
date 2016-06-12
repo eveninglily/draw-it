@@ -14,3 +14,11 @@ class SliderVar {
         });
     }
 }
+
+
+$(document).on('mousedown', function(e) {
+    if(!(e.target.className == "context-item"))
+        $('.context-item').remove();
+});
+
+//TODO: write contextmenu class or something

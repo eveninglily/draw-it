@@ -1,7 +1,10 @@
 var nLayer = 0;
 var longClick = false;
 
-//Wrapper for DrawingCanvas that also holds metadata
+/**
+ * Wrapper for DrawingCanvas that also holds metadata
+ * TODO: Document more
+ */
 class Layer {
 	constructor() {
 		this.isLocked = false; //Unused for now

@@ -105,5 +105,6 @@ $(document).on('mouseup touchend touchcancel', function(e) {
 });
 
 $(window).on('beforeunload', function() {
+	//TODO: add setting to disable this message
 	//return 'Are you sure you want to leave? Your drawing will be lost.';
 });

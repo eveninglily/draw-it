@@ -1,6 +1,6 @@
 "use strict";
 
-//TODO: Clean and implement front-end side of this code
+//TODO: Clean and implement front-end side of this code, document
 class Selection {
     constructor(target, lineDash) {
         this.canvas = $('<canvas>').attr('width', target.width)

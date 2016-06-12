@@ -157,12 +157,8 @@ function addPaletteItem(color) {
 	    });
 }
 
-$(document).on('mousedown', function(e) {
-    if(!(e.target.className == "context-item"))
-        $('.context-item').remove();
-});
-
 //TODO: write common function for this type of thing
+//TODO: Show where outline was and drag a ghost along
 $('#color-settings').on('mousemove', function(e) {
     if(lClick) {
         var r = $('.currColor');
@@ -232,13 +228,15 @@ $('#hsv-toggle').on('click', function() {
 });
 
 $('#gradient-toggle').on('click', function() {
-
+    //TODO: Figure out what this actually does
+    //TODO: Implement a UI for this
 });
 
 $('#palette-toggle').on('click', function() {
     $('#color-settings').toggle();
 });
 
+//TODO: Make these actually do something
 var hue = new SliderVar('hue');
-var hue = new SliderVar('saturation');
-var hue = new SliderVar('value');
+var saturation = new SliderVar('saturation');
+var value = new SliderVar('value');

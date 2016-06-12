@@ -94,6 +94,7 @@ function saveToJSON() {
 
 /**
  * Loads JSON data into the layers
+ * TODO: Actually implement this
  * @param {Object} data - The JSON data to load
  */
 function loadFromJSON(data) {}

@@ -37,23 +37,38 @@ $('#redo').on('click', function() { redo(); });
 $('#fileName').on('input', function() {
 	var name = $('#fileName').val();
 	if(name.length == 0) {
-		name = "amidraw.png";
+		name = "amidraw";
 	}
-	$('#dl-link').attr('download', $('#fileName').val() + '.png');
+	$('#dl-link').attr('download', name + '.' + $('#fileType').val());
 });
 
 $('#modal-bg').on('click', function(e) {
-	if(e.target.id != "modal")
-		if(e.target.id != "fileName")
-			if(e.target.id != "dl-link")
-				$('#modal-bg').hide();
+	if(e.target.id == 'modal-bg') {
+		$('#modal-bg').hide();
+	}
 }).hide();
 
 $("#save").on('click', function(e) {
 	$('#modal-bg').show().css('display','flex');
-    $('#dl-link').attr('href', getMergedLayer().get(0).toDataURL('image/png').replace('image/png', 'image/octet-stream')).on('click', function() {
-		sFile();
+    $('#dl-link').attr('href', saveToPNG()).on('click', function() {
+		if($('#upload').is(':checked')) {
+			sFile();
+		}
+		$('#modal-bg').hide();
 	});
+});
+
+$('#fileType').on('change', function() {
+	var name = $('#fileName').val();
+	if(name.length == 0) {
+		name = "amidraw";
+	}
+	$('#dl-link').attr('download', name + '.' + $('#fileType').val());
+	if($('fileType').val() == 'png') {
+		$('#dl-link').attr('href', saveToPNG());
+	} else {
+		$('#dl-link').attr('href', saveToJSON());
+	}
 });
 
 //TODO: Find a better name
@@ -66,7 +81,14 @@ function getMergedLayer() {
 }
 
 /**
- * Creates and saves a JSON file containing all the layer data
+ * Returns a data url containing the PNG data
+ */
+function saveToPNG() {
+	return getMergedLayer().get(0).toDataURL('image/png').replace('image/png', 'image/octet-stream');
+}
+
+/**
+ * Returns a data url containing the layer data in JSON
  */
 function saveToJSON() {
 	var data = {};
@@ -76,11 +98,7 @@ function saveToJSON() {
 	var blob = new Blob([JSON.stringify(data)], {type:"application/json"});
 
     var url = URL.createObjectURL(blob);
-
-    var a = document.createElement('a');
-    a.download = "amidraw.json";
-    a.href = url;
-    a.click();
+	return url;
 }
 
 /**

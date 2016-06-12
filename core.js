@@ -105,5 +105,5 @@ $(document).on('mouseup touchend touchcancel', function(e) {
 });
 
 $(window).on('beforeunload', function() {
-	return 'Are you sure you want to leave? Your drawing will be lost.';
+	//return 'Are you sure you want to leave? Your drawing will be lost.';
 });

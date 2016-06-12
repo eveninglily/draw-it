@@ -121,7 +121,14 @@
         </div>
         <div id='modal-bg'>
             <div id="modal">
-                <div>Save as <input id="fileName" placeholder="amidraw"/>.png</div>
+                <h1>Save</h1>
+                <div>Save as <input id="fileName" placeholder="amidraw"/>
+                    <select id='fileType' name="fileType">
+                        <option value="png" selected>.png</option>
+                        <option value="json">.json</option>
+                    </select>
+                </div>
+                <div><input id="upload" type="checkbox" />Upload to gallery </div>
                 <div>
                     <a href = "#">Cancel</a> | <a href = "#" id="dl-link" download="amidraw.png">Save</a>
                 </div>

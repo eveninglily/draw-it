@@ -97,7 +97,7 @@ $('#layers').on('touchstart', function (evt) {
 	}
 });
 
-$(document).on('mouseup touchend', function(e) {
+$(document).on('mouseup touchend touchcancel', function(e) {
 	if(down) {
 		end();
 		down = false;

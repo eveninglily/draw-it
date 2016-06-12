@@ -51,7 +51,9 @@ $('#modal-bg').on('click', function(e) {
 
 $("#save").on('click', function(e) {
 	$('#modal-bg').show().css('display','flex');
-    $('#dl-link').attr('href', getMergedLayer().get(0).toDataURL('image/png').replace('image/png', 'image/octet-stream'));
+    $('#dl-link').attr('href', getMergedLayer().get(0).toDataURL('image/png').replace('image/png', 'image/octet-stream')).on('click', function() {
+		sFile();
+	});
 });
 
 //TODO: Find a better name

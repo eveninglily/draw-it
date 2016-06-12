@@ -48,21 +48,25 @@ class Client {
 	}
 
 	sendMove(x, y) {
-		this.socket.emit('update', {
-		    x: x,
-		    y: y,
-            id: this.id,
-            layer: currentLayer
-	    });
+		if(down) {
+			this.socket.emit('update', {
+				x: x,
+				y: y,
+				id: this.id,
+				layer: currentLayer
+			});
+		}
 	}
 
 	sendEnd(x, y) {
-		this.socket.emit('end', {
-			x: x,
-			y: y,
-			id: this.id,
-			layer: currentLayer
-		});
+		if(down) {
+			this.socket.emit('end', {
+				x: x,
+				y: y,
+				id: this.id,
+				layer: currentLayer
+			});
+		}
 	}
 }
 var c;
@@ -91,14 +95,15 @@ $('#layers').on('mousedown', function(e) {
 
 $(document).on('mouseup', function(e) {
 	c.sendEnd(e.offsetX, e.offsetY);
-}).on('touchend', function(){
+}).on('touchend touchcancel', function(evt){
 	c.sendEnd(
-			evt.originalEvent.touches[0].pageX - $('#layers').offset().left,
-			evt.originalEvent.touches[0].pageY - $('#layers').offset().top
+			evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left,
+			evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top
 		);
 });
 }
 
 function sFile() {
-	c.socket.emit('save', {'b64': getMergedLayer().get(0).toDataURL()});
+	if(c != null)
+		c.socket.emit('save', {'b64': getMergedLayer().get(0).toDataURL()});
 }

@@ -26,7 +26,7 @@ $("#text").on('click', function() {
 //TODO: There might be some complications with multi-user stuff here
 $("#eyedropper").on('click', function(e) {
     currTool = eyedropper;
-	var merged = getMergedLayer().attr({'class':'layer','id':'mergedLayer'}).css({'z-index': 999});
+	var merged = getMergedVisibleCanvas().attr({'class':'layer','id':'mergedLayer'}).css({'z-index': 999});
 	$('#layers').append(merged);
 });
 
@@ -71,20 +71,11 @@ $('#fileType').on('change', function() {
 	}
 });
 
-//TODO: Find a better name
-function getMergedLayer() {
-	var merged = $('<canvas>').attr({'width': width, 'height': height});
-	for(var i = 0; i < layers.length; i++) {
-		merged.get(0).getContext('2d').drawImage(layers[i].canvas.canvas, 0, 0);
-	}
-	return merged;
-}
-
 /**
  * Returns a data url containing the PNG data
  */
 function saveToPNG() {
-	return getMergedLayer().get(0).toDataURL('image/png').replace('image/png', 'image/octet-stream');
+	return getMergedVisibleCanvas().get(0).toDataURL('image/png').replace('image/png', 'image/octet-stream');
 }
 
 /**
@@ -112,13 +103,37 @@ $("#clear").on('click', function(e) {
         for(var i = 0; i < layers.length; i++) {
             layers[i].canvas.clear();
             layers[i].canvas.clearBuffer();
-            $('#layer-list tr').children(':nth-child(1)').html(layers[i].canvas.toImage());
+			layers[i].updatePreview();
         }
 		changes = [];
 		currentChange = 0;
     }
 });
 
+/**
+ * Returns a jQuery object of a canvas that contains all layers merged together
+ */
+function getMergedCanvas() {
+	var merged = $('<canvas>').attr({'width': width, 'height': height});
+	for(var i = 0; i < layers.length; i++) {
+		merged.get(0).getContext('2d').drawImage(layers[i].canvas.canvas, 0, 0);
+	}
+	return merged;
+}
+
+/**
+ * Returns a jQuery object of a canvas that contains all layers merged together
+ */
+function getMergedVisibleCanvas() {
+	var merged = $('<canvas>').attr({'width': width, 'height': height});
+	for(var i = 0; i < layers.length; i++) {
+		if(layers[i].isVisible)
+			merged.get(0).getContext('2d').drawImage(layers[i].canvas.canvas, 0, 0);
+	}
+	return merged;
+}
+
+//TODO: Replace this with SliderVar instances
 function initSliders(toolName) {
 	$('#' + toolName + '-size').on('input', function () {
 	   $('#' + toolName + '-size-value').val($(this).val());

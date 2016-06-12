@@ -105,5 +105,5 @@ $(document).on('mouseup', function(e) {
 
 function sFile() {
 	if(c != null)
-		c.socket.emit('save', {'b64': getMergedLayer().get(0).toDataURL()});
+		c.socket.emit('save', {'b64': getMergedVisibleCanvas().get(0).toDataURL()});
 }

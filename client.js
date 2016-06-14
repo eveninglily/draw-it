@@ -1,4 +1,8 @@
-var client; //TODO: replace 'c' with this
+var client;
+
+$(document).ready(function() {
+	client = new Client('https://dev2.nodedraw.com');
+});
 
 class Client {
 	constructor(server) {
@@ -6,8 +10,8 @@ class Client {
 		this.connected = false;
 	}
 
-	connect(server) {
-		this.socket = io(server);
+	connect() {
+		this.socket = io(this.server);
 		var _t = this;
 		this.socket.on('connect', function() {
 			_t.connected = true;
@@ -79,8 +83,14 @@ class Client {
 			});
 		}
 	}
+
+	save() {
+		this.socket.emit('save', {'b64': getMergedVisibleCanvas().get(0).toDataURL()}, function(data) {
+			console.log(data);
+		});
+	}
 }
-var c;
+
 function connect() {/*
 if(window.location.href.split('#').length == 2) {
 	c = new Client('https://dev2.nodedraw.com');
@@ -112,13 +122,3 @@ $(document).on('mouseup', function(e) {
 		);
 });*/
 }
-
-function sFile() {
-	c.socket.emit('save', {'b64': getMergedVisibleCanvas().get(0).toDataURL()}, function(data) {
-		console.log(data);
-	});
-}
-
-$(document).ready(function() {
-	c = new Client('https://dev2.nodedraw.com');
-});

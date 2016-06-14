@@ -63,12 +63,13 @@ io.on('connection', function(socket) {
         });
     });
 
-    socket.on('save', function(data) {
+    socket.on('save', function(data, fn) {
         var image = data.b64.replace(/^data:image\/\w+;base64,/, "");
         var buffer = new Buffer(image, 'base64');
         var uuid = getUUID();
         fs.writeFile("gallery/"+uuid+".png", buffer);
-        io.emit('save-s', {'uuid': uuid});
+        console.log('saving at https://nodedraw.com/amidraw/gallery/' + uuid + '.png');
+        fn({'url':'https://nodedraw.com/amidraw/gallery/' + uuid + '.png'});
     });
 });
 

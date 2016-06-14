@@ -58,7 +58,7 @@ $("#save").on('click', function(e) {
 	$('#modal-bg').show().css('display','flex');
     $('#dl-link').attr('href', saveToPNG()).on('click', function() {
 		if($('#upload').is(':checked')) {
-			sFile();
+			client.save();
 		}
 		$('#modal-bg').hide();
 		clearInterval(interval);
@@ -71,7 +71,7 @@ $("#save").on('click', function(e) {
  * Checks the connection to the server, shows an error if not connected
  */
 function checkGalleryConnection() {
-	if(c.connected) {
+	if(client.connected) {
 		$('#gallery-error').hide();
 		$('#upload').prop('disabled', false);
 	} else {
@@ -213,7 +213,7 @@ function initSliders(toolName) {
 }
 
 $('#invite').on('click', function() {
-	connect();
+	client.connect();
 })
 
 initSliders('brush');

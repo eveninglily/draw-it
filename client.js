@@ -26,7 +26,6 @@ class Client {
 			'id': id
 		});
 		this.socket.on('handshake', function(data) {
-			//Recieved a response from the server, everything is good to go
 			console.log('Connected to server! Room ID: ' + data.id);
 			window.location.href = "#" + data.id
 			this.id = data.id;
@@ -49,7 +48,31 @@ class Client {
 				}
 			}
 			layers[data.layer].updatePreview();
-		})
+		});
+
+		$('#layers').on('mousedown', function(e) {
+			c.sendStart(e.offsetX, e.offsetY);
+		}).on('mousemove', function(e) {
+			if(down) {
+				c.sendMove(e.offsetX, e.offsetY);
+			}
+		}).on('touchstart', function (evt) {
+			c.sendStart(evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left, evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top);
+		}).on('touchmove', function (evt) {
+			c.sendMove(
+				evt.originalEvent.touches[0].pageX - $('#layers').offset().left,
+				evt.originalEvent.touches[0].pageY - $('#layers').offset().top
+			);
+		});
+
+		$(document).on('mouseup', function(e) {
+			c.sendEnd(e.offsetX, e.offsetY);
+		}).on('touchend touchcancel', function(evt){
+			c.sendEnd(
+				evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left,
+				evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top
+			);
+		});
 	}
 
 	sendStart(x, y) {
@@ -86,39 +109,7 @@ class Client {
 
 	save() {
 		this.socket.emit('save', {'b64': getMergedVisibleCanvas().get(0).toDataURL()}, function(data) {
-			console.log(data);
+			console.log("Saved to gallery at " + data.url);
 		});
 	}
-}
-
-function connect() {/*
-if(window.location.href.split('#').length == 2) {
-	c = new Client('https://dev2.nodedraw.com');
-} else {
-	c = new Client('https://dev2.nodedraw.com');
-}
-
-$('#layers').on('mousedown', function(e) {
-	c.sendStart(e.offsetX, e.offsetY);
-}).on('mousemove', function(e) {
-	if(down) {
-	c.sendMove(e.offsetX, e.offsetY);
-	}
-}).on('touchstart', function (evt) {
-	c.sendStart(evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left, evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top);
-}).on('touchmove', function (evt) {
-		c.sendMove(
-			evt.originalEvent.touches[0].pageX - $('#layers').offset().left,
-			evt.originalEvent.touches[0].pageY - $('#layers').offset().top
-		);
-});
-
-$(document).on('mouseup', function(e) {
-	c.sendEnd(e.offsetX, e.offsetY);
-}).on('touchend touchcancel', function(evt){
-	c.sendEnd(
-			evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left,
-			evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top
-		);
-});*/
 }

@@ -1,13 +1,26 @@
-var socket;
+var client; //TODO: replace 'c' with this
 
 class Client {
-	constructor(server, id) {
+	constructor(server) {
+		this.server = server;
 		this.connected = false;
+	}
+
+	connect(server) {
 		this.socket = io(server);
+		var _t = this;
+		this.socket.on('connect', function() {
+			_t.connected = true;
+			console.log('connected!')
+		}).on('disconnect', function() {
+			_t.connected = false;
+		});
+	}
+
+	joinRoom(id) {
 		this.socket.emit('join-room', {
 			'id': id
 		});
-
 		this.socket.on('handshake', function(data) {
 			//Recieved a response from the server, everything is good to go
 			console.log('Connected to server! Room ID: ' + data.id);
@@ -32,9 +45,7 @@ class Client {
 				}
 			}
 			layers[data.layer].updatePreview();
-		}).on('save-s', function(data) {
-			console.log("File saved to https://nodedraw.com/amidraw/gallery/" + data.uuid + ".png");
-		});
+		})
 	}
 
 	sendStart(x, y) {
@@ -70,12 +81,11 @@ class Client {
 	}
 }
 var c;
-function connect() {
-	
+function connect() {/*
 if(window.location.href.split('#').length == 2) {
-	c = new Client('https://dev2.nodedraw.com', "testroom");
+	c = new Client('https://dev2.nodedraw.com');
 } else {
-	c = new Client('https://dev2.nodedraw.com', "testroom");
+	c = new Client('https://dev2.nodedraw.com');
 }
 
 $('#layers').on('mousedown', function(e) {
@@ -100,10 +110,15 @@ $(document).on('mouseup', function(e) {
 			evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left,
 			evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top
 		);
-});
+});*/
 }
 
 function sFile() {
-	if(c != null)
-		c.socket.emit('save', {'b64': getMergedVisibleCanvas().get(0).toDataURL()});
+	c.socket.emit('save', {'b64': getMergedVisibleCanvas().get(0).toDataURL()}, function(data) {
+		console.log(data);
+	});
 }
+
+$(document).ready(function() {
+	c = new Client('https://dev2.nodedraw.com');
+});

@@ -238,3 +238,8 @@ input[type="number"] {
 .nyi {
     display: none !important;
 }
+
+.err {
+    display: none;
+    color: red;
+}

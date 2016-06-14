@@ -45,8 +45,14 @@ $('#fileName').on('input', function() {
 $('#modal-bg').on('click', function(e) {
 	if(e.target.id == 'modal-bg') {
 		$('#modal-bg').hide();
+		clearInterval(interval);
 	}
 }).hide();
+var interval; //TODO: Stop polluting the code with this
+$('#cancel-save').on('click', function() {
+	$('#modal-bg').hide();
+	clearInterval(interval);
+})
 
 $("#save").on('click', function(e) {
 	$('#modal-bg').show().css('display','flex');
@@ -55,8 +61,25 @@ $("#save").on('click', function(e) {
 			sFile();
 		}
 		$('#modal-bg').hide();
+		clearInterval(interval);
 	});
+
+	interval = setInterval(checkGalleryConnection, 500);
 });
+
+/**
+ * Checks the connection to the server, shows an error if not connected
+ */
+function checkGalleryConnection() {
+	if(c.connected) {
+		$('#gallery-error').hide();
+		$('#upload').prop('disabled', false);
+	} else {
+		$('#gallery-error').show();
+		$('#upload').prop('disabled', true);
+		$('#upload').prop('checked', false);
+	}
+}
 
 $('#fileType').on('change', function() {
 	var name = $('#fileName').val();

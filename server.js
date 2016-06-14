@@ -54,7 +54,6 @@ io.on('connection', function(socket) {
     });
 
     socket.on('end', function(data) {
-        console.log(data);
         socket.broadcast.to(data.id).emit('end', {
             x: data.x,
             y: data.y,
@@ -65,12 +64,12 @@ io.on('connection', function(socket) {
     });
 
     socket.on('save', function(data) {
-            var image = data.b64.replace(/^data:image\/\w+;base64,/, "");
-            var buffer = new Buffer(image, 'base64');
-            var uuid = getUUID();
-            fs.writeFile("gallery/"+uuid+".png", buffer);
-            io.emit('save-s', {'uuid': uuid});
-        })
+        var image = data.b64.replace(/^data:image\/\w+;base64,/, "");
+        var buffer = new Buffer(image, 'base64');
+        var uuid = getUUID();
+        fs.writeFile("gallery/"+uuid+".png", buffer);
+        io.emit('save-s', {'uuid': uuid});
+    });
 });
 
 /**

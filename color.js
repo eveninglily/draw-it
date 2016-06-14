@@ -108,12 +108,12 @@ $('#loadPalette').on('change', function() {
     loadJSONFile($('#loadPalette').get(0).files[0], loadPalette);
 });
 
-function loadPalette() {
+function loadPalette(json) {
     for(var key in json) {
         addPaletteItem(json[key]);
     }
 }
-var lClick;
+
 function addPaletteItem(color) {
     var paletteItem = $('<div>')
         .addClass('color')
@@ -124,9 +124,6 @@ function addPaletteItem(color) {
         }).on('mousedown', function(e) {
             $('.currColor').removeClass('currColor');
             $(this).addClass('currColor');
-            $(this).data("longClick", setTimeout(function(){
-                lClick = true;
-            },200));
         }).on('contextmenu', function(e) {
             $("<div>").on('click', function() {
                 paletteItem.remove();
@@ -136,21 +133,17 @@ function addPaletteItem(color) {
                 left: e.pageX,
                 top: e.pageY
             }).appendTo('body');
-
             return false;
         });
 
         paletteItem.appendTo('#color-palette');
-        $(document).on('mouseup', function() {
-            clearTimeout(paletteItem.data("longClick"));
-            lClick = false;
-        });
+        detectLongClick(paletteItem);
 }
 
 //TODO: write common function for this type of thing
 //TODO: Show where outline was and drag a ghost along
 $('#color-settings').on('mousemove', function(e) {
-    if(lClick) {
+    if($('.currColor').data('dragging')) {
         var r = $('.currColor');
 
         e.preventDefault();

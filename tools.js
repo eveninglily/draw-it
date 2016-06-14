@@ -30,7 +30,7 @@ $("#eyedropper").on('click', function(e) {
     $('#layers').append(merged);
 });
 
-$('#undo').on('click', function() {    undo(); });
+$('#undo').on('click', function() { undo(); });
 
 $('#redo').on('click', function() { redo(); });
 
@@ -42,29 +42,28 @@ $('#fileName').on('input', function() {
     $('#dl-link').attr('download', name + '.' + $('#fileType').val());
 });
 
-$('#modal-bg').on('click', function(e) {
-    if(e.target.id == 'modal-bg') {
-        $('#modal-bg').hide();
-        clearInterval(interval);
+$('#modal-bg').on('click', function(evt) {
+    if(evt.target.id == 'modal-bg') {
+        hideSave();
     }
 }).hide();
-var interval; //TODO: Stop polluting the code with this
-$('#cancel-save').on('click', function() {
-    $('#modal-bg').hide();
-    clearInterval(interval);
-})
 
+function hideSave(){
+    $('#modal-bg').hide();
+    clearInterval($('#gallery-error').data('interval'));
+}
+
+$('#cancel-save').on('click', hideSave);
 $("#save").on('click', function(e) {
     $('#modal-bg').show().css('display','flex');
     $('#dl-link').attr('href', saveToPNG()).on('click', function() {
         if($('#upload').is(':checked')) {
             client.save();
         }
-        $('#modal-bg').hide();
-        clearInterval(interval);
+        hideSave();
     });
 
-    interval = setInterval(checkGalleryConnection, 500);
+    $('#gallery-error').data('interval', setInterval(checkGalleryConnection, 500));
 });
 
 /**

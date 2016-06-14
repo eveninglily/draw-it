@@ -5,176 +5,176 @@
  * Uses a stroke system and a hidden canvas to allow for opacity and smooth drawing
  */
 class DrawingCanvas {
-	constructor(canvas) {
-		this.name = "";
-		this.canvas = canvas;
-		this.ctx = canvas.getContext('2d');
-		this.width = canvas.width;
-		this.height = canvas.height;
-		this.strokes = {};
-		this.backCanvas = document.createElement('canvas');
-		this.backCanvas.width = canvas.width;
-		this.backCanvas.height = canvas.height;
-	}
+    constructor(canvas) {
+        this.name = "";
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.width = canvas.width;
+        this.height = canvas.height;
+        this.strokes = {};
+        this.backCanvas = document.createElement('canvas');
+        this.backCanvas.width = canvas.width;
+        this.backCanvas.height = canvas.height;
+    }
 
-	/**
-	 * Clears the visible drawing canvas
-	 */
-	clear() {
-		this.ctx.clearRect(0, 0, this.width, this.height);
-	}
+    /**
+     * Clears the visible drawing canvas
+     */
+    clear() {
+        this.ctx.clearRect(0, 0, this.width, this.height);
+    }
 
-	/**
-	 * Clears the back canvas
-	 */
-	clearBuffer() {
-		this.backCanvas.getContext('2d').clearRect(0, 0, this.width, this.height);
-	}
+    /**
+     * Clears the back canvas
+     */
+    clearBuffer() {
+        this.backCanvas.getContext('2d').clearRect(0, 0, this.width, this.height);
+    }
 
-	/**
-	 * Saves canvas to disk
-	 */
-	saveToDisk() {
-		var data = this.toImage().src.replace('image/png','image/octet-stream');
-		window.location.href = data;
-	}
+    /**
+     * Saves canvas to disk
+     */
+    saveToDisk() {
+        var data = this.toImage().src.replace('image/png','image/octet-stream');
+        window.location.href = data;
+    }
 
-	/**
-	 * Saves canvas to localStorage
-	 */
-	toLocalStorage() {
-		localStorage.setItem('canvas-' + this.name, this.canvas.toDataURL());
-	}
+    /**
+     * Saves canvas to localStorage
+     */
+    toLocalStorage() {
+        localStorage.setItem('canvas-' + this.name, this.canvas.toDataURL());
+    }
 
-	/**
-	 * Returns an image element containing the canvas contents
-	 */
-	toImage() {
-		var image = new Image();
-		image.src = this.canvas.toDataURL();
-		return image;
-	}
+    /**
+     * Returns an image element containing the canvas contents
+     */
+    toImage() {
+        var image = new Image();
+        image.src = this.canvas.toDataURL();
+        return image;
+    }
 
-	loadDataURL(data) {
-		var image = new Image();
-		var _t = this;
-		image.onload = function() {
-			_t.ctx.drawImage(image, 0, 0);
-			_t.backCanvas.getContext('2d').drawImage(image, 0, 0);
-		}
-		image.src = data;
-	}
+    loadDataURL(data) {
+        var image = new Image();
+        var _t = this;
+        image.onload = function() {
+            _t.ctx.drawImage(image, 0, 0);
+            _t.backCanvas.getContext('2d').drawImage(image, 0, 0);
+        }
+        image.src = data;
+    }
 
-	/**
-	 * Draws a canvas onto the visible canvas
-	 */
-	drawCanvas(otherCanvas) {
-		this.ctx.drawImage(otherCanvas, 0, 0);
-	}
+    /**
+     * Draws a canvas onto the visible canvas
+     */
+    drawCanvas(otherCanvas) {
+        this.ctx.drawImage(otherCanvas, 0, 0);
+    }
 
-	/**
-	 * Draws a canvas onto the buffer canvas
-	 */
-	drawCanvasOntoBuffer(otherCanvas) {
-		this.backCanvas.getContext('2d').drawImage(otherCanvas, 0, 0);
-	}
+    /**
+     * Draws a canvas onto the buffer canvas
+     */
+    drawCanvasOntoBuffer(otherCanvas) {
+        this.backCanvas.getContext('2d').drawImage(otherCanvas, 0, 0);
+    }
 
-	/**
-	 * Draws a blob onto the canvas
-	 */
-	drawBlob(blob, x, y) {
-		var reader = new FileReader();
-		var _t = this;
-		reader.onload = function () {
-			var img = new Image();
-			img.src = reader.result;
-			img.onload = function () {
-				_t.ctx.drawImage(img, x, y);
-				_t.backCanvas.getContext('2d').drawImage(img, x, y);
-			}
-		}
-		reader.readAsDataURL(blob);
-	}
+    /**
+     * Draws a blob onto the canvas
+     */
+    drawBlob(blob, x, y) {
+        var reader = new FileReader();
+        var _t = this;
+        reader.onload = function () {
+            var img = new Image();
+            img.src = reader.result;
+            img.onload = function () {
+                _t.ctx.drawImage(img, x, y);
+                _t.backCanvas.getContext('2d').drawImage(img, x, y);
+            }
+        }
+        reader.readAsDataURL(blob);
+    }
 
-	/**
-	 * Ensures that all the ctx values are what they should be
-	 * Checks before setting as to not affect performance too much
-	 */
-	setContextValues(tool) {
-		if (this.ctx.globalAlpha != tool.opacity) { this.ctx.globalAlpha = tool.opacity; }
-		if (this.ctx.lineJoin != 'round') { this.ctx.lineJoin = 'round'; }
-		if (this.ctx.lineCap != 'round') { this.ctx.lineCap = 'round'; }
-		if (this.ctx.lineWidth != (tool.size * 2)) { this.ctx.lineWidth = tool.size * 2; }
-		if (this.ctx.strokeStyle != tool.color) { this.ctx.strokeStyle = tool.color };
-		if (this.ctx.fillStyle != tool.color) { this.ctx.fillStyle = tool.color; }
-		if (this.ctx.globalCompositeOperation != tool.globalCompositeOperation) {
-			this.ctx.globalCompositeOperation = tool.meta;
-		}
-	}
+    /**
+     * Ensures that all the ctx values are what they should be
+     * Checks before setting as to not affect performance too much
+     */
+    setContextValues(tool) {
+        if (this.ctx.globalAlpha != tool.opacity) { this.ctx.globalAlpha = tool.opacity; }
+        if (this.ctx.lineJoin != 'round') { this.ctx.lineJoin = 'round'; }
+        if (this.ctx.lineCap != 'round') { this.ctx.lineCap = 'round'; }
+        if (this.ctx.lineWidth != (tool.size * 2)) { this.ctx.lineWidth = tool.size * 2; }
+        if (this.ctx.strokeStyle != tool.color) { this.ctx.strokeStyle = tool.color };
+        if (this.ctx.fillStyle != tool.color) { this.ctx.fillStyle = tool.color; }
+        if (this.ctx.globalCompositeOperation != tool.globalCompositeOperation) {
+            this.ctx.globalCompositeOperation = tool.meta;
+        }
+    }
 
-	/**
-	 * Creates text at the given point
-	 * TODO: Improve and document
-	 */
-	createText(text, tool, x, y) {
-		this.ctx.fillStyle = tool.color;
-		this.ctx.font = tool.size;
-		this.ctx.fillText(text, x, y);
+    /**
+     * Creates text at the given point
+     * TODO: Improve and document
+     */
+    createText(text, tool, x, y) {
+        this.ctx.fillStyle = tool.color;
+        this.ctx.font = tool.size;
+        this.ctx.fillText(text, x, y);
 
-		this.backCanvas.getContext('2d').fillStyle = tool.color;
-		this.backCanvas.getContext('2d').font = tool.size;
-		this.backCanvas.getContext('2d').fillText(text, x, y);
-	}
+        this.backCanvas.getContext('2d').fillStyle = tool.color;
+        this.backCanvas.getContext('2d').font = tool.size;
+        this.backCanvas.getContext('2d').fillText(text, x, y);
+    }
 
-	/**
-	 * Starts a new stroke
-	 * @param {Object} tool - The tool to use
-	 * @param {number} x - The x coordinate
-	 * @param {number} x - The y coordinate
-	 * @param {string} id - The id of the stroke
-	 */
-	beginStroke(tool, x, y, id) {
-		var s = new Stroke(JSON.parse(JSON.stringify(tool)));
-		s.addPoint(x, y);
-		this.strokes[id] = s;
-	}
+    /**
+     * Starts a new stroke
+     * @param {Object} tool - The tool to use
+     * @param {number} x - The x coordinate
+     * @param {number} x - The y coordinate
+     * @param {string} id - The id of the stroke
+     */
+    beginStroke(tool, x, y, id) {
+        var s = new Stroke(JSON.parse(JSON.stringify(tool)));
+        s.addPoint(x, y);
+        this.strokes[id] = s;
+    }
 
-	/**
-	 * Finalizes the stroke by drawing it onto the buffer canvas
-	 * @param {Object} stroke - The stroke to finalize
-	 */
-	completeStroke(stroke) {
-		this.clear();
-		this.drawCanvas(this.backCanvas);
-        this.drawStroke(stroke);
-
-		this.backCanvas.getContext('2d').clearRect(0, 0, this.width, this.height);
-		this.backCanvas.getContext('2d').drawImage(this.canvas, 0, 0);
-	}
-
-	/**
-	 * Updates strokes by their ids
-	 * @param {string[]} - The stroke IDs to draw
-	 */
-	doStrokes(ids) {
+    /**
+     * Finalizes the stroke by drawing it onto the buffer canvas
+     * @param {Object} stroke - The stroke to finalize
+     */
+    completeStroke(stroke) {
         this.clear();
         this.drawCanvas(this.backCanvas);
-		for(var i = 0; i < ids.length; i++)
-		{
-			this.drawStroke(this.strokes[ids[i]]);
-		}
-	}
+        this.drawStroke(stroke);
 
-	/**
-	 * Draws a stroke onto the canvas
-	 * TODO: document the inside of this function
-	 * @param {Object} stroke - The Stroke to draw
-	 */
-	drawStroke(stroke) {
-		this.ctx.save();
-		this.setContextValues(stroke.tool);
+        this.backCanvas.getContext('2d').clearRect(0, 0, this.width, this.height);
+        this.backCanvas.getContext('2d').drawImage(this.canvas, 0, 0);
+    }
+
+    /**
+     * Updates strokes by their ids
+     * @param {string[]} - The stroke IDs to draw
+     */
+    doStrokes(ids) {
+        this.clear();
+        this.drawCanvas(this.backCanvas);
+        for(var i = 0; i < ids.length; i++)
+        {
+            this.drawStroke(this.strokes[ids[i]]);
+        }
+    }
+
+    /**
+     * Draws a stroke onto the canvas
+     * TODO: document the inside of this function
+     * @param {Object} stroke - The Stroke to draw
+     */
+    drawStroke(stroke) {
+        this.ctx.save();
+        this.setContextValues(stroke.tool);
         this.ctx.beginPath();
-		if(stroke.path.length > 3) {
+        if(stroke.path.length > 3) {
             var len = stroke.path.length;
             var controls = stroke.controlPoints.concat(stroke.getControlPoints(stroke.path[len-3].x, stroke.path[len - 3].y, stroke.path[len-2].x, stroke.path[len-2].y, stroke.path[len-1].x, stroke.path[len-1].y, .3));
             var cLen = controls.length;
@@ -192,33 +192,33 @@ class DrawingCanvas {
             this.ctx.quadraticCurveTo(controls[cLen - 2],controls[cLen-1],stroke.path[len-1].x,stroke.path[len-1].y);
             this.ctx.stroke();
             this.ctx.closePath();
-		} else {
-			//There are too few points to do a bezier curve, so we just draw the point
-			this.ctx.lineWidth = 1;
-			this.ctx.arc(stroke.path[0].x, stroke.path[0].y, stroke.tool.size, 0, 2 * Math.PI, false);
-			this.ctx.fill();
-    	}
-		this.ctx.stroke();
-		this.ctx.restore();
-	}
+        } else {
+            //There are too few points to do a bezier curve, so we just draw the point
+            this.ctx.lineWidth = 1;
+            this.ctx.arc(stroke.path[0].x, stroke.path[0].y, stroke.tool.size, 0, 2 * Math.PI, false);
+            this.ctx.fill();
+        }
+        this.ctx.stroke();
+        this.ctx.restore();
+    }
 
-	/**
-	 * Loads a canvas from localstorage
-	 * @param {string} name - Name of the canvas
-	 */
-	static loadFromLocalStorage(name) {
-		if (localStorage.getItem('canvas-' + name)) {
+    /**
+     * Loads a canvas from localstorage
+     * @param {string} name - Name of the canvas
+     */
+    static loadFromLocalStorage(name) {
+        if (localStorage.getItem('canvas-' + name)) {
             var img = new Image;
             img.src = localStorage.getItem('canvas');
 
-			var canvas = document.createElement('canvas');
-			canvas.width = img.width;
-			canvas.height = img.height;
+            var canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
 
-			return new DrawingCanvas(canvas);
+            return new DrawingCanvas(canvas);
         }
-		return null;
-	}
+        return null;
+    }
 }
 
 /**
@@ -227,22 +227,22 @@ class DrawingCanvas {
  * TODO: Document this
  */
 class Stroke {
-	constructor(tool) {
-		this.tool = tool;
-    	this.path = [];
+    constructor(tool) {
+        this.tool = tool;
+        this.path = [];
         this.controlPoints = [];
-	}
+    }
 
-	addPoint(x, y) {
-		this.path.push({
-			'x':x,
-			'y':y
-		});
-		if(this.path.length > 3) {
-			var pLen = this.path.length - 1;
-			this.controlPoints = this.controlPoints.concat(this.getControlPoints(this.path[pLen - 3].x, this.path[pLen - 3].y, this.path[pLen - 2].x, this.path[pLen - 2].y, this.path[pLen - 1].x, this.path[pLen - 1].y, .3));
-		}
-	}
+    addPoint(x, y) {
+        this.path.push({
+            'x':x,
+            'y':y
+        });
+        if(this.path.length > 3) {
+            var pLen = this.path.length - 1;
+            this.controlPoints = this.controlPoints.concat(this.getControlPoints(this.path[pLen - 3].x, this.path[pLen - 3].y, this.path[pLen - 2].x, this.path[pLen - 2].y, this.path[pLen - 1].x, this.path[pLen - 1].y, .3));
+        }
+    }
 
     getControlPoints(x1, y1, x2, y2, x3, y3, scale) {
         var dist1 = Math.sqrt(Math.pow( x2 - x1, 2 ) + Math.pow( y2 - y1 , 2 ));
@@ -266,13 +266,13 @@ class Stroke {
  * TODO: Consider rewrite, implications of rewrite
  */
 class Tool {
-	constructor(name, size, meta, color) {
-		this.name = name;
-		this.size = size;
-		this.opacity = 1;
-		this.color = color;
-		this.meta = meta
-	}
+    constructor(name, size, meta, color) {
+        this.name = name;
+        this.size = size;
+        this.opacity = 1;
+        this.color = color;
+        this.meta = meta
+    }
 }
 
 var pencil = new Tool("Pencil", 5, "source-over", "#000000");

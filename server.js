@@ -3,10 +3,10 @@
 var fs = require('fs');
 
 class Room {
-	constructor(id) {
-		this.id = id;
-		this.clients = [];
-	}
+    constructor(id) {
+        this.id = id;
+        this.clients = [];
+    }
 }
 
 var io = require('socket.io')().listen(3000);
@@ -16,22 +16,22 @@ io.on('connection', function(socket) {
     socket.on('join-room', function(data) {
         var id;
         console.log(data);
-		if(data['id'] == '') {
-			id = getUUID();
+        if(data['id'] == '') {
+            id = getUUID();
             console.log(id);
-			var room = new Room(id);
-			room.clients.push(socket);
-			rooms.push(room);
+            var room = new Room(id);
+            room.clients.push(socket);
+            rooms.push(room);
             socket.join(id);
-		} else {
+        } else {
             id = data.id;
-			socket.join(id);
-		}
+            socket.join(id);
+        }
 
-		socket.emit('handshake', {
-			'id': id
-		});
-	});
+        socket.emit('handshake', {
+            'id': id
+        });
+    });
 
     socket.on('start', function(data) {
         socket.broadcast.to(data.id).emit('start', {

@@ -1,13 +1,13 @@
 var colorWheel = new ColorWheel('wheel', 300, function() {
     currTool.color = "#" + colorWheel.getHex();
     $('#hexValue').val("#" + colorWheel.getHex());
-	if(activeColor == 1) {
+    if(activeColor == 1) {
         $("#color1").css({background: currTool.color});
         color1 = currTool.color;
-	} else {
-		$("#color2").css({background: currTool.color});
+    } else {
+        $("#color2").css({background: currTool.color});
         color2 = currTool.color;
-	}
+    }
 });
 
 var color1 = '#000000';
@@ -27,10 +27,10 @@ function updateColorDisplays(hex) {
     if(activeColor == 1) {
         $("#color1").css({background: currTool.color});
         color1 = currTool.color;
-	} else {
-		$("#color2").css({background: currTool.color});
+    } else {
+        $("#color2").css({background: currTool.color});
         color2 = currTool.color;
-	}
+    }
 
     $('#hexValue').val(currTool.color);
 }
@@ -70,16 +70,16 @@ $('#hexValue').on('keypress', function(e) {
 });
 
 $("#color1").on('click', function() {
-	activeColor = 1;
-	currTool.color = color1;
-	colorWheel.setColorHex(color1);
+    activeColor = 1;
+    currTool.color = color1;
+    colorWheel.setColorHex(color1);
     $('#hexValue').val("#"+colorWheel.getHex());
 });
 
 $("#color2").on('click', function() {
-	activeColor = 2;
-	currTool.color = color2;
-	colorWheel.setColorHex(color2);
+    activeColor = 2;
+    currTool.color = color2;
+    colorWheel.setColorHex(color2);
     $('#hexValue').val("#"+colorWheel.getHex());
 });
 
@@ -125,8 +125,8 @@ function addPaletteItem(color) {
             $('.currColor').removeClass('currColor');
             $(this).addClass('currColor');
             $(this).data("longClick", setTimeout(function(){
-			    lClick = true;
-		    },200));
+                lClick = true;
+            },200));
         }).on('contextmenu', function(e) {
             $("<div>").on('click', function() {
                 paletteItem.remove();
@@ -142,9 +142,9 @@ function addPaletteItem(color) {
 
         paletteItem.appendTo('#color-palette');
         $(document).on('mouseup', function() {
-		    clearTimeout(paletteItem.data("longClick"));
-		    lClick = false;
-	    });
+            clearTimeout(paletteItem.data("longClick"));
+            lClick = false;
+        });
 }
 
 //TODO: write common function for this type of thing
@@ -154,25 +154,25 @@ $('#color-settings').on('mousemove', function(e) {
         var r = $('.currColor');
 
         e.preventDefault();
-		document.getSelection().removeAllRanges();
-		var x = e.pageX - $('#color-palette').offset().left;
-		if(!(r.index() == 0)) {
-			var prev = r.prev();
+        document.getSelection().removeAllRanges();
+        var x = e.pageX - $('#color-palette').offset().left;
+        if(!(r.index() == 0)) {
+            var prev = r.prev();
             if(r.position().top == prev.position().top) {
                 if(x < (prev.position().left - (prev.width()))) {
                     r.insertBefore(prev);
                 }
             }
-		}
+        }
 
-		if(!(r.index() == $('.color').length - 1)) {
-			var next = r.next();
+        if(!(r.index() == $('.color').length - 1)) {
+            var next = r.next();
             if(r.position().top == next.position().top) {
                 if(x > (next.position().left - (next.width()))) {
                     r.insertAfter(next);
                 }
             }
-		}
+        }
 
         var y = e.pageY;
         if(!(r.index == ($('.color').length - 1))) {

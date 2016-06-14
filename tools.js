@@ -67,7 +67,7 @@ $('#fileType').on('change', function() {
 	if($('fileType').val() == 'png') {
 		$('#dl-link').attr('href', saveToPNG());
 	} else {
-		$('#dl-link').attr('href', saveToJSON());
+		$('#dl-link').attr('href', saveLayersToJSON());
 	}
 });
 
@@ -81,7 +81,7 @@ function saveToPNG() {
 /**
  * Returns a data url containing the layer data in JSON
  */
-function saveToJSON() {
+function saveLayersToJSON() {
 	var data = {};
 	for(var i = 0; i < layers.length; i++) {
 		data[i] = layers[i].toJSON();
@@ -94,10 +94,42 @@ function saveToJSON() {
 
 /**
  * Loads JSON data into the layers
- * TODO: Actually implement this
- * @param {Object} data - The JSON data to load
+ * TODO: Move logic to Layer.fromJSON(), finish
  */
-function loadFromJSON(data) {}
+function loadLayersFromJSON(json) {
+	layers.splice(0, layers.length);
+	currentLayer = 0;
+	$('#layer-list').empty()
+	$('#layers').empty()
+	nLayer = 0;
+	for(var key in json) {
+		addLayer(json[key].id);
+		var layer = layers[layers.length - 1];
+		layer.canvas.loadDataURL(json[key].data);
+	}
+}
+
+/**
+ * Loads JSON from a file
+ * TODO: Move this?
+ */
+function loadJSONFile(file, callback) {
+	if(!window.File || !window.FileReader || !window.FileList || !window.Blob) {
+        alert('Sorry, your browser can\'t read this file');
+        return;
+    }
+	console.log(file);
+    var reader = new FileReader();
+    reader.onload = function() {
+        var json = JSON.parse(reader.result);
+		callback(json);
+	}
+	reader.readAsText(file);
+}
+
+$('#loadFile').on('change', function() {
+	loadJSONFile($('#loadFile').get(0).files[0], loadLayersFromJSON);
+});
 
 $("#clear").on('click', function(e) {
     if(confirm("Clear all layers? This can not be undone. All history will be lost.")) {

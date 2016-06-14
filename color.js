@@ -104,24 +104,14 @@ function savePalette() {
     a.click();
 }
 
-$('#loadPalette').on('change', loadPalette);
+$('#loadPalette').on('change', function() {
+    loadJSONFile($('#loadPalette').get(0).files[0], loadPalette);
+});
 
 function loadPalette() {
-    if(!window.File || !window.FileReader || !window.FileList || !window.Blob) {
-        alert('Sorry, your browser can\'t read this file');
-        return;
+    for(var key in json) {
+        addPaletteItem(json[key]);
     }
-
-    var file = $('#loadPalette').get(0).files[0];
-    var reader = new FileReader();
-    reader.onload = function() {
-        var json = JSON.parse(reader.result);
-        console.log(json);
-        for(var key in json) {
-            addPaletteItem(json[key]);
-        }
-    }
-    reader.readAsText(file);
 }
 var lClick;
 function addPaletteItem(color) {

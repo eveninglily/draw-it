@@ -6,14 +6,14 @@ var longClick = false;
  * TODO: Document more
  */
 class Layer {
-	constructor() {
+	constructor(id) {
 		this.isLocked = false; //Unused for now
 		this.isVisible = true;
 
 		this.opacity = 1.0;
 		this.name = "";
 
-		this.id = 'layer' + nLayer;
+		this.id = id;
 		this.ids = [this.id]; //For multiple ID's from merging
 
 		var _this = this;
@@ -113,8 +113,7 @@ class Layer {
 		data.isVisible = this.isVisible;
 		data.isLocked = this.isLocked;
 		data.opacity = this.opacity;
-		data.strokes = this.canvas.strokes;
-		data.imageData = this.canvas.canvas.toDataURL();
+		data.data = this.canvas.canvas.toDataURL();
 
 		return data;
 	}
@@ -170,14 +169,16 @@ $('#layer-list').on('mousemove', function(e) {
 	}
 });
 
-$('#layer-add').on('click', function() {
-	nLayer++;
-	var n = new Layer();
+function addLayer(id) {
+	var n = new Layer(id);
 	layers.push(n);
-
+	console.log(layers);
+	nLayer++;
 	$('#' + n.id + '-control').trigger('mousedown');
 	$('#' + n.id + '-control').trigger('mouseup');
-});
+}
+
+$('#layer-add').on('click', function() { addLayer('layer' + nLayer); });
 
 $('#layer-remove').on('click', function() {
 	if(layers.length > 1) {

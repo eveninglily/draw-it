@@ -6,7 +6,7 @@ var activeStrokes = [];
 var currTool = pencil;
 
 $(document).ready(function() {
-	layers.push(new Layer());
+	addLayer('layer0');
 	currentLayer = 0;
 });
 

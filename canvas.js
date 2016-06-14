@@ -55,6 +55,16 @@ class DrawingCanvas {
 		return image;
 	}
 
+	loadDataURL(data) {
+		var image = new Image();
+		var _t = this;
+		image.onload = function() {
+			_t.ctx.drawImage(image, 0, 0);
+			_t.backCanvas.getContext('2d').drawImage(image, 0, 0);
+		}
+		image.src = data;
+	}
+
 	/**
 	 * Draws a canvas onto the visible canvas
 	 */

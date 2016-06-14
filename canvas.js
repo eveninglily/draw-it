@@ -176,13 +176,7 @@ class DrawingCanvas {
         this.ctx.beginPath();
 		if(stroke.path.length > 3) {
             var len = stroke.path.length;
-            var controls = [];
-
-            //TODO: Move this into stroke and calc control points on addition of a new point
-            for(var i = 0; i < len - 2; i++){
-                controls = controls.concat(stroke.getControlPoints(stroke.path[i].x, stroke.path[i].y, stroke.path[i+1].x, stroke.path[i+1].y, stroke.path[i+2].x, stroke.path[i+2].y, .3));
-            }
-
+            var controls = stroke.controlPoints.concat(stroke.getControlPoints(stroke.path[len-3].x, stroke.path[len - 3].y, stroke.path[len-2].x, stroke.path[len-2].y, stroke.path[len-1].x, stroke.path[len-1].y, .3));
             var cLen = controls.length;
 
             this.ctx.beginPath();
@@ -244,6 +238,10 @@ class Stroke {
 			'x':x,
 			'y':y
 		});
+		if(this.path.length > 3) {
+			var pLen = this.path.length - 1;
+			this.controlPoints = this.controlPoints.concat(this.getControlPoints(this.path[pLen - 3].x, this.path[pLen - 3].y, this.path[pLen - 2].x, this.path[pLen - 2].y, this.path[pLen - 1].x, this.path[pLen - 1].y, .3));
+		}
 	}
 
     getControlPoints(x1, y1, x2, y2, x3, y3, scale) {

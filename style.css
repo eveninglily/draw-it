@@ -29,8 +29,8 @@ img {
 
 #layers {
     position: relative;
-    width: 750px;
-    height: 750px;
+    width: 1150px;
+    height: 800px;
     display: inline-block;
     vertical-align: top;
     border: 1px solid black;

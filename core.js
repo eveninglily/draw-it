@@ -1,3 +1,6 @@
+var width = 1150;
+var height = 800;
+
 var down = false;
 
 var currentLayer = 0;
@@ -10,20 +13,17 @@ $(document).ready(function() {
 	currentLayer = 0;
 });
 
-var width = 750;
-var height = 750;
-
 function start(x, y) {
 	if(currTool.name == "Pencil" || currTool.name == "Eraser") {
 		layers[currentLayer].canvas.beginStroke(currTool, x, y, 'local');
 		activeStrokes.push('local');
 		layers[currentLayer].canvas.doStrokes(activeStrokes);
 	} else {
-        if(currTool.name == "Eyedropper") {
-                var c = $('#mergedLayer').get(0).getContext('2d').getImageData(x, y, 1, 1).data;
-                var nC = 'rgb(' + c[0] +', ' + c[1] + ', ' + c[2] + ')';
-                pencil.color = nC;
-                colorWheel.setColor(c[0], c[1], c[2]);
+		if(currTool.name == "Eyedropper") {
+			var c = $('#mergedLayer').get(0).getContext('2d').getImageData(x, y, 1, 1).data;
+			var nC = 'rgb(' + c[0] +', ' + c[1] + ', ' + c[2] + ')';
+			pencil.color = nC;
+			colorWheel.setColor(c[0], c[1], c[2]);
 		} else {
 			var text = prompt("Text:");
 			if(text != null) {

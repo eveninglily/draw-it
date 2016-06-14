@@ -1,5 +1,4 @@
 var nLayer = 0;
-var longClick = false;
 
 /**
  * Wrapper for DrawingCanvas that also holds metadata
@@ -71,19 +70,10 @@ class Layer {
 			_this.select();
 
 			document.getSelection().removeAllRanges();
-
-			nRow.data("longClick", setTimeout(function(){
-				longClick = true;
-			},200));
-		})
-
-		$(document).on('mouseup', function() {
-			clearTimeout(nRow.data("longClick"));
-			longClick = false;
 		});
 
 		$('#layer-list').prepend(nRow);
-
+		detectLongClick('#' + this.id + '-control');
 		this.updatePreview();
 	}
 
@@ -139,40 +129,22 @@ function removeLayer(pos) {
 	currentChange -= r;
 	layers.splice(pos, 1);
 }
-
-$('#layer-list').on('mousemove', function(e) {
-	if(longClick) {
-		var r = $('.selected');
-		e.preventDefault();
-		document.getSelection().removeAllRanges();
-		var y = e.pageY;
-		if(!(r.index() == 0)) {
-			var prev = r.prev();
-			if(y < (prev.position().top + (prev.height() / 2))) {
-				r.insertBefore(prev);
-				layers.splice(currentLayer + 1, 0, layers.splice(currentLayer, 1)[0]);
-				$(layers[currentLayer].id).css('z-index', currentLayer);
-				currentLayer++;
-			}
-		}
-
-		if(!(r.index() == layers.length - 1)) {
-			var next = r.next();
-			if(y > (next.position().top + (next.height() / 2))) {
-				r.insertAfter(next);
-				layers.splice(currentLayer - 1, 0, layers.splice(currentLayer, 1)[0]);
-				$('#' + layers[currentLayer].id).css('z-index', currentLayer);
-				currentLayer--;
-			}
-		}
+$(document).ready(function(){
+	allowReorder('#layer-list', '.selected', function(){
+		layers.splice(currentLayer + 1, 0, layers.splice(currentLayer, 1)[0]);
 		$('#' + layers[currentLayer].id).css('z-index', currentLayer);
-	}
+		currentLayer++;
+		$('#' + layers[currentLayer].id).css('z-index', currentLayer);
+	}, function(){
+		layers.splice(currentLayer - 1, 0, layers.splice(currentLayer, 1)[0]);
+		$('#' + layers[currentLayer].id).css('z-index', currentLayer);
+		currentLayer--;
+		$('#' + layers[currentLayer].id).css('z-index', currentLayer);
+	});
 });
-
 function addLayer(id) {
 	var n = new Layer(id);
 	layers.push(n);
-	console.log(layers);
 	nLayer++;
 	$('#' + n.id + '-control').trigger('mousedown');
 	$('#' + n.id + '-control').trigger('mouseup');

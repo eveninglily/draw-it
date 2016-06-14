@@ -1,4 +1,4 @@
-var width = 1150;
+var width = 1250;
 var height = 800;
 
 var down = false;

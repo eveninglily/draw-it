@@ -29,7 +29,7 @@ img {
 
 #layers {
     position: relative;
-    width: 1150px;
+    width: 1250px;
     height: 800px;
     display: inline-block;
     vertical-align: top;
@@ -45,7 +45,6 @@ img {
 
 #layer-controls {
     border: 1px solid black;
-    width: 366px;
     display: inline-block;
     vertical-align: bottom;
 }

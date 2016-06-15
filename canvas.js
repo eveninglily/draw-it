@@ -118,11 +118,12 @@ class DrawingCanvas {
      */
     createText(text, tool, x, y) {
         this.ctx.fillStyle = tool.color;
-        this.ctx.font = tool.size;
+        this.ctx.font = fontSize.value + "px serif";
+        console.log(fontSize.value);
         this.ctx.fillText(text, x, y);
 
         this.backCanvas.getContext('2d').fillStyle = tool.color;
-        this.backCanvas.getContext('2d').font = tool.size;
+        this.backCanvas.getContext('2d').font = fontSize.value + "px serif";
         this.backCanvas.getContext('2d').fillText(text, x, y);
     }
 
@@ -223,7 +224,6 @@ class DrawingCanvas {
 
 /**
  * Holds all the points in a stroke
- * TODO: Make this calculate the control points as points are added
  * TODO: Document this
  */
 class Stroke {
@@ -277,5 +277,5 @@ class Tool {
 
 var pencil = new Tool("Pencil", 5, "source-over", "#000000");
 var eraser = new Tool("Eraser", 3, "destination-out", "rgba(255,255,255,1)");
-var text = new Tool("Text", "32px serif", "", "#FF0000");
+var text = new Tool("Text", "32px serif", "", "#000000");
 var eyedropper = new Tool("Eyedropper");

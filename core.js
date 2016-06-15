@@ -10,11 +10,11 @@ var currTool = pencil;
 
 $(document).ready(function() {
     addLayer('layer0');
-    currentLayer = 0;
 });
 
 function start(x, y) {
     if(currTool.name == "Pencil" || currTool.name == "Eraser") {
+        down = true;
         layers[currentLayer].canvas.beginStroke(currTool, x, y, 'local');
         activeStrokes.push('local');
         layers[currentLayer].canvas.doStrokes(activeStrokes);
@@ -54,7 +54,6 @@ function end() {
 
 $('#layers').on('touchstart', function (evt) {
     start(evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left, evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top);
-    down = true;
 }).on('touchmove', function (evt) {
     evt.preventDefault();
     if(down){
@@ -64,7 +63,6 @@ $('#layers').on('touchstart', function (evt) {
         );
     }
 }).on('mousedown', function(e) {
-    down = true;
     start(e.offsetX, e.offsetY);
 }).on('mousemove', function(e) {
     if(down) {

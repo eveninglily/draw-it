@@ -51,10 +51,6 @@ function updateFromHex() {
 $('#hexValue').on('keypress', function(e) {
     var char = String.fromCharCode(e.which);
 
-    if(e.which == 13) {
-        updateFromHex();
-    }
-
     if(!char.match(/([a-f]|[0-9])+/ig)) {
         e.preventDefault();
         return false;

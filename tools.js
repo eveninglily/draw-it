@@ -194,3 +194,4 @@ $('#invite').on('click', function() {
 
 initSliders('brush');
 initSliders('eraser');
+var fontSize = new SliderVar('font-size');

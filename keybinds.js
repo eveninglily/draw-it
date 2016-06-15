@@ -31,6 +31,9 @@ var bindings = [
     }),
     new KeyBinding('redo', 89, false, false, true, function () {
         redo();
+    }),
+    new KeyBinding('input', 13, false, false, false, function () {
+        $('input').trigger('blur');
     })
 ];
 
@@ -57,9 +60,6 @@ var bindings = [
         color = color1;
         $('#color1').css({ 'background': color });
         $('#color2').css({ 'background': color2 });
-    }),
-    new KeyBinding('finishLayerRename', 13, false, false, false, function () {
-        $('#newName').trigger('blur');
     }),
     new KeyBinding('sizeUp', 187, false, false, false, function () {
         currTool.radius++;

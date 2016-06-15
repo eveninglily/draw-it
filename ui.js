@@ -2,15 +2,16 @@ class SliderVar {
     constructor(id) {
         this.id = id;
         this.value = $('#' + id).val();
+        var _t = this;
 
         $('#' + id).on('input', function () {
             $('#' + id + '-value').val($(this).val());
-            this.value = $(this).val();
+            _t.value = $(this).val();
         });
 
         $('#' + id + '-value').on('input', function () {
             $('#' + id).val($(this).val());
-            this.value = $(this).val();
+            _t.value = $(this).val();
         });
     }
 }

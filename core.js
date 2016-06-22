@@ -55,13 +55,14 @@ function end() {
 }
 
 $('#layers').on('touchstart', function (evt) {
-    start(evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left, evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top);
+    start((evt.originalEvent.changedTouches[0].clientX - $('#layers').offset().left) + $(window).scrollLeft(),
+          (evt.originalEvent.changedTouches[0].clientY - $('#layers').offset().top) + $(window).scrollTop());
 }).on('touchmove', function (evt) {
     evt.preventDefault();
     if(down){
         move(
-            evt.originalEvent.touches[0].pageX - $('#layers').offset().left,
-            evt.originalEvent.touches[0].pageY - $('#layers').offset().top
+            (evt.originalEvent.touches[0].clientX - $('#layers').offset().left) + $(window).scrollLeft(),
+            (evt.originalEvent.touches[0].clientY - $('#layers').offset().top) + $(window).scrollTop()
         );
     }
 }).on('mousedown', function(e) {

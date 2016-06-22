@@ -1,17 +1,18 @@
 "use strict";
 
-//TODO: Clean and implement front-end side of this code, document
+//TODO: Clean, document
 class Selection {
     constructor(target, lineDash) {
         this.canvas = $('<canvas>').attr('width', target.width)
                             .attr('height', target.height)
                             .css({
-                                top: 0,
-                                left: 0,
+                                top: $('#layers').position().top,
+                                left: $('#layers').position().left,
                                 width: target.width + 'px',
                                 height: target.height+ 'px',
                                 position: "absolute",
-                                'pointer-events': 'none'
+                                'pointer-events': 'none',
+                                'z-index': '10000'
                             }).appendTo('body').get(0);
         this.canvas.getContext('2d').strokeStyle = "black";
         this.target = target;
@@ -26,13 +27,19 @@ class Selection {
         this.size = { x: 0, y: 0 };
         this.diff = { x: 0, y: 0 };
 
-        var t = this;
-
         var selection;
-        $(this.target).on('mousedown', function(evt) {
+        $(this.target).on('mousedown', {t:this},this.mouseDown);
+        $(this.target).on('mousemove', {t:this},this.mouseMove);
+        $(this.target).on('mouseup', {t:this},this.mouseUp);
+
+        this.march();
+    }
+
+    mouseDown(evt) {
+        var t = evt.data.t;
             if(!t.inSelection(evt.offsetX, evt.offsetY)) {
                 if(t.selActive == true) {
-                    target.getContext('2d')
+                    t.target.getContext('2d')
                                     .drawImage(selection.get(0), 0, 0, t.size.x, t.size.y,
                                                 t.start.x, t.start.y, t.size.x, t.size.y);
                     selection.remove();
@@ -51,8 +58,8 @@ class Selection {
                             .attr('width', t.size.x)
                             .attr('height', t.size.y)
                             .css({
-                                top: t.start.y,
-                                left: t.start.x,
+                                top: $('#layers').position().top + t.start.y,
+                                left: $('#layers').position().left + t.start.x,
                                 width: t.size.x + 'px',
                                 height: t.size.y + 'px',
                                 position: "absolute",
@@ -60,63 +67,65 @@ class Selection {
                             }).appendTo('body');
                     selection.get(0)
                         .getContext('2d')
-                            .drawImage(target, t.start.x, t.start.y, t.size.x, t.size.y,
+                            .drawImage(t.target, t.start.x, t.start.y, t.size.x, t.size.y,
                                         0, 0, t.size.x, t.size.y);
-                    ctx.clearRect(t.start.x, t.start.y, t.size.x, t.size.y)
+                    t.target.getContext('2d').clearRect(t.start.x, t.start.y, t.size.x, t.size.y)
                     t.selActive = true;
                 }
             }
             t.mDown = true;
-        });
+    }
 
-        $(this.target).on('mousemove', function(evt) {
-            if(t.active) {
-
-                if(t.inSelection(evt.offsetX, evt.offsetY)) {
-                    $('body').addClass('center');
-                } else {
-                    $('body').removeClass('center');
+    mouseUp(evt) {
+        var t = evt.data.t;
+        if(t.mDown) {
+            if(!t.active) {
+                t.size.x = evt.offsetX - t.start.x;
+                t.size.y = evt.offsetY - t.start.y;
+                if(t.size.x < 0) {
+                    t.start.x += t.size.x;
+                    t.size.x *= -1;
                 }
-            }
-
-            if(t.mDown) {
-                if(!t.active) {
-                    t.size.x = evt.offsetX - t.start.x;
-                    t.size.y = evt.offsetY - t.start.y;
-                    t.drawSelection();
-                } else {
-                    t.start.x = evt.offsetX - t.diff.x;
-                    t.start.y = evt.offsetY - t.diff.y;
-
-                    selection.css({
-                        top: t.start.y,
-                        left: t.start.x
-                    });
+                if(t.size.y < 0) {
+                    t.start.y += t.size.y;
+                    t.size.y *= -1;
                 }
+                t.active = true;
             }
-        });
+            t.mDown = false;
+        }
+    }
 
-        $(this.target).on('mouseup', function(evt) {
-            if(t.mDown) {
-                if(!t.active) {
-                    t.size.x = evt.offsetX - t.start.x;
-                    t.size.y = evt.offsetY - t.start.y;
-                    if(t.size.x < 0) {
-                        t.start.x += t.size.x;
-                        t.size.x *= -1;
-                    }
-                    if(t.size.y < 0) {
-                        t.start.y += t.size.y;
-                        t.size.y *= -1;
-                    }
-
-                    t.active = true;
-                }
-                t.mDown = false;
+    mouseMove(evt) {
+        var t = evt.data.t;
+        if(t.active) {
+            if(t.inSelection(evt.offsetX, evt.offsetY)) {
+                $('.layer').addClass('move');
+            } else {
+                $('.layer').removeClass('move');
             }
-        });
+        }
 
-        this.march();
+        if(t.mDown) {
+            if(!t.active) {
+                t.size.x = evt.offsetX - t.start.x;
+                t.size.y = evt.offsetY - t.start.y;
+                t.drawSelection();
+            } else {
+                t.start.x = evt.offsetX - t.diff.x;
+                t.start.y = evt.offsetY - t.diff.y;
+                selection.css({
+                    top: $('#layers').position().top + t.start.y,
+                    left: $('#layers').position().left + t.start.x
+                });
+            }
+        }
+    }
+
+    detach() {
+        $(this.target).off('mousedown', this.mouseDown);
+        $(this.target).off('mousemove', this.mouseMove);
+        $(this.target).off('mouseup', this.mouseUp);
     }
 
     drawSelection() {

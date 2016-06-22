@@ -8,6 +8,8 @@ var layers = [];
 var activeStrokes = [];
 var currTool = pencil;
 
+var sel;
+
 $(document).ready(function() {
     addLayer('layer0');
 });
@@ -24,7 +26,7 @@ function start(x, y) {
             var nC = 'rgb(' + c[0] +', ' + c[1] + ', ' + c[2] + ')';
             pencil.color = nC;
             colorWheel.setColor(c[0], c[1], c[2]);
-        } else {
+        } else if (currTool.name == "Text") {
             var text = prompt("Text:");
             if(text != null) {
                 layers[currentLayer].canvas.createText(text, currTool, x, y);

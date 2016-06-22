@@ -3,6 +3,11 @@ $('.tool').on('click', function() {
     $(this).addClass('active');
     $('.activeTool').removeClass('activeTool');
     $('#mergedLayer').remove();
+    if(sel != null) {
+        sel.detach();
+        layers[currentLayer].canvas.clearBuffer();
+        layers[currentLayer].canvas.drawCanvasOntoBuffer(layers[currentLayer].canvas.canvas);
+    }
 });
 
 $("#pencil").on('click', function() {
@@ -15,6 +20,11 @@ $("#eraser").on('click', function() {
     currTool = eraser;
 
     $('#eraser-settings').addClass('activeTool');
+});
+
+$("#select").on('click', function() {
+    currTool = selection;
+    sel = new Selection($('#layer0').get(0), [8,4]);
 });
 
 $("#text").on('click', function() {

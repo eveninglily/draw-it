@@ -13,15 +13,6 @@
         <link rel='stylesheet' href='colorwheel.js/colorwheel.css'/>
     </head>
     <body>
-        <div id="actions">
-            <img id="undo" src="img/icons/undo.png" class="action" alt="Undo"/>
-            <img id="redo" src="img/icons/redo.png" class="action" alt="Redo"/>
-            <img id="invite" src="img/icons/invite.png" class="action" alt="Invite"/>
-            <img id="save" src="img/icons/save.png" class="action" alt="Save"/>
-            <label><img id="load" src="img/icons/load.png" class="action" alt="Load"/><input id="loadFile" type='file' accept='.json'></label>
-            <img id="settings" src="img/icons/settings.png" class="action" alt="Settings"/>
-            <img id="help" src="img/icons/help.png" class="action" alt="Help"/>
-        </div>
         <div id="tools">
             <table>
                 <tr><td><img id="pencil" src="img/icons/brush.png" class="active tool" alt="Brush"/></td></tr>
@@ -87,8 +78,20 @@
                 </div>
             </div>
         </div>
+        <div id="center">
+        <div id="actions">
+            <img id="undo" src="img/icons/undo.png" class="action" alt="Undo"/>
+            <img id="redo" src="img/icons/redo.png" class="action" alt="Redo"/>
+            <img id="invite" src="img/icons/invite.png" class="action" alt="Invite"/>
+            <img id="save" src="img/icons/save.png" class="action" alt="Save"/>
+            <label><img id="load" src="img/icons/load.png" class="action" alt="Load"/><input id="loadFile" type='file' accept='.json'></label>
+            <img id="settings" src="img/icons/settings.png" class="action" alt="Settings"/>
+            <img id="help" src="img/icons/help.png" class="action" alt="Help"/>
+        </div>
         <div id='layers'></div>
+        </div>
         <div id="layer-controls">
+            <div id='layer-c-inner'>
             <table id="layer-controls-opacity">
                 <tr>
                     <td>
@@ -113,6 +116,7 @@
                     <td class='action' id='layer-mergedown'><img src='img/icons/layerMergeDown.png'></td>
                 </tr>
             </table>
+            </div>
         </div>
         <div id="eyedropper-holder" class="eyedropper-wheel">
             <div id="eyedropper-outer" class="eyedropper-wheel">&nbsp</div>

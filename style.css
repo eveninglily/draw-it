@@ -4,8 +4,26 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-
   margin: 0px;
+  display: flex;
+}
+
+@media screen and (max-device-width: 480px) {
+    #center {
+        order: 1;
+    }
+
+    #tools {
+        order: 2;
+    }
+
+    #tools {
+        order: 3;
+    }
+
+    body {
+        flex-direction: column;
+    }
 }
 
 img {
@@ -44,9 +62,14 @@ img {
 }
 
 #layer-controls {
-    border: 1px solid black;
     display: inline-block;
-    vertical-align: bottom;
+    position: relative;
+}
+
+#layer-c-inner {
+    border: 1px solid black;
+    position: absolute;
+    bottom: 0;
 }
 
 #layer-controls-opacity {
@@ -99,7 +122,7 @@ img {
 }
 
 #tool-meta {
-    border: 1px solid black;
+    border-left: 1px solid black;
     width: auto;
     flex-grow: 1;
 }

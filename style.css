@@ -210,30 +210,6 @@ input[type="number"] {
     display: none;
 }
 
-#modal-bg {
-    top: 0;
-    left: 0;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,.8);
-    z-index: 10000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-}
-
-#modal {
-    width: 30em;
-    height: 20em;
-    background: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-flow: column;
-    padding: 20px;
-}
-
 .nyi {
     display: none !important;
 }
@@ -249,4 +225,43 @@ input[type="file"] {
 
 .move {
     cursor: move !important;
+}
+
+#modal-bg {
+    background: rgba(0,0,0,.8);
+    display: none;
+}
+
+#notify-holder {
+    display: none;
+} 
+
+#notify-content {
+    margin-bottom: 30%;
+    border: 1px solid black;
+}
+
+#modal {
+    width: 30em;
+    height: 20em;
+    background: white;
+    padding: 20px;
+}
+
+.center-holder {
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+}
+
+.center-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
 }

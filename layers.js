@@ -31,8 +31,8 @@ class Layer {
         $('#layers').prepend(newCan);
 
         var nRow = $('<tr>')
-                            .append($('<td>').attr({'class':'layer-preview'}).append($('<img>')))
                             .append($('<td>').attr({'class':'layer-actions'}))
+                            .append($('<td>').attr({'class':'layer-preview'}).append($('<img>')))
                             .append($('<td>').attr({'class':'layer-info'}));
 
         nRow.attr({
@@ -123,8 +123,10 @@ class Layer {
         return data;
     }
 
-    static fromJSON() {
-
+    static fromJSON(json) {
+        addLayer(json.id);
+        var layer = layers[layers.length - 1];
+        layer.canvas.loadDataURL(json.data);
     }
 }
 

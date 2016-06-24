@@ -126,7 +126,6 @@ function saveLayersToJSON() {
 
 /**
  * Loads JSON data into the layers
- * TODO: Move logic to Layer.fromJSON(), finish
  */
 function loadLayersFromJSON(json) {
     layers.splice(0, layers.length);
@@ -135,9 +134,7 @@ function loadLayersFromJSON(json) {
     $('#layers').empty()
     nLayer = 0;
     for(var key in json) {
-        addLayer(json[key].id);
-        var layer = layers[layers.length - 1];
-        layer.canvas.loadDataURL(json[key].data);
+        Layer.fromJSON(json[key]);
     }
 }
 

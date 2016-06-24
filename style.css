@@ -253,7 +253,7 @@ input[type="file"] {
 
 #notify-holder {
     display: none;
-} 
+}
 
 #notify-content {
     margin-bottom: 30%;
@@ -290,4 +290,10 @@ input[type="file"] {
     height: 24px;
     filter: invert(100%);
     -webkit-filter: invert(100%);
+}
+
+#hidden-input {
+    top: -999px;
+    left: -999px;
+    position: absolute;
 }

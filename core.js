@@ -15,6 +15,13 @@ $(document).ready(function() {
 });
 
 function start(x, y) {
+    if($('#hidden-input').val() != "") {
+        layers[currentLayer].canvas.finalizeText($('#hidden-input').val(), currTool, $('#hidden-input').data('tx'), $('#hidden-input').data('ty'));
+        layers[currentLayer].canvas.clear();
+        layers[currentLayer].canvas.drawBuffer();
+        $('#hidden-input').remove();
+    }
+
     if(currTool.name == "Pencil" || currTool.name == "Eraser") {
         down = true;
         layers[currentLayer].canvas.beginStroke(currTool, x, y, 'local');
@@ -27,10 +34,12 @@ function start(x, y) {
             pencil.color = nC;
             colorWheel.setColor(c[0], c[1], c[2]);
         } else if (currTool.name == "Text") {
-            var text = prompt("Text:");
-            if(text != null) {
-                layers[currentLayer].canvas.createText(text, currTool, x, y);
-            }
+            $('<input>').attr('id', 'hidden-input').data('tx', x).data('ty', y).on('input',function(){
+                layers[currentLayer].canvas.clear();
+                layers[currentLayer].canvas.drawBuffer();
+                layers[currentLayer].canvas.createText($(this).val(), currTool, x, y);
+            }).appendTo('body');
+            setTimeout(function(){$('#hidden-input').focus();}, 100);
         }
         down = false;
     }

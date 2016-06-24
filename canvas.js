@@ -65,6 +65,10 @@ class DrawingCanvas {
         image.src = data;
     }
 
+    drawBuffer() {
+        this.ctx.drawImage(this.backCanvas, 0, 0);
+    }
+
     /**
      * Draws a canvas onto the visible canvas
      */
@@ -119,9 +123,10 @@ class DrawingCanvas {
     createText(text, tool, x, y) {
         this.ctx.fillStyle = tool.color;
         this.ctx.font = fontSize.value + "px serif";
-        console.log(fontSize.value);
         this.ctx.fillText(text, x, y);
+    }
 
+    finalizeText(text, tool, x, y) {
         this.backCanvas.getContext('2d').fillStyle = tool.color;
         this.backCanvas.getContext('2d').font = fontSize.value + "px serif";
         this.backCanvas.getContext('2d').fillText(text, x, y);

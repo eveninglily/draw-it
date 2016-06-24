@@ -30,12 +30,27 @@ class Layer {
 
         $('#layers').prepend(newCan);
 
-        var nRow = $('<tr>').append($('<td>').attr({'class':'layer-preview'}).append($('<img>'))).append($('<td>').attr({'class':'layer-info'}))
+        var nRow = $('<tr>')
+                            .append($('<td>').attr({'class':'layer-preview'}).append($('<img>')))
+                            .append($('<td>').attr({'class':'layer-actions'}))
+                            .append($('<td>').attr({'class':'layer-info'}));
 
         nRow.attr({
             'id': this.id + '-control',
             'class': 'selected'
         });
+
+        nRow.children('.layer-actions').append(
+            $('<img>').attr({'src':'img/icons/layervisible.png'}).on('click', function() {
+                var can = layers[currentLayer].canvas.canvas;
+                _this.isVisible = !_this.isVisible;
+                $(can).toggle();
+                if (_this.isVisible) {
+                    $(this).attr('src', 'img/icons/layervisible.png');
+                } else {
+                    $(this).attr('src', 'img/icons/layerhidden.png');
+                };
+            }));
 
         nRow.children('.layer-info').append($('<div>').attr({'class':'layer-name'}))
                                     .append($('<div>').attr({'class':'layer-opacity'}).html('100%'))
@@ -171,19 +186,6 @@ $('#layer-clear').on('click', function() {
 
 $('#layer-save').on('click', function() {
     layers[currentLayer].canvas.toFile();
-});
-
-$('#layer-visible').on('click', function() {
-    var can = layers[currentLayer].canvas.canvas;
-    layers[currentLayer].isVisible = !layers[currentLayer].isVisible; //Todo: Improve this line
-    $(can).toggle();
-    $('.selected').toggleClass('hidden');
-
-    if (layers[currentLayer].isVisible) {
-        $(this).html('<img src="img/icons/layervisible.png" />');
-    } else {
-        $(this).html('<img src="img/icons/layerhidden.png" />');
-    };
 });
 
 $('#layer-mergeup').on('click', function() {

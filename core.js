@@ -10,10 +10,15 @@ var currTool = pencil;
 
 var sel;
 
+var settings = {
+    showLeaveMessage: false
+}
+
 $(document).ready(function() {
     addLayer('layer0');
 });
 
+//TODO: Rewrite inside of this along with tools
 function start(x, y) {
     if($('#hidden-input').val() != "") {
         layers[currentLayer].canvas.finalizeText($('#hidden-input').val(), currTool, $('#hidden-input').data('tx'), $('#hidden-input').data('ty'));
@@ -115,8 +120,8 @@ $(document).on('mouseup touchend touchcancel', function(e) {
 });
 
 $(window).on('beforeunload', function() {
-    //TODO: add setting to disable this message
-    //return 'Are you sure you want to leave? Your drawing will be lost.';
+    if(settings.showLeaveMessage)
+        return 'Are you sure you want to leave? Your drawing will be lost.';
 });
 
 /**

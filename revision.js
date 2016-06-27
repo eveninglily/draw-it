@@ -2,6 +2,7 @@
 
 /**
  * Simple holder class that holds a stroke and the layer it happened on
+ * TODO: Add more types of changes
  */
 class Change {
     constructor(stroke, layer) {
@@ -12,7 +13,10 @@ class Change {
 
 var changes = [];
 var currentChange = 0;
-//TODO: Document functions
+
+/**
+ * Adds a change to the list of changes; splices changes if the current state is behind
+ */
 function addChange(stroke) {
     if (currentChange != changes.length) {
         changes.splice(currentChange, changes.length - currentChange);
@@ -21,6 +25,9 @@ function addChange(stroke) {
     changes.push(new Change(stroke, layers[currentLayer].id));
 }
 
+/**
+ * Undoes a change. If the current change is 0, clears the canvas
+ */
 function undo() {
     if(currentChange > 0) {
         currentChange--;
@@ -33,6 +40,9 @@ function undo() {
     }
 }
 
+/**
+ * Redoes a change
+ */
 function redo() {
     if(currentChange <= changes.length - 1) {
         currentChange++;
@@ -40,6 +50,9 @@ function redo() {
     }
 }
 
+/**
+ * Redraws and layers that need to get redrawn based on currentChange
+ */
 function updateCanvas() {
     var needsRedraw = [];
     var layerMap = {};

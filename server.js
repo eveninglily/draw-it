@@ -66,7 +66,7 @@ io.on('connection', function(socket) {
     socket.on('save', function(data, fn) {
         var image = data.b64.replace(/^data:image\/\w+;base64,/, "");
         var buffer = new Buffer(image, 'base64');
-        var uuid = getUUID();
+        var uuid = getUUID().split('-')[0];
         fs.writeFile("gallery/"+uuid+".png", buffer);
         console.log('saving at https://nodedraw.com/amidraw/gallery/' + uuid + '.png');
         fn({'url':'https://nodedraw.com/amidraw/gallery/' + uuid + '.png'});

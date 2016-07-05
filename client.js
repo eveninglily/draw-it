@@ -8,6 +8,7 @@ class Client {
     constructor(server) {
         this.server = server;
         this.connected = false;
+        this.down = false;
     }
 
     connect() {
@@ -19,6 +20,7 @@ class Client {
         }).on('disconnect', function() {
             _t.connected = false;
         });
+        this.joinRoom('test');
     }
 
     joinRoom(id) {
@@ -30,26 +32,28 @@ class Client {
             window.location.href = "#" + data.id
             this.id = data.id;
         });
-        this.id = "testroom";
+        this.id = "test";
         this.socket.on('start', function(data) {
             layers[data.layer].canvas.beginStroke(data.tool, data.x, data.y, data.cId);
             activeStrokes.push(data.cId);
             layers[data.layer].canvas.doStrokes(activeStrokes);
-        }).on('update', function(data){
+        }).on('update', function(data) {
             layers[data.layer].canvas.strokes[data.cId].addPoint(data.x, data.y);
             layers[data.layer].canvas.doStrokes(activeStrokes);
         }).on('end', function(data) {
+            console.log('end');
             layers[data.layer].canvas.completeStroke(layers[data.layer].canvas.strokes[data.cId]);
             addChange(layers[data.layer].canvas.strokes[data.cId]);
             for(var i = 0; i < activeStrokes.length; i++) {
-                if(activeStrokes[i] == data.cId) {
+                console.log(activeStrokes[i]);
+                if(activeStrokes[i].id == data.cId) {
                     activeStrokes.splice(i, 1);
                     break;
                 }
             }
             layers[data.layer].updatePreview();
         });
-
+        var c = this;
         $('#layers').on('mousedown', function(e) {
             c.sendStart(e.offsetX, e.offsetY);
         }).on('mousemove', function(e) {
@@ -83,10 +87,11 @@ class Client {
             layer: currentLayer,
             tool: currTool
         });
+        this.down = true;
     }
 
     sendMove(x, y) {
-        if(down) {
+        if(this.down) {
             this.socket.emit('update', {
                 x: x,
                 y: y,
@@ -97,13 +102,15 @@ class Client {
     }
 
     sendEnd(x, y) {
-        if(down) {
+        if(this.down) {
+            console.log('ending');
             this.socket.emit('end', {
                 x: x,
                 y: y,
                 id: this.id,
                 layer: currentLayer
             });
+            this.down = false;
         }
     }
 

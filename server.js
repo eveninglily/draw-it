@@ -22,12 +22,10 @@ io.on('connection', function(socket) {
             var room = new Room(id);
             room.clients.push(socket);
             rooms.push(room);
-            socket.join(id);
         } else {
             id = data.id;
-            socket.join(id);
         }
-
+        socket.join(id);
         socket.emit('handshake', {
             'id': id
         });
@@ -61,6 +59,7 @@ io.on('connection', function(socket) {
             layer: data.layer,
             cId: socket.id
         });
+        console.log('fisdghjdsk');
     });
 
     socket.on('save', function(data, fn) {

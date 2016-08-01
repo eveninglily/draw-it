@@ -59,7 +59,6 @@ io.on('connection', function(socket) {
             layer: data.layer,
             cId: socket.id
         });
-        console.log('fisdghjdsk');
     });
 
     socket.on('save', function(data, fn) {

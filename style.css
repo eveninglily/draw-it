@@ -1,10 +1,15 @@
 /* General Styles */
+html, body {
+    margin: 0px;
+    height: 100%;
+    width: 100%;
+}
+
 body {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  margin: 0px;
   display: flex;
 }
 
@@ -104,6 +109,21 @@ img {
 
 /* Toolbox */
 
+#toolbox {
+    display: flex;
+    flex-flow: column;
+    justify-content: space-around;
+    padding: 0px 6px 0px 6px;
+    background: #e73955;
+    height: 100%;
+}
+
+#toolbox img {
+    width: 52px;
+    height: 52px;
+    border: 3px solid white;
+}
+
 #tools {
     border: 1px solid black;
     width: 366px;
@@ -123,12 +143,12 @@ img {
     flex-grow: 1;
 }
 
-.tool, .action {
-    background-color: #81CD29;
+.action {
+    background: #50cfbb;
 }
 
-.active, .tool:hover, .action:hover {
-    background-color: #5C931D;
+.tool, #clear {
+    background: #e73955;
 }
 
 .tool-meta:not(.activeTool) {

@@ -15,6 +15,7 @@ class DrawingCanvas {
         this.backCanvas = document.createElement('canvas');
         this.backCanvas.width = canvas.width;
         this.backCanvas.height = canvas.height;
+        this._isRedrawing = false;
     }
 
     /**
@@ -163,12 +164,15 @@ class DrawingCanvas {
      * @param {string[]} - The stroke IDs to draw
      */
     doStrokes(ids) {
+        if(this._isRedrawing) return;
+        this._isRedrawing = true;
         this.clear();
         this.drawCanvas(this.backCanvas);
         for(var i = 0; i < ids.length; i++)
         {
             this.drawStroke(this.strokes[ids[i]]);
         }
+        this._isRedrawing = false;
     }
 
     /**

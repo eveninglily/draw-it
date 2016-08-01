@@ -1,13 +1,27 @@
 $('.tool').on('click', function() {
+    var s = $('.active').attr('src');
+    $('.active').attr('src', s.replace('/active', ''));
     $('.active').removeClass('active');
-    $(this).addClass('active');
     $('.activeTool').removeClass('activeTool');
+
+    $(this).addClass('active');
+    var sr = $(this).attr('src').split('/');
+    sr.splice(2,0, 'active');
+    var src = sr.join('/');
+    $(this).attr('src', src);
     $('#mergedLayer').remove();
     if(sel != null) {
         sel.detach();
         layers[currentLayer].canvas.clearBuffer();
         layers[currentLayer].canvas.drawCanvasOntoBuffer(layers[currentLayer].canvas.canvas);
     }
+});
+
+$('.tool').on('hover', function() {
+    var sr = $(this).attr('src').split('/');
+    sr.splice(2,0, 'active');
+    var src = sr.join('/');
+    $(this).attr('src', src);
 });
 
 $("#pencil").on('click', function() {

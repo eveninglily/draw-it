@@ -41,11 +41,9 @@ class Client {
             layers[data.layer].canvas.strokes[data.cId].addPoint(data.x, data.y);
             layers[data.layer].canvas.doStrokes(activeStrokes);
         }).on('end', function(data) {
-            console.log('end');
             layers[data.layer].canvas.completeStroke(layers[data.layer].canvas.strokes[data.cId]);
             addChange(layers[data.layer].canvas.strokes[data.cId]);
             for(var i = 0; i < activeStrokes.length; i++) {
-                console.log(activeStrokes[i]);
                 if(activeStrokes[i].id == data.cId) {
                     activeStrokes.splice(i, 1);
                     break;
@@ -103,7 +101,6 @@ class Client {
 
     sendEnd(x, y) {
         if(this.down) {
-            console.log('ending');
             this.socket.emit('end', {
                 x: x,
                 y: y,

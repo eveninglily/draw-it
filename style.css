@@ -52,8 +52,8 @@ img {
 
 #layers {
     position: relative;
-    width: 1250px;
-    height: 800px;
+    width: 1280px;
+    height: 720px;
     display: inline-block;
     vertical-align: top;
     border: 1px solid black;
@@ -125,8 +125,8 @@ img {
 }
 
 #tools {
+    padding: 5px;
     border: 1px solid black;
-    width: 366px;
     height: auto;
     display: inline-flex;
     vertical-align: top;
@@ -138,7 +138,6 @@ img {
 }
 
 #tool-meta {
-    border-left: 1px solid black;
     width: auto;
     flex-grow: 1;
 }
@@ -196,6 +195,11 @@ input[type="number"] {
 
 #gallery-url-holder {
     display: none;
+}
+
+.right {
+    display: inline-block;
+    float: right;
 }
 
 /*TODO: Clean up this CSS*/

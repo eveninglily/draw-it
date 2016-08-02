@@ -1,5 +1,5 @@
-var width = 1250;
-var height = 800;
+var width = 1280;
+var height = 720;
 
 var down = false;
 

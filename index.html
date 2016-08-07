@@ -34,8 +34,8 @@
                 <button id="hsv-toggle">H</button>
                 <button id="gradient-toggle">G</button>
                 <button id="palette-toggle">P</button>
-                <img id="color1" src="img/icons/color1.png" alt="Color 1 "/>
-                <img id="color2" src="img/icons/color2.png" alt="Color 2"/>
+                <div id="color1">&nbsp;</div>
+                <div id="color2">&nbsp;</div>
                 <div id="color-settings">
                     <h3>Palette</h3>
                     <button id="addToPalette">Add</button>
@@ -80,21 +80,22 @@
             </div>
         </div>
         <div id="center">
-        <div id="actions">
-            <img id="undo" src="img/icons/undo.png" class="action" alt="Undo"/>
-            <img id="redo" src="img/icons/redo.png" class="action" alt="Redo"/>
-            <div class='right'>
-                <img id="invite" src="img/icons/invite.png" class="action" alt="Invite"/>
-                <img id="save" src="img/icons/save.png" class="action" alt="Save"/>
-                <label><img id="load" src="img/icons/upload.png" class="action" alt="Load"/><input id="loadFile" type='file' accept='.json'></label>
-                <img id="settings" src="img/icons/settings.png" class="action" alt="Settings"/>
-                <img id="help" src="img/icons/help.png" class="action" alt="Help"/>
+            <div id="actions">
+                <img id="undo" src="img/icons/undo.png" class="action" alt="Undo"/>
+                <img id="redo" src="img/icons/redo.png" class="action" alt="Redo"/>
+                <div class='right'>
+                    <img id="invite" src="img/icons/invite.png" class="action" alt="Invite"/>
+                    <img id="save" src="img/icons/save.png" class="action" alt="Save"/>
+                    <label><img id="load" src="img/icons/upload.png" class="action" alt="Load"/><input id="loadFile" type='file' accept='.json'></label>
+                    <img id="settings" src="img/icons/settings.png" class="action" alt="Settings"/>
+                    <img id="help" src="img/icons/help.png" class="action" alt="Help"/>
+                </div>
             </div>
-        </div>
         <div id='layers'></div>
         </div>
         <div id="layer-controls">
             <div id='layer-c-inner'>
+            Layers
             <table id="layer-controls-opacity">
                 <tr>
                     <td>

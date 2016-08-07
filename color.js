@@ -1,4 +1,4 @@
-var colorWheel = new ColorWheel('wheel', 300, function() {
+var colorWheel = new ColorWheel('wheel', 250, function() {
     currTool.color = "#" + colorWheel.getHex();
     $('#hexValue').val("#" + colorWheel.getHex());
     if(activeColor == 1) {
@@ -10,8 +10,8 @@ var colorWheel = new ColorWheel('wheel', 300, function() {
     }
 });
 
-var color1 = '#000000';
-var color2 = '#ffffff';
+var color1 = '#e73955';
+var color2 = '#50cfbb';
 var activeColor = 1;
 
 colorWheel.setColorHex(color1);

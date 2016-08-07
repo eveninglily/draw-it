@@ -80,7 +80,9 @@ $('#layers').on('touchstart', function (evt) {
         );
     }
 }).on('mousedown', function(e) {
-    start(e.offsetX, e.offsetY);
+    if(e.which == 1) {
+        start(e.offsetX, e.offsetY);
+    }
 }).on('mousemove', function(e) {
     if(down) {
         window.getSelection().removeAllRanges()
@@ -110,6 +112,9 @@ $('#layers').on('touchstart', function (evt) {
     if(down) {
         end();
     }
+}).on('contextmenu', function(e) {
+    e.preventDefault();
+    return false;
 });
 
 $(document).on('mouseup touchend touchcancel', function(e) {

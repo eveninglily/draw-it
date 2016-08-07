@@ -1,8 +1,18 @@
-/* General Styles */
+/* General Styles
+red: #e73955
+blue: #50cgbb
+white: #fbfbfb
+grey: #6d6d6d
+medium grey: #777777
+dark grey: #2a2a2a
+ */
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+
 html, body {
     margin: 0px;
     height: 100%;
     width: 100%;
+    font-family: 'Montserrat', sans-serif;
 }
 
 body {
@@ -11,6 +21,13 @@ body {
   -ms-user-select: none;
   user-select: none;
   display: flex;
+  background: #2a2a2a;
+}
+
+#color1, #color2 {
+    width: 48px;
+    height: 48px;
+    display: inline-block;
 }
 
 @media screen and (max-device-width: 480px) {
@@ -45,7 +62,7 @@ img {
 
 .context-item:hover {
     color: white;
-    background: #81CD29;
+    background: #50cfbb;
 }
 
 /* Layers */
@@ -57,6 +74,7 @@ img {
     display: inline-block;
     vertical-align: top;
     border: 1px solid black;
+    background: white;
 }
 
 .layer {
@@ -69,12 +87,14 @@ img {
 #layer-controls {
     display: inline-block;
     position: relative;
+    width: 100%;
 }
 
 #layer-c-inner {
-    border: 1px solid black;
+    background: #494949;
     position: absolute;
     bottom: 0;
+    width: 100%;
 }
 
 #layer-controls-opacity {
@@ -86,24 +106,32 @@ img {
     font-size: 1.2em;
     border-collapse: collapse;
     width: 100%;
+    
 }
 
 #layer-scroll {
     height: 20em;
     max-height: 20em;
     overflow-y: auto;
+    background: #494949
 }
 
 #layer-list tr {
     border: 1px solid black;
+    background: #777777;
 }
 
 .layer-opacity {
     font-size: .8em;
 }
 
+.layer-preview img {
+    width: 48px !important;
+    height: 27px !important;
+}
+
 .selected {
-    background-color: #DEF2C5;
+    background-color: #494949 !important;
     font-weight: bold;
 }
 
@@ -140,6 +168,11 @@ img {
 #tool-meta {
     width: auto;
     flex-grow: 1;
+    background: #494949;
+}
+
+.tool-meta {
+    background: #777777;
 }
 
 .action {

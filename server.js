@@ -16,14 +16,14 @@ io.on('connection', function(socket) {
     var roomId = '';
     socket.on('join-room', function(data) {
         var id;
-        console.log(data);
         if(data['id'] == '') {
             id = getUUID();
-            console.log(id);
+            console.log('Creating room #' + id);
             var room = new Room(id);
             room.clients.push(socket);
             rooms.push(room);
         } else {
+            console.log('Client ' + this.id + ' joined #' + data.id);
             id = data.id;
         }
         socket.join(id);
@@ -32,21 +32,15 @@ io.on('connection', function(socket) {
             'cId': socket.id
         });
         roomId = id;
-    });
-
-    socket.on('s', function(data) {
+    }).on('disconnect', function() {
+        console.log('Client ' + this.id + ' disconnected from #' + roomId);
+    }).on('s', function(data) {
         socket.broadcast.to(roomId).emit('s', data);
-    });
-
-    socket.on('u', function(data) {
+    }).on('u', function(data) {
         socket.broadcast.to(roomId).emit('u', data);
-    });
-
-    socket.on('e', function(data) {
+    }).on('e', function(data) {
         socket.broadcast.to(roomId).emit('e', data);
-    });
-
-    socket.on('save', function(data, fn) {
+    }).on('save', function(data, fn) {
         var image = data.b64.replace(/^data:image\/\w+;base64,/, "");
         var buffer = new Buffer(image, 'base64');
         var uuid = getUUID().split('-')[0];

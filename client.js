@@ -47,9 +47,6 @@ class Client {
             layers[layer].canvas.beginStroke(data.tool, data.x, data.y, data.cId);
             activeStrokes.push(data.cId);
             layers[layer].canvas.doStrokes(activeStrokes);
-
-            var diff = recieved - data.sent;
-            console.log(diff);
         }).on('u', function(data) {
             var layer = _this.connections[data.cId];
             data.positions.forEach(function(pos) {
@@ -102,7 +99,7 @@ class Client {
                 });
                 _this.updateQueue = [];
             }
-        }, 50);
+        }, 40);
     }
 
     sendStart(x, y) {
@@ -126,12 +123,14 @@ class Client {
 
     sendEnd(x, y) {
         if(this.down) {
-            var c = this.clientId;
-            this.socket.emit('e', {
-                cId: c,
-                x: x,
-                y: y
-            });
+            var _this = this;
+            setTimeout(function(){
+                _this.socket.emit('e', {
+                    cId: _this.clientId,
+                    x: x,
+                    y: y
+                });
+            }, 45);
             this.down = false;
         }
     }

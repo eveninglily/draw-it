@@ -1,7 +1,7 @@
 var client;
 
 $(document).ready(function() {
-    client = new Client('https://dev2.nodedraw.com');
+    client = new Client('https://nodedraw.com');
 });
 
 class Client {
@@ -9,6 +9,10 @@ class Client {
         this.server = server;
         this.connected = false;
         this.down = false;
+        this.id = 'test';
+        this.clientId = '';
+        this.connections = {};
+        this.updateQueue = [];
     }
 
     connect() {
@@ -27,36 +31,50 @@ class Client {
         this.socket.emit('join-room', {
             'id': id
         });
+        var _this = this;
         this.socket.on('handshake', function(data) {
             console.log('Connected to server! Room ID: ' + data.id);
             window.location.href = "#" + data.id
-            this.id = data.id;
+            _this.id = data.id;
+            _this.clientId = data.cId;
+            console.log(data.cId);
+            $('.right').prepend($('<div>').attr('id','server-status').text('Connected to #' + data.id));
         });
-        this.id = "test";
-        this.socket.on('start', function(data) {
-            layers[data.layer].canvas.beginStroke(data.tool, data.x, data.y, data.cId);
+
+        this.socket.on('s', function(data) {
+            _this.connections[data.cId] = data.layer;
+            var layer = _this.connections[data.cId];
+            layers[layer].canvas.beginStroke(data.tool, data.x, data.y, data.cId);
             activeStrokes.push(data.cId);
-            layers[data.layer].canvas.doStrokes(activeStrokes);
-        }).on('update', function(data) {
-            layers[data.layer].canvas.strokes[data.cId].addPoint(data.x, data.y);
-            layers[data.layer].canvas.doStrokes(activeStrokes);
-        }).on('end', function(data) {
-            layers[data.layer].canvas.completeStroke(layers[data.layer].canvas.strokes[data.cId]);
-            addChange(layers[data.layer].canvas.strokes[data.cId]);
+            layers[layer].canvas.doStrokes(activeStrokes);
+
+            var diff = recieved - data.sent;
+            console.log(diff);
+        }).on('u', function(data) {
+            var layer = _this.connections[data.cId];
+            data.positions.forEach(function(pos) {
+                layers[layer].canvas.strokes[data.cId].addPoint(pos.x, pos.y);
+                layers[layer].canvas.doStrokes(activeStrokes);
+            }, this);
+        }).on('e', function(data) {
+            var layer = _this.connections[data.cId];
+
+            layers[layer].canvas.completeStroke(layers[layer].canvas.strokes[data.cId]);
+            addChange(layers[layer].canvas.strokes[data.cId]);
             for(var i = 0; i < activeStrokes.length; i++) {
                 if(activeStrokes[i].id == data.cId) {
                     activeStrokes.splice(i, 1);
                     break;
                 }
             }
-            layers[data.layer].updatePreview();
+            layers[layer].updatePreview();
         });
-        var c = this;
+
         $('#layers').on('mousedown', function(e) {
-            c.sendStart(e.offsetX, e.offsetY);
+            _this.sendStart(e.offsetX, e.offsetY);
         }).on('mousemove', function(e) {
             if(down) {
-                c.sendMove(e.offsetX, e.offsetY);
+                _this.sendMove(e.offsetX, e.offsetY);
             }
         }).on('touchstart', function (evt) {
             c.sendStart(evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left, evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top);
@@ -68,20 +86,32 @@ class Client {
         });
 
         $(document).on('mouseup', function(e) {
-            c.sendEnd(e.offsetX, e.offsetY);
+            _this.sendEnd(e.offsetX, e.offsetY);
         }).on('touchend touchcancel', function(evt){
-            c.sendEnd(
+            _this.sendEnd(
                 evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left,
                 evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top
             );
         });
+
+        setInterval(function() {
+            if(_this.updateQueue.length != 0) {
+                _this.socket.emit('u', {
+                    cId: _this.clientId,
+                    positions: _this.updateQueue
+                });
+                _this.updateQueue = [];
+            }
+        }, 50);
     }
 
     sendStart(x, y) {
-        this.socket.emit('start', {
+        var c = this.clientId;
+        console.log(c);
+        this.socket.emit('s', {
+            cId: c,
             x: x,
             y: y,
-            id: this.id,
             layer: currentLayer,
             tool: currTool
         });
@@ -90,22 +120,17 @@ class Client {
 
     sendMove(x, y) {
         if(this.down) {
-            this.socket.emit('update', {
-                x: x,
-                y: y,
-                id: this.id,
-                layer: currentLayer
-            });
+            this.updateQueue.push({'x': x, 'y': y});
         }
     }
 
     sendEnd(x, y) {
         if(this.down) {
-            this.socket.emit('end', {
+            var c = this.clientId;
+            this.socket.emit('e', {
+                cId: c,
                 x: x,
-                y: y,
-                id: this.id,
-                layer: currentLayer
+                y: y
             });
             this.down = false;
         }

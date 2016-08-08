@@ -349,3 +349,8 @@ input[type="file"] {
     left: -999px;
     position: absolute;
 }
+
+#server-status {
+    display: inline-block;
+    color: #ffffff;
+}

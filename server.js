@@ -13,6 +13,7 @@ var io = require('socket.io')().listen(3000);
 var rooms = [];
 
 io.on('connection', function(socket) {
+    var roomId = '';
     socket.on('join-room', function(data) {
         var id;
         console.log(data);
@@ -27,38 +28,22 @@ io.on('connection', function(socket) {
         }
         socket.join(id);
         socket.emit('handshake', {
-            'id': id
+            'id': id,
+            'cId': socket.id
         });
+        roomId = id;
     });
 
-    socket.on('start', function(data) {
-        socket.broadcast.to(data.id).emit('start', {
-            x: data.x,
-            y: data.y,
-            layer: data.layer,
-            cId: socket.id,
-            tool: data.tool
-        });
+    socket.on('s', function(data) {
+        socket.broadcast.to(roomId).emit('s', data);
     });
 
-    socket.on('update', function(data) {
-        socket.broadcast.to(data.id).emit('update', {
-            x: data.x,
-            y: data.y,
-            id: this.id,
-            layer: data.layer,
-            cId: socket.id
-        });
+    socket.on('u', function(data) {
+        socket.broadcast.to(roomId).emit('u', data);
     });
 
-    socket.on('end', function(data) {
-        socket.broadcast.to(data.id).emit('end', {
-            x: data.x,
-            y: data.y,
-            id: this.id,
-            layer: data.layer,
-            cId: socket.id
-        });
+    socket.on('e', function(data) {
+        socket.broadcast.to(roomId).emit('e', data);
     });
 
     socket.on('save', function(data, fn) {

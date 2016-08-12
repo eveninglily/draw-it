@@ -4,6 +4,8 @@ $(document).ready(function() {
     client = new Client('https://nodedraw.com');
 });
 
+//TODO: Replace the client ID as the stroke identifier
+
 class Client {
     constructor(server) {
         this.server = server;
@@ -13,6 +15,7 @@ class Client {
         this.clientId = '';
         this.connections = {};
         this.updateQueue = [];
+        this.deferred = $.Deferred();
     }
 
     connect() {
@@ -49,12 +52,13 @@ class Client {
             layers[layer].canvas.doStrokes(activeStrokes);
         }).on('u', function(data) {
             var layer = _this.connections[data.cId];
-            data.positions.forEach(function(pos) {
-                layers[layer].canvas.strokes[data.cId].addPoint(pos.x, pos.y);
+            layers[layer].canvas.strokes[data.cId].addPoints(data.positions);
+            setTimeout(function(){
                 layers[layer].canvas.doStrokes(activeStrokes);
-            }, this);
+            }, 0);
         }).on('e', function(data) {
-            var layer = _this.connections[data.cId];
+            setTimeout(function(){
+                var layer = _this.connections[data.cId];
 
             layers[layer].canvas.completeStroke(layers[layer].canvas.strokes[data.cId]);
             addChange(layers[layer].canvas.strokes[data.cId]);
@@ -65,6 +69,7 @@ class Client {
                 }
             }
             layers[layer].updatePreview();
+            }, 0);
         });
 
         $('#layers').on('mousedown', function(e) {

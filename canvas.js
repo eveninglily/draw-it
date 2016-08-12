@@ -182,11 +182,18 @@ class DrawingCanvas {
      */
     drawStroke(stroke) {
         this.ctx.save();
-        this.setContextValues(stroke.tool);
+        this.setContextValues(stroke.tool); //Ensures that all the context values are correct
         this.ctx.beginPath();
         if(stroke.path.length > 3) {
             var len = stroke.path.length;
-            var controls = stroke.controlPoints.concat(stroke.getControlPoints(stroke.path[len-3].x, stroke.path[len - 3].y, stroke.path[len-2].x, stroke.path[len-2].y, stroke.path[len-1].x, stroke.path[len-1].y, .3));
+            var controls = stroke.controlPoints.concat(
+                stroke.getControlPoints(stroke.path[len-3].x,
+                                        stroke.path[len - 3].y,
+                                        stroke.path[len-2].x,
+                                        stroke.path[len-2].y,
+                                        stroke.path[len-1].x,
+                                        stroke.path[len-1].y,
+                                        .3));
             var cLen = controls.length;
 
             this.ctx.beginPath();
@@ -195,7 +202,8 @@ class DrawingCanvas {
 
             for(var i = 0; i < len - 1; i += 1) {
                 this.ctx.moveTo(stroke.path[i].x,stroke.path[i].y);
-                this.ctx.bezierCurveTo(controls[4*i-2],controls[4*i-1],controls[4*i],controls[4*i+1],stroke.path[i + 1].x,stroke.path[i + 1].y); //controls.length == x.length * 4
+                //controls.length == x.length * 4
+                this.ctx.bezierCurveTo(controls[4*i-2],controls[4*i-1],controls[4*i],controls[4*i+1],stroke.path[i + 1].x,stroke.path[i + 1].y);
             }
 
             this.ctx.moveTo(stroke.path[len-2].x,stroke.path[len-2].y);
@@ -250,6 +258,12 @@ class Stroke {
         if(this.path.length > 3) {
             var pLen = this.path.length - 1;
             this.controlPoints = this.controlPoints.concat(this.getControlPoints(this.path[pLen - 3].x, this.path[pLen - 3].y, this.path[pLen - 2].x, this.path[pLen - 2].y, this.path[pLen - 1].x, this.path[pLen - 1].y, .3));
+        }
+    }
+
+    addPoints(points) {
+        for(var i = 0; i < points.length; i++) {
+            this.addPoint(points[i].x, points[i].y);
         }
     }
 

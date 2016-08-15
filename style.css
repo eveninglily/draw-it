@@ -106,7 +106,7 @@ img {
     font-size: 1.2em;
     border-collapse: collapse;
     width: 100%;
-    
+
 }
 
 #layer-scroll {
@@ -308,7 +308,7 @@ input[type="file"] {
 }
 
 #modal-bg {
-    background: rgba(0,0,0,.8);
+    background: rgba(0,0,0,.6);
     display: none;
 }
 
@@ -317,6 +317,7 @@ input[type="file"] {
     height: 20em;
     background: white;
     padding: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
 
 .center-holder {

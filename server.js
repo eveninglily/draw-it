@@ -3,8 +3,9 @@
 var fs = require('fs');
 
 class Room {
-    constructor(id) {
+    constructor(id, name) {
         this.id = id;
+        this.name = name;
         this.clients = [];
     }
 }
@@ -19,9 +20,10 @@ io.on('connection', function(socket) {
         if(data['id'] == '') {
             id = getUUID();
             console.log('Creating room #' + id);
-            var room = new Room(id);
+            var room = new Room(id, id);
             room.clients.push(socket);
             rooms.push(room);
+            room.admin = socket.id;
         } else {
             console.log('Client ' + this.id + ' joined #' + data.id);
             id = data.id;
@@ -45,8 +47,8 @@ io.on('connection', function(socket) {
         var buffer = new Buffer(image, 'base64');
         var uuid = getUUID().split('-')[0];
         fs.writeFile("gallery/"+uuid+".png", buffer);
-        console.log('saving at https://nodedraw.com/amidraw/gallery/' + uuid + '.png');
-        fn({'url':'https://nodedraw.com/amidraw/gallery/' + uuid + '.png'});
+        console.log('saving at https://nodedraw.com/draw/gallery/' + uuid + '.png');
+        fn({'url':'https://nodedraw.com/draw/gallery/' + uuid + '.png'});
     });
 });
 

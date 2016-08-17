@@ -1,10 +1,11 @@
+/**
+ * Client-side networking code.
+ */
 var client;
 
 $(document).ready(function() {
     client = new Client('https://nodedraw.com');
 });
-
-//TODO: Replace the client ID as the stroke identifier
 
 class Client {
     constructor(server) {
@@ -12,10 +13,12 @@ class Client {
         this.connected = false;
         this.down = false;
         this.id = 'test';
+
+        this.currentUUID;
         this.clientId = '';
-        this.connections = {};
-        this.updateQueue = [];
-        this.deferred = $.Deferred();
+
+        this.recieving = {};
+        this.sending = {};
     }
 
     connect() {
@@ -45,20 +48,20 @@ class Client {
         });
 
         this.socket.on('s', function(data) {
-            _this.connections[data.cId] = data.layer;
-            var layer = _this.connections[data.cId];
+            _this.recieving[data.cId] = data.layer;
+            var layer = _this.recieving[data.cId];
             layers[layer].canvas.beginStroke(data.tool, data.x, data.y, data.cId);
             activeStrokes.push(data.cId);
             layers[layer].canvas.doStrokes(activeStrokes);
         }).on('u', function(data) {
-            var layer = _this.connections[data.cId];
+            var layer = _this.recieving[data.cId];
             layers[layer].canvas.strokes[data.cId].addPoints(data.positions);
             setTimeout(function(){
                 layers[layer].canvas.doStrokes(activeStrokes);
             }, 0);
         }).on('e', function(data) {
             setTimeout(function(){
-                var layer = _this.connections[data.cId];
+                var layer = _this.recieving[data.cId];
 
             layers[layer].canvas.completeStroke(layers[layer].canvas.strokes[data.cId]);
             addChange(layers[layer].canvas.strokes[data.cId]);
@@ -97,19 +100,24 @@ class Client {
         });
 
         setInterval(function() {
-            if(_this.updateQueue.length != 0) {
-                _this.socket.emit('u', {
-                    cId: _this.clientId,
-                    positions: _this.updateQueue
-                });
-                _this.updateQueue = [];
+            for(var key in _this.sending) {
+                if(!_this.sending.hasOwnProperty(key)) {
+                    continue;
+                }
+                if(!_this.sending[key].length == 0) {
+                    _this.socket.emit('u', {
+                        cId: key,
+                        positions: _this.sending[key]
+                    });
+                    _this.sending[key] = [];
+                }
             }
         }, 40);
     }
 
     sendStart(x, y) {
-        var c = this.clientId;
-        console.log(c);
+        this.currentUUID = getUUID();
+        var c = this.currentUUID;
         this.socket.emit('s', {
             cId: c,
             x: x,
@@ -118,11 +126,12 @@ class Client {
             tool: currTool
         });
         this.down = true;
+        this.sending[c] = [];
     }
 
     sendMove(x, y) {
         if(this.down) {
-            this.updateQueue.push({'x': x, 'y': y});
+            this.sending[this.currentUUID].push({'x': x, 'y': y});
         }
     }
 
@@ -131,7 +140,7 @@ class Client {
             var _this = this;
             setTimeout(function(){
                 _this.socket.emit('e', {
-                    cId: _this.clientId,
+                    cId: _this.currentUUID,
                     x: x,
                     y: y
                 });
@@ -148,4 +157,17 @@ class Client {
             $('#modal-bg').show();
         });
     }
+}
+
+/**
+ * UUID generator from https://jsfiddle.net/xg7tek9j/7/, a RFC4122-compliant solution
+ */
+function getUUID() {
+    var t = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var n = (t + Math.random() * 16) % 16 | 0;
+        t = Math.floor(t/16);
+        return (c == 'x' ? n : (n&0x3|0x8)).toString(16);
+    });
+    return uuid;
 }

@@ -130,6 +130,20 @@ class Layer {
     }
 }
 
+/**
+ * Creates a new layer with the given ID
+ */
+function addLayer(id) {
+    var n = new Layer(id);
+    layers.push(n);
+    nLayer++;
+    $('#' + n.id + '-control').trigger('mousedown'); //TODO: this is hacky. Fix?
+    $('#' + n.id + '-control').trigger('mouseup');
+}
+
+/**
+ * Removes the nth layer in the layers array
+ */
 function removeLayer(pos) {
     var nId = layers[pos].id;
 
@@ -146,6 +160,7 @@ function removeLayer(pos) {
     currentChange -= r;
     layers.splice(pos, 1);
 }
+
 $(document).ready(function(){
     allowReorder('#layer-list', '.selected', function(){
         layers.splice(currentLayer + 1, 0, layers.splice(currentLayer, 1)[0]);
@@ -158,68 +173,61 @@ $(document).ready(function(){
         currentLayer--;
         $('#' + layers[currentLayer].id).css('z-index', currentLayer);
     });
-});
-function addLayer(id) {
-    var n = new Layer(id);
-    layers.push(n);
-    nLayer++;
-    $('#' + n.id + '-control').trigger('mousedown');
-    $('#' + n.id + '-control').trigger('mouseup');
-}
 
-$('#layer-add').on('click', function() { addLayer('layer' + nLayer); });
+    $('#layer-add').on('click', function() { addLayer('layer' + nLayer); });
 
-$('#layer-remove').on('click', function() {
-    if(layers.length > 1) {
-        removeLayer(currentLayer);
-        if(currentLayer >= layers.length) {
+    $('#layer-remove').on('click', function() {
+        if(layers.length > 1) {
+            removeLayer(currentLayer);
+            if(currentLayer >= layers.length) {
+                currentLayer--;
+            }
+            layers[currentLayer].select();
+        }
+    });
+
+    $('#layer-clear').on('click', function() {
+        if(confirm('Clear current layer?'))
+            layers[currentLayer].canvas.clear();
+            layers[currentLayer].canvas.clearBuffer();
+            layers[currentLayer].updatePreview();
+    });
+
+    $('#layer-save').on('click', function() {
+        layers[currentLayer].canvas.toFile();
+    });
+
+    $('#layer-mergeup').on('click', function() {
+        if(!(currentLayer == layers.length - 1)) {
+            layers[currentLayer + 1].canvas.drawCanvas(layers[currentLayer].canvas.canvas);
+            layers[currentLayer + 1].canvas.drawCanvasOntoBuffer(layers[currentLayer].canvas.canvas);
+            for(var i = 0; i < layers[currentLayer].ids.length; i++) {
+                layers[currentLayer + 1].ids.push(layers[currentLayer].ids[i]);
+            }
+            removeLayer(currentLayer);
+            layers[currentLayer].select();
+            layers[currentLayer].updatePreview();
+        }
+    });
+
+    $('#layer-mergedown').on('click', function() {
+        if((currentLayer != 0)) {
+            layers[currentLayer - 1].canvas.drawCanvas(layers[currentLayer].canvas.canvas);
+            layers[currentLayer + 1].canvas.drawCanvasOntoBuffer(layers[currentLayer].canvas.canvas);
+            for(var i = 0; i < layers[currentLayer].ids.length; i++) {
+                layers[currentLayer - 1].ids.push(layers[currentLayer].ids[i]);
+            }
+            removeLayer(currentLayer);
             currentLayer--;
+            layers[currentLayer].select();
+            layers[currentLayer].updatePreview();
         }
-        layers[currentLayer].select();
-    }
-});
+    });
 
-$('#layer-clear').on('click', function() {
-    if(confirm('Clear current layer?'))
-        layers[currentLayer].canvas.clear();
-        layers[currentLayer].canvas.clearBuffer();
-        layers[currentLayer].updatePreview();
-});
-
-$('#layer-save').on('click', function() {
-    layers[currentLayer].canvas.toFile();
-});
-
-$('#layer-mergeup').on('click', function() {
-    if(!(currentLayer == layers.length - 1)) {
-        layers[currentLayer + 1].canvas.drawCanvas(layers[currentLayer].canvas.canvas);
-        layers[currentLayer + 1].canvas.drawCanvasOntoBuffer(layers[currentLayer].canvas.canvas);
-        for(var i = 0; i < layers[currentLayer].ids.length; i++) {
-            layers[currentLayer + 1].ids.push(layers[currentLayer].ids[i]);
-        }
-        removeLayer(currentLayer);
-        layers[currentLayer].select();
-        layers[currentLayer].updatePreview();
-    }
-});
-
-$('#layer-mergedown').on('click', function() {
-    if((currentLayer != 0)) {
-        layers[currentLayer - 1].canvas.drawCanvas(layers[currentLayer].canvas.canvas);
-        layers[currentLayer + 1].canvas.drawCanvasOntoBuffer(layers[currentLayer].canvas.canvas);
-        for(var i = 0; i < layers[currentLayer].ids.length; i++) {
-            layers[currentLayer - 1].ids.push(layers[currentLayer].ids[i]);
-        }
-        removeLayer(currentLayer);
-        currentLayer--;
-        layers[currentLayer].select();
-        layers[currentLayer].updatePreview();
-    }
-});
-
-$('#layer-opacity').on('input', function () {
-        $('#layer-opacity-value').html($(this).val() + "%");
-        $('.selected .layer-opacity').html($(this).val() + "%");
-        layers[currentLayer].opacity = $(this).val() / 100;
-        $('#' + layers[currentLayer].id).css('opacity', $(this).val() / 100);
+    $('#layer-opacity').on('input', function () {
+            $('#layer-opacity-value').html($(this).val() + "%");
+            $('.selected .layer-opacity').html($(this).val() + "%");
+            layers[currentLayer].opacity = $(this).val() / 100;
+            $('#' + layers[currentLayer].id).css('opacity', $(this).val() / 100);
+    });
 });

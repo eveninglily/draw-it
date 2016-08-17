@@ -1,3 +1,7 @@
+/**
+ * Sets up the canvas and binds all the core events
+ */
+
 var width = 1280;
 var height = 720;
 
@@ -7,8 +11,6 @@ var currentLayer = 0;
 var layers = [];
 var activeStrokes = [];
 var currTool = pencil;
-
-var sel;
 
 var settings = {
     showLeaveMessage: false

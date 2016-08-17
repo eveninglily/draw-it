@@ -1,6 +1,7 @@
 "use strict";
 
 //TODO: Clean, document
+//CURRENTLY UNUSED AND A WIP
 class Selection {
     constructor(target, lineDash) {
         this.canvas = $('<canvas>').attr('width', target.width)

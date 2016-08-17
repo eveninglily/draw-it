@@ -1,3 +1,7 @@
+var color1 = '#e73955';
+var color2 = '#50cfbb';
+var activeColor = 1;
+
 var colorWheel = new ColorWheel('wheel', 250, function() {
     currTool.color = "#" + colorWheel.getHex();
     $('#hexValue').val("#" + colorWheel.getHex());
@@ -9,10 +13,6 @@ var colorWheel = new ColorWheel('wheel', 250, function() {
         color2 = currTool.color;
     }
 });
-
-var color1 = '#e73955';
-var color2 = '#50cfbb';
-var activeColor = 1;
 
 colorWheel.setColorHex(color1);
 $('#wheel').prependTo('#tool-meta');
@@ -207,8 +207,8 @@ $('#hsv-toggle').on('click', function() {
 });
 
 $('#gradient-toggle').on('click', function() {
-    //TODO: Figure out what this actually does
     //TODO: Implement a UI for this
+    //https://i.imgur.com/QVgYbiZ.gif
 });
 
 $('#palette-toggle').on('click', function() {

@@ -241,7 +241,6 @@ class DrawingCanvas {
 
 /**
  * Holds all the points in a stroke
- * TODO: Document this
  */
 class Stroke {
     constructor(tool) {
@@ -250,6 +249,9 @@ class Stroke {
         this.controlPoints = [];
     }
 
+    /**
+     * Adds a (x,y) pair to the stroke, calculates control points if need be
+     */
     addPoint(x, y) {
         this.path.push({
             'x':x,
@@ -261,12 +263,19 @@ class Stroke {
         }
     }
 
+    /**
+     * Adds an array of (x,y) points
+     */
     addPoints(points) {
         for(var i = 0; i < points.length; i++) {
             this.addPoint(points[i].x, points[i].y);
         }
     }
 
+    /**
+     * Calculate control points
+     * TODO: Comment this function
+     */
     getControlPoints(x1, y1, x2, y2, x3, y3, scale) {
         var dist1 = Math.sqrt(Math.pow( x2 - x1, 2 ) + Math.pow( y2 - y1 , 2 ));
         var dist2 = Math.sqrt(Math.pow( x3 - x2, 2 ) + Math.pow( y3 - y2 , 2 ));

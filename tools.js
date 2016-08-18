@@ -10,11 +10,6 @@ $('.tool').on('click', function() {
     var src = sr.join('/');
     $(this).attr('src', src);
     $('#mergedLayer').remove();
-    if(sel != null) {
-        sel.detach();
-        layers[currentLayer].canvas.clearBuffer();
-        layers[currentLayer].canvas.drawCanvasOntoBuffer(layers[currentLayer].canvas.canvas);
-    }
 });
 
 $('.tool').on('hover', function() {
@@ -69,16 +64,20 @@ $('#fileName').on('input', function() {
 $('#modal-bg').on('click', function(evt) {
     if(evt.target.id == 'modal-bg') {
         hideSave();
+        $('#modal-bg').hide();
+        $('#dialog-invite').hide();
     }
 }).hide();
 
 function hideSave(){
     $('#modal-bg').hide();
+    $('#dialog-save').hide();
     clearInterval($('#gallery-error').data('interval'));
 }
 
 $('#cancel-save').on('click', hideSave);
 $("#save").on('click', function(e) {
+    $('#dialog-save').show().css('display','flex');;
     $('#modal-bg').show().css('display','flex');
     $('#dl-link').attr('href', saveToPNG()).on('click', function() {
         if($('#upload').is(':checked')) {
@@ -210,8 +209,23 @@ function initSliders(toolName) {
 }
 
 $('#invite').on('click', function() {
-    client.connect();
+    $('#dialog-invite').show().css('display','flex');
+    $('#modal-bg').show().css('display','flex');
+    if(client.inRoom) {
+        $('#room-create').hide();
+    } else {
+        $('#room-manage').hide();
+    }
 })
+
+$('#create-room').on('click', function() {
+    if(!client.connected) {
+        client.connect();
+    }
+    client.joinRoom('');
+    $('#modal-bg').hide();
+    $('#dialog-invite').hide();
+});
 
 initSliders('brush');
 initSliders('eraser');

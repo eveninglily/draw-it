@@ -19,6 +19,7 @@ io.on('connection', function(socket) {
         var id;
         if(data['id'] == '') {
             id = getUUID();
+            id = id.split('-')[4];
             console.log('Creating room #' + id);
             var room = new Room(id, id);
             room.clients.push(socket);

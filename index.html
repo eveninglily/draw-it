@@ -53,7 +53,7 @@
                 <input type='number' id='value-value' value='0' max='100'><br/>
             </div>
             <div id="brush-settings" class='tool-meta activeTool'>
-                <h1>Brush settings</h1>
+                <h1>Brush</h1>
                 <div>
                     <label> Size <input type='number' id='brush-size-value' value='5'> </label><br/>
                     <input id='brush-size' max='50' min='1' value='5' type='range' /><br/>
@@ -62,7 +62,7 @@
                 </div>
             </div>
             <div id="eraser-settings" class='tool-meta'>
-                <h1>Eraser settings</h1>
+                <h1>Eraser</h1>
                 <div>
                     <label> Size <input type='number' id='eraser-size-value' value='5'> </label><br/>
                     <input id='eraser-size' max='50' min='1' value='5' type='range' /><br/>
@@ -71,7 +71,7 @@
                 </div>
             </div>
             <div id="text-settings" class='tool-meta'>
-                <h1>Text settings</h1>
+                <h1>Text</h1>
                 <label> Size <input type='number' id='font-size-value' value='5'>px </label><br/>
                 <input id='font-size' max='50' min='1' value='5' type='range' /><br/>
             </div>
@@ -123,8 +123,8 @@
             <div id="eyedropper-top" class="eyedropper-inner eyedropper-wheel">&nbsp</div>
             <div id="eyedropper-bottom" class="eyedropper-inner eyedropper-wheel">&nbsp</div>
         </div>
-        <div class='center-holder' id='modal-bg'>
-            <div id="modal" class='center-item'>
+        <div id='modal-bg'>
+            <div id="dialog-save" class="modal">
                 <h1>Save</h1>
                 <div>Save as <input id="fileName" placeholder="amidraw"/>
                     <select id='fileType' name="fileType">
@@ -137,6 +137,19 @@
                 <div class='err' id='gallery-error'>Unable to connect to server</div>
                 <div>
                     <a href = "#" id='cancel-save'>Cancel</a> | <a href = "#" id="dl-link" download="amidraw.png">Save</a>
+                </div>
+            </div>
+            <div id="dialog-invite" class='modal'>
+                <div id='room-create'>
+                    <h1> Invite </h1>
+                    <!--<label> Room name <input type='text' id='name' id='room-name'/></label>-->
+                    <div>
+                        <input type="button" value="Cancel" />
+                        <input type="button" value="Create Room" id='create-room'/>
+                    </div>
+                </div>
+                <div id='room-manage'>
+                    <h1> Manage </h1>
                 </div>
             </div>
         </div>

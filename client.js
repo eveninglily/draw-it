@@ -5,12 +5,20 @@ var client;
 
 $(document).ready(function() {
     client = new Client('https://nodedraw.com');
+    var l = window.location.href.split('#');
+    if(l.length == 2) {
+        client.connect();
+        client.joinRoom(l[1]);
+    }
 });
 
 class Client {
     constructor(server) {
         this.server = server;
+
         this.connected = false;
+        this.inRoom = false;
+
         this.down = false;
         this.id = 'test';
 
@@ -30,7 +38,6 @@ class Client {
         }).on('disconnect', function() {
             _t.connected = false;
         });
-        this.joinRoom('test');
     }
 
     joinRoom(id) {
@@ -45,6 +52,7 @@ class Client {
             _this.clientId = data.cId;
             console.log(data.cId);
             $('.right').prepend($('<div>').attr('id','server-status').text('Connected to #' + data.id));
+            _this.inRoom = true;
         });
 
         this.socket.on('s', function(data) {

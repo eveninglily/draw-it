@@ -15,7 +15,7 @@ var colorWheel = new ColorWheel('wheel', 250, function() {
 });
 
 colorWheel.setColorHex(color1);
-$('#wheel').prependTo('#tool-meta');
+$('#wheel').prependTo('#tool-info');
 $("#color1").css({background: color1});
 $("#color2").css({background: color2});
 

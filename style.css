@@ -1,51 +1,23 @@
 /* General Styles
-red: #e73955
-blue: #50cgbb
-white: #fbfbfb
-grey: #6d6d6d
-medium grey: #777777
-dark grey: #2a2a2a
- */
+******************/
+
 @import url(https://fonts.googleapis.com/css?family=Montserrat);
 
 html, body {
     margin: 0px;
     height: 100%;
     width: 100%;
-    font-family: 'Montserrat', sans-serif;
 }
 
 body {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  display: flex;
-  background: #2a2a2a;
-}
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 
-#color1, #color2 {
-    width: 48px;
-    height: 48px;
-    display: inline-block;
-}
-
-@media screen and (max-device-width: 480px) {
-    #center {
-        order: 1;
-    }
-
-    #tools {
-        order: 2;
-    }
-
-    #tools {
-        order: 3;
-    }
-
-    body {
-        flex-direction: column;
-    }
+    display: flex;
+    background: #2a2a2a;
+    font-family: 'Montserrat', sans-serif;
 }
 
 img {
@@ -65,77 +37,46 @@ img {
     background: #50cfbb;
 }
 
-/* Layers */
-
-#layers {
-    position: relative;
-    width: 1280px;
-    height: 720px;
-    display: inline-block;
-    vertical-align: top;
-    border: 1px solid black;
-    background: white;
+.nyi {
+    display: none !important;
 }
 
-.layer {
-    margin: 0;
+.err {
+    display: none;
+    color: red;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+#hidden-input {
+    top: -999px;
+    left: -999px;
     position: absolute;
-    cursor: crosshair;
-    background-color: transparent;
 }
 
-#layer-controls {
+#server-status {
     display: inline-block;
-    position: relative;
-    width: 100%;
+    color: #ffffff;
 }
 
-#layer-c-inner {
-    background: #494949;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
+
+.action {
+    background: #50cfbb;
 }
 
-#layer-controls-opacity {
-    margin-left: auto;
-    margin-right: auto;
+#gallery-url-holder {
+    display: none;
 }
 
-#layer-list {
-    font-size: 1.2em;
-    border-collapse: collapse;
-    width: 100%;
-
+.right {
+    display: inline-block;
+    float: right;
 }
 
-#layer-scroll {
-    height: 20em;
-    max-height: 20em;
-    overflow-y: auto;
-    background: #494949
-}
-
-#layer-list tr {
-    border: 1px solid black;
-    background: #777777;
-}
-
-.layer-opacity {
-    font-size: .8em;
-}
-
-.layer-preview img {
-    width: 48px !important;
-    height: 27px !important;
-}
-
-.selected {
-    background-color: #494949 !important;
-    font-weight: bold;
-}
-
-/* Toolbox */
+/* Toolbox
+***********/
 
 #toolbox {
     display: flex;
@@ -152,20 +93,14 @@ img {
     border: 3px solid white;
 }
 
-#tools {
-    padding: 5px;
-    border: 1px solid black;
-    height: auto;
-    display: inline-flex;
-    vertical-align: top;
+#clear {
+    background: #e73955;
 }
 
-#tools h1 {
-    margin: 0px;
-    text-align: center
-}
+/* Tool Info
+*************/
 
-#tool-meta {
+#tool-info {
     width: auto;
     flex-grow: 1;
     background: #494949;
@@ -173,14 +108,6 @@ img {
 
 .tool-meta {
     background: #777777;
-}
-
-.action {
-    background: #50cfbb;
-}
-
-.tool, #clear {
-    background: #e73955;
 }
 
 .tool-meta:not(.activeTool) {
@@ -226,16 +153,112 @@ input[type="number"] {
     display: block;
 }
 
-#gallery-url-holder {
+#color1, #color2 {
+    width: 48px;
+    height: 48px;
+    display: inline-block;
+}
+
+#hexValue {
+    width: 5em;
+}
+
+#color-settings, #hsv-settings {
     display: none;
 }
 
-.right {
-    display: inline-block;
-    float: right;
+#wheel {
+    position: relative;
+    text-align: left;
 }
 
-/*TODO: Clean up this CSS*/
+/* Layers
+**********/
+
+#layers {
+    position: relative;
+    width: 1280px;
+    height: 720px;
+    display: inline-block;
+    vertical-align: top;
+    border: 1px solid black;
+    background: white;
+}
+
+.layer {
+    margin: 0;
+    position: absolute;
+    cursor: crosshair;
+    background-color: transparent;
+}
+
+/* Right Bar
+*************/
+
+#right-bar {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+}
+
+/* Layer Controls
+******************/
+
+#layer-controls {
+    background: #494949;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+#layer-controls-opacity {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#layer-list {
+    font-size: 1.2em;
+    border-collapse: collapse;
+    width: 100%;
+
+}
+
+#layer-scroll {
+    height: 20em;
+    max-height: 20em;
+    overflow-y: auto;
+    background: #494949
+}
+
+#layer-list tr {
+    border: 1px solid black;
+    background: #777777;
+}
+
+.layer-opacity {
+    font-size: .8em;
+}
+
+.layer-preview img {
+    width: 48px !important;
+    height: 27px !important;
+}
+
+.selected {
+    background-color: #494949 !important;
+    font-weight: bold;
+}
+
+.layer-actions img {
+    width: 24px;
+    height: 24px;
+    filter: invert(100%);
+    -webkit-filter: invert(100%);
+}
+
+/* Eyedropper
+**************/
+
 #eyedropper-top {
     border: 10px solid blue;
     border-bottom: 0;
@@ -275,37 +298,8 @@ input[type="number"] {
     display: none;
 }
 
-/* Color settings */
-
-#wheel {
-    position: relative;
-    text-align: left;
-}
-
-#hexValue {
-    width: 5em;
-}
-
-#color-settings, #hsv-settings {
-    display: none;
-}
-
-.nyi {
-    display: none !important;
-}
-
-.err {
-    display: none;
-    color: red;
-}
-
-input[type="file"] {
-    display: none;
-}
-
-.move {
-    cursor: move !important;
-}
+/* Modal
+*********/
 
 #modal-bg {
     background: rgba(0,0,0,.6);
@@ -336,22 +330,4 @@ input[type="file"] {
     align-items: center;
     justify-content: center;
     flex-flow: column;
-}
-
-.layer-actions img {
-    width: 24px;
-    height: 24px;
-    filter: invert(100%);
-    -webkit-filter: invert(100%);
-}
-
-#hidden-input {
-    top: -999px;
-    left: -999px;
-    position: absolute;
-}
-
-#server-status {
-    display: inline-block;
-    color: #ffffff;
 }

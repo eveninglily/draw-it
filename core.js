@@ -13,8 +13,10 @@ var activeStrokes = [];
 var currTool = pencil;
 
 var settings = {
-    showLeaveMessage: false
-}
+    showLeaveMessage: false,
+    whiteBg: false,
+    cache: false
+};
 
 $(document).ready(function() {
     addLayer('layer0');
@@ -147,9 +149,15 @@ function getMergedCanvas() {
  */
 function getMergedVisibleCanvas() {
     var merged = $('<canvas>').attr({'width': width, 'height': height});
+    var ctx = merged.get(0).getContext('2d');
+    if(settings.whiteBg) {
+        ctx.fillStyle = 'white';
+        ctx.strokeStyle = 'white';
+        ctx.fillRect(0, 0, width, height);
+    }
     for(var i = 0; i < layers.length; i++) {
         if(layers[i].isVisible)
-            merged.get(0).getContext('2d').drawImage(layers[i].canvas.canvas, 0, 0);
+            ctx.drawImage(layers[i].canvas.canvas, 0, 0);
     }
     return merged;
 }

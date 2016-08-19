@@ -63,19 +63,18 @@ $('#fileName').on('input', function() {
 
 $('#modal-bg').on('click', function(evt) {
     if(evt.target.id == 'modal-bg') {
-        hideSave();
-        $('#modal-bg').hide();
-        $('#dialog-invite').hide();
+        hideModals()
     }
 }).hide();
 
-function hideSave(){
+function hideModals() {
     $('#modal-bg').hide();
-    $('#dialog-save').hide();
+    $('.modal').hide();
     clearInterval($('#gallery-error').data('interval'));
+    clearInterval($('.connection-status').data('interval'));
 }
 
-$('#cancel-save').on('click', hideSave);
+$('#cancel-save').on('click', hideModals);
 $("#save").on('click', function(e) {
     $('#dialog-save').show().css('display','flex');;
     $('#modal-bg').show().css('display','flex');
@@ -83,7 +82,7 @@ $("#save").on('click', function(e) {
         if($('#upload').is(':checked')) {
             client.save();
         }
-        hideSave();
+        hideModals()
     });
 
     $('#gallery-error').data('interval', setInterval(checkGalleryConnection, 500));
@@ -216,7 +215,32 @@ $('#invite').on('click', function() {
     } else {
         $('#room-manage').hide();
     }
-})
+});
+
+$('#settings').on('click', function() {
+    $('#dialog-settings').show().css('display','flex');
+    $('#modal-bg').show().css('display','flex');
+});
+
+$('.settings-item').on('change', function() {
+    var data = $(this).attr('data-val');
+    settings[data] = $(this).is(':checked');
+    localStorage.setItem('settings', JSON.stringify(settings));
+});
+
+$(document).ready(function() {
+    if(localStorage.getItem('settings')) {
+        settings = JSON.parse(localStorage.getItem('settings'));
+        for(var key in settings) {
+            if(!settings.hasOwnProperty(key)) {
+                continue;
+            }
+            if(settings[key] == true) {
+                $('#setting-' + key).prop('checked', true);
+            }
+        }
+    }
+});
 
 $('#create-room').on('click', function() {
     if(!client.connected) {

@@ -40,7 +40,7 @@ function allowReorder(container, selector, upCallback, downCallback) {
             var y = evt.pageY;
             if(!(r.index() == 0)) {
                 var prev = r.prev();
-                if(y < (prev.position().top + (prev.height() / 2))) {
+                if(y < (prev.offset().top + (prev.height() / 2))) {
                     r.insertBefore(prev);
                     upCallback();
                 }
@@ -48,7 +48,7 @@ function allowReorder(container, selector, upCallback, downCallback) {
 
             if(!(r.index() == layers.length - 1)) {
                 var next = r.next();
-                if(y > (next.position().top + (next.height() / 2))) {
+                if(y > (next.offset().top + (next.height() / 2))) {
                     r.insertAfter(next);
                     downCallback();
                 }

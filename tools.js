@@ -39,61 +39,6 @@ $('#undo').on('click', function() { undo(); });
 
 $('#redo').on('click', function() { redo(); });
 
-$('#fileName').on('input', function() {
-    var name = $('#fileName').val();
-    if(name.length == 0) {
-        name = "amidraw";
-    }
-    $('#dl-link').attr('download', name + '.' + $('#fileType').val());
-});
-
-function hideModals() {
-    $('#modal-bg').hide();
-    $('.modal').hide();
-    clearInterval($('#gallery-error').data('interval'));
-    clearInterval($('.connection-status').data('interval'));
-}
-
-$("#save").on('click', function(e) {
-    $('#dialog-save').show().css('display','flex');;
-    $('#modal-bg').show().css('display','flex');
-    $('#dl-link').attr('href', saveToPNG()).on('click', function() {
-        if($('#upload').is(':checked')) {
-            client.save();
-        }
-        hideModals()
-    });
-
-    $('#gallery-error').data('interval', setInterval(checkGalleryConnection, 500));
-});
-
-/**
- * Checks the connection to the server, shows an error if not connected
- */
-function checkGalleryConnection() {
-    if(client.connected) {
-        $('#gallery-error').hide();
-        $('#upload').prop('disabled', false);
-    } else {
-        $('#gallery-error').show();
-        $('#upload').prop('disabled', true);
-        $('#upload').prop('checked', false);
-    }
-}
-
-$('#fileType').on('change', function() {
-    var name = $('#fileName').val();
-    if(name.length == 0) {
-        name = "amidraw";
-    }
-    $('#dl-link').attr('download', name + '.' + $('#fileType').val());
-    if($('fileType').val() == 'png') {
-        $('#dl-link').attr('href', saveToPNG());
-    } else {
-        $('#dl-link').attr('href', saveLayersToJSON());
-    }
-});
-
 /**
  * Returns a data url containing the PNG data
  */
@@ -186,60 +131,6 @@ function initSliders(toolName) {
     });
 }
 
-$('#invite').on('click', function() {
-    $('#dialog-invite').show().css('display','flex');
-    $('#modal-bg').show().css('display','flex');
-    if(client.inRoom) {
-        $('#room-create').hide();
-    } else {
-        $('#room-manage').hide();
-    }
-});
-
-$('#settings').on('click', function() {
-    $('#dialog-settings').show().css('display','flex');
-    $('#modal-bg').show().css('display','flex');
-});
-
-$('.settings-item').on('change', function() {
-    var data = $(this).attr('data-val');
-    settings[data] = $(this).is(':checked');
-    localStorage.setItem('settings', JSON.stringify(settings));
-});
-
-$(document).ready(function() {
-    if(localStorage.getItem('settings')) {
-        settings = JSON.parse(localStorage.getItem('settings'));
-        for(var key in settings) {
-            if(!settings.hasOwnProperty(key)) {
-                continue;
-            }
-            if(settings[key] == true) {
-                $('#setting-' + key).prop('checked', true);
-            }
-        }
-    }
-});
-
-$('#create-room').on('click', function() {
-    if(!client.connected) {
-        client.connect();
-    }
-    client.joinRoom('');
-    $('#modal-bg').hide();
-    $('#dialog-invite').hide();
-});
-
 initSliders('brush');
 initSliders('eraser');
 var fontSize = new SliderVar('font-size');
-
-//TODO: All jQuery events in this file should be here
-$(document).ready(function() {
-    $('#modal-bg').on('click', function(evt) {
-        if(evt.target.id == 'modal-bg') {
-            hideModals()
-        }
-    }).hide();
-    $('.cancel').on('click', hideModals);
-});

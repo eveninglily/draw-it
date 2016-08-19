@@ -4,6 +4,7 @@ $('.tool').on('click', function() {
     $('.active').removeClass('active');
     $('.activeTool').removeClass('activeTool');
 
+    //TODO: Once SVGs are used, this can be deleted
     $(this).addClass('active');
     var sr = $(this).attr('src').split('/');
     sr.splice(2,0, 'active');
@@ -12,33 +13,18 @@ $('.tool').on('click', function() {
     $('#mergedLayer').remove();
 });
 
-$('.tool').on('hover', function() {
-    var sr = $(this).attr('src').split('/');
-    sr.splice(2,0, 'active');
-    var src = sr.join('/');
-    $(this).attr('src', src);
-});
-
 $("#pencil").on('click', function() {
     currTool = pencil;
-
     $('#brush-settings').addClass('activeTool');
 });
 
 $("#eraser").on('click', function() {
     currTool = eraser;
-
     $('#eraser-settings').addClass('activeTool');
-});
-
-$("#select").on('click', function() {
-    currTool = selection;
-    sel = new Selection($('#layer0').get(0), [8,4]);
 });
 
 $("#text").on('click', function() {
     currTool = text;
-
     $('#text-settings').addClass('activeTool');
 });
 
@@ -61,12 +47,6 @@ $('#fileName').on('input', function() {
     $('#dl-link').attr('download', name + '.' + $('#fileType').val());
 });
 
-$('#modal-bg').on('click', function(evt) {
-    if(evt.target.id == 'modal-bg') {
-        hideModals()
-    }
-}).hide();
-
 function hideModals() {
     $('#modal-bg').hide();
     $('.modal').hide();
@@ -74,7 +54,6 @@ function hideModals() {
     clearInterval($('.connection-status').data('interval'));
 }
 
-$('#cancel-save').on('click', hideModals);
 $("#save").on('click', function(e) {
     $('#dialog-save').show().css('display','flex');;
     $('#modal-bg').show().css('display','flex');
@@ -254,3 +233,13 @@ $('#create-room').on('click', function() {
 initSliders('brush');
 initSliders('eraser');
 var fontSize = new SliderVar('font-size');
+
+//TODO: All jQuery events in this file should be here
+$(document).ready(function() {
+    $('#modal-bg').on('click', function(evt) {
+        if(evt.target.id == 'modal-bg') {
+            hideModals()
+        }
+    }).hide();
+    $('.cancel').on('click', hideModals);
+});

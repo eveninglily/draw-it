@@ -136,7 +136,8 @@
                 <div id='gallery-url-holder'><a id='gallery-url'></a></div>
                 <div class='err' id='gallery-error'>Unable to connect to server</div>
                 <div>
-                    <a href = "#" id='cancel-save'>Cancel</a> | <a href = "#" id="dl-link" download="amidraw.png">Save</a>
+                    <input type='button' class='button-red cancel' id='cancel-save' value='Cancel'>
+                    <button class='button-blue'><a href = "#" id="dl-link" download="amidraw.png">Save</a></button>
                 </div>
             </div>
             <div id="dialog-invite" class='modal'>
@@ -144,8 +145,8 @@
                     <h1> Invite </h1>
                     <!--<label> Room name <input type='text' id='name' id='room-name'/></label>-->
                     <div>
-                        <input type="button" value="Cancel" />
-                        <input type="button" value="Create Room" id='create-room'/>
+                        <input class="button-red cancel" type="button" value="Cancel" />
+                        <input class='button-blue' type="button" value="Create Room" id='create-room'/>
                     </div>
                 </div>
                 <div id='room-manage'>

@@ -4,9 +4,12 @@
 
 @import url(https://fonts.googleapis.com/css?family=Montserrat);
 
+html {
+    height: 100%;
+}
+
 html, body {
     margin: 0px;
-    height: 100%;
     width: 100%;
 }
 
@@ -19,6 +22,7 @@ body {
     display: flex;
     background: #2a2a2a;
     font-family: 'Montserrat', sans-serif;
+    min-height: 100%;
 }
 
 img {
@@ -81,15 +85,15 @@ input[type="file"] {
 #toolbox {
     display: flex;
     flex-flow: column;
-    justify-content: space-around;
+    justify-content: space-between;
     padding: 0em .35em 0em .35em;
     background: #e73955;
-    height: 100%;
+    min-height: 100%;
 }
 
 #toolbox img {
-    width: 52px;
-    height: 52px;
+    width: 3.25em;
+    height: 3.25em;
     border: 3px solid white;
 }
 
@@ -311,14 +315,24 @@ input[type="number"] {
 }
 
 .modal {
-    width: 30em;
-    height: 20em;
+    width: auto;
+    height: auto;
     background: white;
-    padding: 20px;
+    padding: 1em;
     box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
     display: flex;
-    align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     flex-flow: column;
     display: none;
+}
+
+.modal h1 {
+    margin: 0px;
+    padding: 0px;
+    border-bottom: 1px solid black;
+    margin-bottom: .5em;
+}
+
+.modal div {
+    margin: .2em;
 }

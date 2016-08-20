@@ -1,6 +1,7 @@
 /**
  * Client-side networking code.
  */
+"use strict";
 var client;
 
 $(document).ready(function() {
@@ -44,83 +45,18 @@ class Client {
         this.socket.emit('join-room', {
             'id': id
         });
+
         var _this = this;
         this.socket.on('handshake', function(data) {
-            console.log('Connected to server! Room ID: ' + data.id);
-            window.location.href = "#" + data.id
-            _this.id = data.id;
-            _this.clientId = data.cId;
-            console.log(data.cId);
-            $('.right').prepend($('<div>').attr('id','server-status').text('Connected to #' + data.id));
-            _this.inRoom = true;
-        });
-
-        this.socket.on('s', function(data) {
-            _this.recieving[data.cId] = data.layer;
-            var layer = _this.recieving[data.cId];
-            layers[layer].canvas.beginStroke(data.tool, data.x, data.y, data.cId);
-            activeStrokes.push(data.cId);
-            layers[layer].canvas.doStrokes(activeStrokes);
+            _this._handshake(data);
+        }).on('s', function(data) {
+            _this._recieveStart(data);
         }).on('u', function(data) {
-            var layer = _this.recieving[data.cId];
-            layers[layer].canvas.strokes[data.cId].addPoints(data.positions);
-            setTimeout(function(){
-                layers[layer].canvas.doStrokes(activeStrokes);
-            }, 0);
+            _this._recieveUpdate(data);
         }).on('e', function(data) {
-            setTimeout(function(){
-                var layer = _this.recieving[data.cId];
-
-            layers[layer].canvas.completeStroke(layers[layer].canvas.strokes[data.cId]);
-            addChange(layers[layer].canvas.strokes[data.cId]);
-            for(var i = 0; i < activeStrokes.length; i++) {
-                if(activeStrokes[i].id == data.cId) {
-                    activeStrokes.splice(i, 1);
-                    break;
-                }
-            }
-            layers[layer].updatePreview();
-            }, 0);
+            _this._recieveEnd(data);
         });
-
-        $('#layers').on('mousedown', function(e) {
-            _this.sendStart(e.offsetX, e.offsetY);
-        }).on('mousemove', function(e) {
-            if(down) {
-                _this.sendMove(e.offsetX, e.offsetY);
-            }
-        }).on('touchstart', function (evt) {
-            c.sendStart(evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left, evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top);
-        }).on('touchmove', function (evt) {
-            c.sendMove(
-                evt.originalEvent.touches[0].pageX - $('#layers').offset().left,
-                evt.originalEvent.touches[0].pageY - $('#layers').offset().top
-            );
-        });
-
-        $(document).on('mouseup', function(e) {
-            _this.sendEnd(e.offsetX, e.offsetY);
-        }).on('touchend touchcancel', function(evt){
-            _this.sendEnd(
-                evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left,
-                evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top
-            );
-        });
-
-        setInterval(function() {
-            for(var key in _this.sending) {
-                if(!_this.sending.hasOwnProperty(key)) {
-                    continue;
-                }
-                if(!_this.sending[key].length == 0) {
-                    _this.socket.emit('u', {
-                        cId: key,
-                        positions: _this.sending[key]
-                    });
-                    _this.sending[key] = [];
-                }
-            }
-        }, 40);
+        _this._initListeners();
     }
 
     sendStart(x, y) {
@@ -164,6 +100,91 @@ class Client {
             $('#gallery-url').text(data.url).attr('href', data.url);
             $('#modal-bg').show();
         });
+    }
+
+    _handshake(data) {
+        console.log('Connected to server! Room ID: ' + data.id);
+        window.location.href = "#" + data.id
+        this.id = data.id;
+        this.clientId = data.cId;
+        console.log(data.cId);
+        $('.right').prepend($('<div>').attr('id','server-status').text('Connected to #' + data.id));
+        this.inRoom = true;
+    }
+
+    _recieveStart(data) {
+        this.recieving[data.cId] = data.layer;
+        var layer = this.recieving[data.cId];
+        layers[layer].canvas.beginStroke(data.tool, data.x, data.y, data.cId);
+        activeStrokes.push(data.cId);
+        layers[layer].canvas.doStrokes(activeStrokes);
+    }
+
+    _recieveUpdate(data) {
+        var layer = this.recieving[data.cId];
+        layers[layer].canvas.strokes[data.cId].addPoints(data.positions);
+        setTimeout(function(){
+            layers[layer].canvas.doStrokes(activeStrokes);
+        }, 0);
+    }
+
+    _recieveEnd(data) {
+        var _this = this;
+        setTimeout(function(){
+            var layer = _this.recieving[data.cId];
+
+            layers[layer].canvas.completeStroke(layers[layer].canvas.strokes[data.cId]);
+            addChange(layers[layer].canvas.strokes[data.cId]);
+            for(var i = 0; i < activeStrokes.length; i++) {
+                if(activeStrokes[i].id == data.cId) {
+                    activeStrokes.splice(i, 1);
+                    break;
+                }
+            }
+            layers[layer].updatePreview();
+        }, 0);
+    }
+
+    _initListeners() {
+        var _this = this;
+        $('#layers').on('mousedown', function(e) {
+            _this.sendStart(e.offsetX, e.offsetY);
+        }).on('mousemove', function(e) {
+            if(down) {
+                _this.sendMove(e.offsetX, e.offsetY);
+            }
+        }).on('touchstart', function (evt) {
+            _this.sendStart(evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left, evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top);
+        }).on('touchmove', function (evt) {
+        _this.sendMove(
+                evt.originalEvent.touches[0].pageX - $('#layers').offset().left,
+                evt.originalEvent.touches[0].pageY - $('#layers').offset().top
+            );
+        });
+
+        $(document).on('mouseup', function(e) {
+            _this.sendEnd(e.offsetX, e.offsetY);
+        }).on('touchend touchcancel', function(evt){
+            _this.sendEnd(
+                evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left,
+                evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top
+            );
+        });
+
+        setInterval(function() {
+            for(var key in _this.sending) {
+                if(!_this.sending.hasOwnProperty(key)) {
+                    continue;
+                }
+                if(!_this.sending[key].length == 0) {
+                    _this.socket.emit('u', {
+                        cId: key,
+                    positions: _this.sending[key]
+                    });
+                    _this.sending[key] = [];
+                }
+            }
+        }, 40);
     }
 }
 

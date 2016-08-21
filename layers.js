@@ -112,6 +112,10 @@ class Layer {
         $('#layer-opacity').val(opacity);
     }
 
+    stroke() {
+        this.canvas.doStrokes(this.activeStrokes);
+    }
+
     toJSON() {
         var data = {};
         data.id = this.id;

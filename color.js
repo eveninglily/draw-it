@@ -89,15 +89,7 @@ function savePalette() {
         layers[currentLayer].canvas.ctx.strokeStyle = rgb;
         data[i] = layers[currentLayer].canvas.ctx.strokeStyle;
     });
-
-    var blob = new Blob([JSON.stringify(data)], {type:"application/json"});
-
-    var url = URL.createObjectURL(blob);
-
-    var a = document.createElement('a');
-    a.download = "palette.json";
-    a.href = url;
-    a.click();
+    saveJSONFile('palette.json', data);
 }
 
 $('#loadPalette').on('change', function() {

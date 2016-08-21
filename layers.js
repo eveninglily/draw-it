@@ -15,6 +15,8 @@ class Layer {
         this.id = id;
         this.ids = [this.id]; //For multiple ID's from merging
 
+        this.activeStrokes = [];
+
         var _this = this;
 
         var newCan = $('<canvas>').attr({
@@ -37,7 +39,6 @@ class Layer {
 
         nRow.attr({
             'id': this.id + '-control',
-            'class': 'selected'
         });
 
         nRow.children('.layer-actions').append(
@@ -137,8 +138,7 @@ function addLayer(id) {
     var n = new Layer(id);
     layers.push(n);
     nLayer++;
-    $('#' + n.id + '-control').trigger('mousedown'); //TODO: this is hacky. Fix?
-    $('#' + n.id + '-control').trigger('mouseup');
+    console.log(n);
 }
 
 /**
@@ -174,7 +174,17 @@ $(document).ready(function(){
         $('#' + layers[currentLayer].id).css('z-index', currentLayer);
     });
 
-    $('#layer-add').on('click', function() { addLayer('layer' + nLayer); });
+    $('#layer-add').on('click', function() {
+        if(client.inRoom) {
+            client.sendAddLayer('layer' + nLayer);
+        }
+        addLayer('layer' + nLayer);
+        setTimeout(function(){
+            var n = layers[layers.length - 1];
+            $('#' + n.id + '-control').trigger('mousedown'); //TODO: this is hacky. Fix?
+            $('#' + n.id + '-control').trigger('mouseup');
+        }, 0);
+    });
 
     $('#layer-remove').on('click', function() {
         if(layers.length > 1) {

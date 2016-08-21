@@ -9,7 +9,6 @@ var down = false;
 
 var currentLayer = 0;
 var layers = [];
-var activeStrokes = [];
 var currTool = pencil;
 
 var settings = {
@@ -20,6 +19,11 @@ var settings = {
 
 $(document).ready(function() {
     addLayer('layer0');
+    setTimeout(function(){
+        var n = layers[layers.length - 1];
+        $('#' + n.id + '-control').trigger('mousedown'); //TODO: this is hacky. Fix?
+        $('#' + n.id + '-control').trigger('mouseup');
+    }, 0);
 });
 
 //TODO: Rewrite inside of this along with tools
@@ -34,8 +38,8 @@ function start(x, y) {
     if(currTool.name == "Pencil" || currTool.name == "Eraser") {
         down = true;
         layers[currentLayer].canvas.beginStroke(currTool, x, y, 'local');
-        activeStrokes.push('local');
-        layers[currentLayer].canvas.doStrokes(activeStrokes);
+        layers[currentLayer].activeStrokes.push('local');
+        layers[currentLayer].canvas.doStrokes(layers[currentLayer].activeStrokes);
     } else {
         if(currTool.name == "Eyedropper") {
             var c = $('#mergedLayer').get(0).getContext('2d').getImageData(x, y, 1, 1).data;
@@ -56,19 +60,19 @@ function start(x, y) {
 
 function move(x, y) {
     layers[currentLayer].canvas.strokes['local'].addPoint(x, y);
-    layers[currentLayer].canvas.doStrokes(activeStrokes);
+    layers[currentLayer].canvas.doStrokes(layers[currentLayer].activeStrokes);
 }
 
 function end() {
     layers[currentLayer].canvas.completeStroke(layers[currentLayer].canvas.strokes['local']);
     addChange(layers[currentLayer].canvas.strokes['local']);
-    for(var i = 0; i < activeStrokes.length; i++) {
-        if(activeStrokes[i] == 'local') {
-            activeStrokes.splice(i, 1);
+    for(var i = 0; i < layers[currentLayer].activeStrokes.length; i++) {
+        if(layers[currentLayer].activeStrokes[i] == 'local') {
+            layers[currentLayer].activeStrokes.splice(i, 1);
             break;
         }
     }
-    layers[currentLayer].canvas.doStrokes(activeStrokes);
+    layers[currentLayer].canvas.doStrokes(layers[currentLayer].activeStrokes);
     layers[currentLayer].updatePreview();
 }
 

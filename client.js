@@ -55,6 +55,8 @@ class Client {
             _this._recieveUpdate(data);
         }).on('e', function(data) {
             _this._recieveEnd(data);
+        }).on('nl', function(data) {
+            addLayer(data.id);
         });
         _this._initListeners();
     }
@@ -93,6 +95,12 @@ class Client {
         }
     }
 
+    sendAddLayer(id) {
+        this.socket.emit('nl', {
+            'id': id
+        });
+    }
+
     save() {
         this.socket.emit('save', {'b64': getMergedVisibleCanvas().get(0).toDataURL()}, function(data) {
             console.log("Saved to gallery at " + data.url);
@@ -114,17 +122,17 @@ class Client {
 
     _recieveStart(data) {
         this.recieving[data.cId] = data.layer;
-        var layer = this.recieving[data.cId];
+        var layer = data.layer;
         layers[layer].canvas.beginStroke(data.tool, data.x, data.y, data.cId);
-        activeStrokes.push(data.cId);
-        layers[layer].canvas.doStrokes(activeStrokes);
+        layers[layer].activeStrokes.push(data.cId);
+        layers[layer].canvas.doStrokes(layers[layer].activeStrokes);
     }
 
     _recieveUpdate(data) {
         var layer = this.recieving[data.cId];
         layers[layer].canvas.strokes[data.cId].addPoints(data.positions);
         setTimeout(function(){
-            layers[layer].canvas.doStrokes(activeStrokes);
+            layers[layer].canvas.doStrokes(layers[layer].activeStrokes);
         }, 0);
     }
 
@@ -135,12 +143,13 @@ class Client {
 
             layers[layer].canvas.completeStroke(layers[layer].canvas.strokes[data.cId]);
             addChange(layers[layer].canvas.strokes[data.cId]);
-            for(var i = 0; i < activeStrokes.length; i++) {
-                if(activeStrokes[i].id == data.cId) {
-                    activeStrokes.splice(i, 1);
+            for(var i = 0; i < layers[layer].activeStrokes.length; i++) {
+                if(layers[layer].activeStrokes[i].id == data.cId) {
+                    layers[layer].activeStrokes.splice(i, 1);
                     break;
                 }
             }
+            delete _this.recieving[data.cId];
             layers[layer].updatePreview();
         }, 0);
     }

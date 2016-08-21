@@ -43,6 +43,8 @@ io.on('connection', function(socket) {
         socket.broadcast.to(roomId).emit('u', data);
     }).on('e', function(data) {
         socket.broadcast.to(roomId).emit('e', data);
+    }).on('nl', function(data) {
+        socket.broadcast.to(roomId).emit('nl', data);
     }).on('save', function(data, fn) {
         var image = data.b64.replace(/^data:image\/\w+;base64,/, "");
         var buffer = new Buffer(image, 'base64');

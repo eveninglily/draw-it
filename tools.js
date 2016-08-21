@@ -1,11 +1,38 @@
+/**
+ * Holds all tools and deals with their frontends
+ */
+
+"use strict";
+
+/**
+ * Simple object to hold data about tools in a standard way
+ * TODO: Consider rewrite, implications of rewrite
+ */
+class Tool {
+    constructor(name, size, meta, color) {
+        this.name = name;
+        this.size = size;
+        this.opacity = 1;
+        this.color = color;
+        this.meta = meta
+    }
+}
+
+var pencil = new Tool("Pencil", 5, "source-over", "#e73955");
+var eraser = new Tool("Eraser", 3, "destination-out", "rgba(255,255,255,1)");
+var text = new Tool("Text", "32px serif", "", "#000000");
+var eyedropper = new Tool("Eyedropper");
+
+//TODO: Clean up a lot of this when SVGs are used
 $('.tool').on('click', function() {
     var s = $('.active').attr('src');
     $('.active').attr('src', s.replace('/active', ''));
+
     $('.active').removeClass('active');
     $('.activeTool').removeClass('activeTool');
-
-    //TODO: Once SVGs are used, this can be deleted
     $(this).addClass('active');
+    $('#' + $(this).attr('data-options')).addClass('activeTool');
+
     var sr = $(this).attr('src').split('/');
     sr.splice(2,0, 'active');
     var src = sr.join('/');
@@ -13,20 +40,9 @@ $('.tool').on('click', function() {
     $('#mergedLayer').remove();
 });
 
-$("#pencil").on('click', function() {
-    currTool = pencil;
-    $('#brush-settings').addClass('activeTool');
-});
-
-$("#eraser").on('click', function() {
-    currTool = eraser;
-    $('#eraser-settings').addClass('activeTool');
-});
-
-$("#text").on('click', function() {
-    currTool = text;
-    $('#text-settings').addClass('activeTool');
-});
+$("#pencil").on('click', () => currTool = pencil);
+$("#eraser").on('click', () => currTool = eraser);
+$("#text").on('click', () => currTool = text);
 
 //TODO: There might be some complications with multi-user stuff here
 $("#eyedropper").on('click', function(e) {
@@ -35,9 +51,8 @@ $("#eyedropper").on('click', function(e) {
     $('#layers').append(merged);
 });
 
-$('#undo').on('click', function() { undo(); });
-
-$('#redo').on('click', function() { redo(); });
+$('#undo').on('click', undo);
+$('#redo').on('click', redo);
 
 $("#clear").on('click', function(e) {
     if(confirm("Clear all layers? This can not be undone. All history will be lost.")) {

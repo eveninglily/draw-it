@@ -21,7 +21,6 @@ function detectLongClick(selector) {
     element.on('mousedown', function(){
         element.data("longClick", setTimeout(function(){
             element.data('dragging', true);
-            console.log(element);
         },200));
     });
 

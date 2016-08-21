@@ -15,15 +15,15 @@
     <body>
         <div id='toolbox'>
             <!--TODO: These will be replaced by an icon font -->
-            <img id="pencil" src="img/icons/active/brush.png" class="active tool" alt="Brush"/>
-            <img id="eraser" src="img/icons/eraser.png" class="tool" alt="Eraser"/>
+            <img id="pencil" src="img/icons/active/brush.png" class="active tool" data-options='brush-settings' alt="Brush"/>
+            <img id="eraser" src="img/icons/eraser.png" class="tool" data-options='eraser-settings' alt="Eraser"/>
             <img id="eyedropper" src="img/icons/eyedropper.png" class="tool" alt="Eyedropper"/>
             <img id="select" src="img/icons/select.png" class="tool" alt="Selection"/>
             <img id="shapes" src="img/icons/shapes.png" class="tool" alt="Shapes"/>
             <img id="line" src="img/icons/line.png" class="tool" alt="Line"/>
             <img id="bucket" src="img/icons/fill.png" class="tool" alt="Bucket"/>
             <img id="blur" src="img/icons/blur.png" class="tool" alt="Blur"/>
-            <img id="text" src="img/icons/text.png" class="tool" alt="Text"/>
+            <img id="text" src="img/icons/text.png" class="tool" data-options='text-settings' alt="Text"/>
             <img id="pointer" src="img/icons/pointer.png" class="tool" alt="Pointer"/>
             <img id="pan" src="img/icons/pan.png" class="tool" alt="Pan"/>
             <img id="clear" src="img/icons/clear.png" class="action" alt="Clear"/>
@@ -168,8 +168,8 @@
         <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.6/socket.io.min.js'></script>
         <script src="layers.js"></script>
         <script src="ui.js"></script>
-        <script src="core.js"></script>
         <script src="tools.js"></script>
+        <script src="core.js"></script>
         <script src="revision.js"></script>
         <script src="color.js"></script>
         <script src="keybinds.js"></script>

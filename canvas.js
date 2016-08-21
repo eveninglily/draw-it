@@ -15,6 +15,7 @@ class DrawingCanvas {
         this.backCanvas = document.createElement('canvas');
         this.backCanvas.width = canvas.width;
         this.backCanvas.height = canvas.height;
+        this.bCtx = this.backCanvas.getContext('2d');
         this._isRedrawing = false;
     }
 
@@ -29,7 +30,7 @@ class DrawingCanvas {
      * Clears the back canvas
      */
     clearBuffer() {
-        this.backCanvas.getContext('2d').clearRect(0, 0, this.width, this.height);
+        this.bCtx.clearRect(0, 0, this.width, this.height);
     }
 
     /**
@@ -58,11 +59,10 @@ class DrawingCanvas {
 
     loadDataURL(data) {
         var image = new Image();
-        var _t = this;
-        image.onload = function() {
-            _t.ctx.drawImage(image, 0, 0);
-            _t.backCanvas.getContext('2d').drawImage(image, 0, 0);
-        }
+        image.onload = (() => {
+            this.ctx.drawImage(image, 0, 0);
+            this.bCtx.drawImage(image, 0, 0);
+        });
         image.src = data;
     }
 
@@ -81,7 +81,7 @@ class DrawingCanvas {
      * Draws a canvas onto the buffer canvas
      */
     drawCanvasOntoBuffer(otherCanvas) {
-        this.backCanvas.getContext('2d').drawImage(otherCanvas, 0, 0);
+        this.bCtx.drawImage(otherCanvas, 0, 0);
     }
 
     /**
@@ -89,15 +89,14 @@ class DrawingCanvas {
      */
     drawBlob(blob, x, y) {
         var reader = new FileReader();
-        var _t = this;
-        reader.onload = function () {
+        reader.onload = (() => {
             var img = new Image();
             img.src = reader.result;
-            img.onload = function () {
-                _t.ctx.drawImage(img, x, y);
-                _t.backCanvas.getContext('2d').drawImage(img, x, y);
-            }
-        }
+            img.onload = (() => {
+                this.ctx.drawImage(img, x, y);
+                this.bCtx.drawImage(img, x, y);
+            });
+        });
         reader.readAsDataURL(blob);
     }
 
@@ -128,9 +127,9 @@ class DrawingCanvas {
     }
 
     finalizeText(text, tool, x, y) {
-        this.backCanvas.getContext('2d').fillStyle = tool.color;
-        this.backCanvas.getContext('2d').font = fontSize.value + "px serif";
-        this.backCanvas.getContext('2d').fillText(text, x, y);
+        this.bCtx.fillStyle = tool.color;
+        this.bCtx.font = fontSize.value + "px serif";
+        this.bCtx.fillText(text, x, y);
     }
 
     /**
@@ -155,8 +154,8 @@ class DrawingCanvas {
         this.drawCanvas(this.backCanvas);
         this.drawStroke(stroke);
 
-        this.backCanvas.getContext('2d').clearRect(0, 0, this.width, this.height);
-        this.backCanvas.getContext('2d').drawImage(this.canvas, 0, 0);
+        this.bCtx.clearRect(0, 0, this.width, this.height);
+        this.bCtx.drawImage(this.canvas, 0, 0);
     }
 
     /**
@@ -259,7 +258,9 @@ class Stroke {
         });
         if(this.path.length > 3) {
             var pLen = this.path.length - 1;
-            this.controlPoints = this.controlPoints.concat(this.getControlPoints(this.path[pLen - 3].x, this.path[pLen - 3].y, this.path[pLen - 2].x, this.path[pLen - 2].y, this.path[pLen - 1].x, this.path[pLen - 1].y, .3));
+            this.controlPoints = this.controlPoints.concat(this.getControlPoints(this.path[pLen - 3].x, this.path[pLen - 3].y,
+                                                                                 this.path[pLen - 2].x, this.path[pLen - 2].y,
+                                                                                 this.path[pLen - 1].x, this.path[pLen - 1].y, .3));
         }
     }
 

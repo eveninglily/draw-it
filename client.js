@@ -47,17 +47,11 @@ class Client {
         });
 
         var _this = this;
-        this.socket.on('handshake', function(data) {
-            _this._handshake(data);
-        }).on('s', function(data) {
-            _this._recieveStart(data);
-        }).on('u', function(data) {
-            _this._recieveUpdate(data);
-        }).on('e', function(data) {
-            _this._recieveEnd(data);
-        }).on('nl', function(data) {
-            addLayer(data.id);
-        });
+        this.socket.on('handshake', data => this._handshake(data))
+                   .on('s', data => this._recieveStart(data))
+                   .on('u', data => this._recieveUpdate(data))
+                   .on('e', data => this._recieveEnd(data))
+                   .on('nl', data => addLayer(data.id));
         _this._initListeners();
     }
 
@@ -83,10 +77,9 @@ class Client {
 
     sendEnd(x, y) {
         if(this.down) {
-            var _this = this;
-            setTimeout(function(){
-                _this.socket.emit('e', {
-                    cId: _this.currentUUID,
+            setTimeout(() => {
+                this.socket.emit('e', {
+                    cId: this.currentUUID,
                     x: x,
                     y: y
                 });
@@ -137,9 +130,8 @@ class Client {
     }
 
     _recieveEnd(data) {
-        var _this = this;
-        setTimeout(function(){
-            var layer = _this.recieving[data.cId];
+        setTimeout(() => {
+            var layer = this.recieving[data.cId];
 
             layers[layer].canvas.completeStroke(layers[layer].canvas.strokes[data.cId]);
             addChange(layers[layer].canvas.strokes[data.cId]);
@@ -149,16 +141,15 @@ class Client {
                     break;
                 }
             }
-            delete _this.recieving[data.cId];
+            delete this.recieving[data.cId];
             layers[layer].updatePreview();
         }, 0);
     }
 
     _initListeners() {
         var _this = this;
-        $('#layers').on('mousedown', function(e) {
-            _this.sendStart(e.offsetX, e.offsetY);
-        }).on('mousemove', function(e) {
+        $('#layers').on('mousedown', e => this.sendStart(e.offsetX, e.offsetY))
+        .on('mousemove', function(e) {
             if(down) {
                 _this.sendMove(e.offsetX, e.offsetY);
             }
@@ -171,26 +162,25 @@ class Client {
             );
         });
 
-        $(document).on('mouseup', function(e) {
-            _this.sendEnd(e.offsetX, e.offsetY);
-        }).on('touchend touchcancel', function(evt){
-            _this.sendEnd(
-                evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left,
-                evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top
-            );
-        });
+        $(document).on('mouseup', e => this.sendEnd(e.offsetX, e.offsetY))
+                   .on('touchend touchcancel', evt =>
+                        this.sendEnd(
+                            evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left,
+                            evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top
+                        )
+                    );
 
-        setInterval(function() {
-            for(var key in _this.sending) {
-                if(!_this.sending.hasOwnProperty(key)) {
+        setInterval(() => {
+            for(var key in this.sending) {
+                if(!this.sending.hasOwnProperty(key)) {
                     continue;
                 }
-                if(!_this.sending[key].length == 0) {
-                    _this.socket.emit('u', {
+                if(!this.sending[key].length == 0) {
+                    this.socket.emit('u', {
                         cId: key,
-                    positions: _this.sending[key]
+                        positions: this.sending[key]
                     });
-                    _this.sending[key] = [];
+                    this.sending[key] = [];
                 }
             }
         }, 40);

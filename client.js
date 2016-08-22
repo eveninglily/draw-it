@@ -43,7 +43,8 @@ class Client {
 
     joinRoom(id) {
         this.socket.emit('join-room', {
-            'id': id
+            'id': id,
+            'name': $('#new-room-name').val()
         });
 
         var _this = this;
@@ -109,7 +110,8 @@ class Client {
         this.id = data.id;
         this.clientId = data.cId;
         console.log(data.cId);
-        $('.right').prepend($('<div>').attr('id','server-status').text('Connected to #' + data.id));
+        $('#server-status').show();
+        $('#server-name').text(data.name);
         this.inRoom = true;
     }
 

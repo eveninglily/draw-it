@@ -17,21 +17,37 @@ io.on('connection', function(socket) {
     var roomId = '';
     socket.on('join-room', function(data) {
         var id;
+        var name;
+
         if(data['id'] == '') {
             id = getUUID();
             id = id.split('-')[4];
             console.log('Creating room #' + id);
-            var room = new Room(id, id);
+
+            if(data.name == '') {
+                name = id;
+            } else {
+                name = data.name;
+            }
+
+            var room = new Room(id, name);
             room.clients.push(socket);
             rooms.push(room);
             room.admin = socket.id;
         } else {
             console.log('Client ' + this.id + ' joined #' + data.id);
             id = data.id;
+            for(var i = 0; i < rooms.length; i++) {
+                if(rooms[i].id == data.id) {
+                    name = rooms[i].name;
+                    break;
+                }
+            }
         }
         socket.join(id);
         socket.emit('handshake', {
             'id': id,
+            'name': name,
             'cId': socket.id
         });
         roomId = id;

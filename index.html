@@ -81,6 +81,7 @@
                 <img id="undo" src="img/icons/undo.png" class="action" alt="Undo"/>
                 <img id="redo" src="img/icons/redo.png" class="action" alt="Redo"/>
                 <div class='right'>
+                    <div id='server-status' style='display: none'>Connected to #<span id='server-name'></span></div>
                     <img id="invite" src="img/icons/invite.png" class="action" alt="Invite"/>
                     <img id="save" src="img/icons/save.png" class="action" alt="Save"/>
                     <label><img id="load" src="img/icons/upload.png" class="action" alt="Load"/><input id="loadFile" type='file' accept='.json'></label>
@@ -143,7 +144,7 @@
             <div id="dialog-invite" class='modal'>
                 <div id='room-create'>
                     <h1> Invite </h1>
-                    <!--<label> Room name <input type='text' id='name' id='room-name'/></label>-->
+                    <label> Room name <input type='text' id='new-room-name'/></label>
                     <div>
                         <input class="button-red cancel" type="button" value="Cancel" />
                         <input class='button-blue' type="button" value="Create Room" id='create-room'/>

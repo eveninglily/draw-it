@@ -48,7 +48,7 @@ img {
 
 .err {
     display: none;
-    color: red;
+    color: #e73955;
 }
 
 input[type="file"] {
@@ -322,22 +322,44 @@ input[type="number"] {
     height: auto;
     background: white;
     padding: 1em;
+    padding-bottom: .5em;
     box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
     display: flex;
     justify-content: flex-start;
     flex-flow: column;
     display: none;
+    border-radius: 4px;
 }
 
 .modal h1 {
     margin: 0px;
     padding: 0px;
     border-bottom: 1px solid black;
+    margin-bottom: .35em;
+}
+
+#room-create {
+    display: flex;
+    flex-flow: column;
+}
+
+#room-create label {
     margin-bottom: .5em;
 }
 
-.modal div {
+.modal div, #room-create div {
+    align-self: center;
+    margin-top: .4em;
+    margin-bottom: .4em;
     margin: .2em;
+}
+
+#gallery-error {
+    margin-bottom: .9em !important;
+}
+
+#dialog-save label, #dialog-save input {
+    display: inline-block;
 }
 
 /* Colorwheel
@@ -346,4 +368,30 @@ input[type="number"] {
 #wheel canvas {
     width: 15vw;
     height: 15vw;
+}
+
+/* Buttons
+***********/
+
+.button {
+    border: none;
+    color: #fbfbfb;
+    font-size: 1em;
+    padding: .5em;
+    width: 5em;
+    border-radius: 4px;
+    margin: 0em .1em 0em .1em;
+}
+
+.button a {
+    text-decoration: none;
+    color: #fbfbfb;
+}
+
+.button-red {
+    background: #e73955;
+}
+
+.button-blue {
+    background: #50cfbb;
 }

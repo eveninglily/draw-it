@@ -131,21 +131,21 @@
                         <option value="json">.json</option>
                     </select>
                 </div>
-                <div><input id="upload" type="checkbox" />Upload to gallery </div>
+                <div><label><input id="upload" type="checkbox" /> Upload to gallery</label></div>
                 <div id='gallery-url-holder'><a id='gallery-url'></a></div>
                 <div class='err server-error' id='gallery-error'>Unable to connect to server</div>
-                <div>
-                    <input type='button' class='button-red cancel' id='cancel-save' value='Cancel'>
-                    <button class='button-blue'><a href = "#" id="dl-link" download="amidraw.png">Save</a></button>
+                <div class='button-holder'>
+                    <input type='button' class=' button button-red cancel' id='cancel-save' value='Cancel'>
+                    <button class='button button-blue'><a href = "#" id="dl-link" download="amidraw.png">Save</a></button>
                 </div>
             </div>
             <div id="dialog-invite" class='modal'>
                 <div id='room-create'>
-                    <h1> Invite </h1>
-                    <label> Room name <input type='text' id='new-room-name'/></label>
-                    <div>
-                        <input class="button-red cancel" type="button" value="Cancel" />
-                        <input class='button-blue' type="button" value="Create Room" id='create-room'/>
+                    <h1> Create Board </h1>
+                    <label> Board name <input type='text' id='new-room-name'/></label>
+                    <div class='button-holder'>
+                        <input class="button button-red cancel" type="button" value="Cancel" />
+                        <input class='button button-blue' type="button" value="Create" id='create-room'/>
                     </div>
                 </div>
                 <div id='room-manage'>

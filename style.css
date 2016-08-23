@@ -339,3 +339,11 @@ input[type="number"] {
 .modal div {
     margin: .2em;
 }
+
+/* Colorwheel
+**************/
+
+#wheel canvas {
+    width: 15vw;
+    height: 15vw;
+}

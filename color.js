@@ -13,6 +13,16 @@ var colorWheel = new ColorWheel('wheel', 250, function() {
         color2 = currTool.color;
     }
 });
+colorWheel.adjustSize();
+
+$(window).resize(() => {
+    colorWheel.adjustSize();
+    if(activeColor == 1) {
+        colorWheel.setColorHex(color1);
+    } else {
+        colorWheel.setColorHex(color2);
+    }
+});
 
 colorWheel.setColorHex(color1);
 $('#wheel').prependTo('#tool-info');

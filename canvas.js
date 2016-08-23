@@ -57,6 +57,10 @@ class DrawingCanvas {
         return image;
     }
 
+    /**
+     * Loads a DataURL into the canvas at 0,0
+     * @param {string} data - The DataUrl
+     */
     loadDataURL(data) {
         var image = new Image();
         image.onload = (() => {
@@ -258,9 +262,11 @@ class Stroke {
         });
         if(this.path.length > 3) {
             var pLen = this.path.length - 1;
-            this.controlPoints = this.controlPoints.concat(this.getControlPoints(this.path[pLen - 3].x, this.path[pLen - 3].y,
-                                                                                 this.path[pLen - 2].x, this.path[pLen - 2].y,
-                                                                                 this.path[pLen - 1].x, this.path[pLen - 1].y, .3));
+            this.controlPoints = this.controlPoints.concat(
+                this.getControlPoints(this.path[pLen - 3].x, this.path[pLen - 3].y,
+                                      this.path[pLen - 2].x, this.path[pLen - 2].y,
+                                      this.path[pLen - 1].x, this.path[pLen - 1].y, .3)
+                );
         }
     }
 

@@ -150,10 +150,14 @@ class Client {
 
     _initListeners() {
         var _this = this;
-        $('#layers').on('mousedown', e => this.sendStart(e.offsetX, e.offsetY))
-        .on('mousemove', function(e) {
+        $('#layers').on('mousedown', e => {
+            var n = normalize(e.offsetX, e.offsetY);
+            this.sendStart(n.x, n.y);
+        })
+        .on('mousemove', e => {
             if(down) {
-                _this.sendMove(e.offsetX, e.offsetY);
+                var n = normalize(e.offsetX, e.offsetY);
+                this.sendMove(n.x, n.y);
             }
         }).on('touchstart', function (evt) {
             _this.sendStart(evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left, evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top);
@@ -164,7 +168,10 @@ class Client {
             );
         });
 
-        $(document).on('mouseup', e => this.sendEnd(e.offsetX, e.offsetY))
+        $(document).on('mouseup', e => {
+                        var n = normalize(e.offsetX, e.offsetY);
+                        this.sendEnd(n.x, n.y);
+                    })
                    .on('touchend touchcancel', evt =>
                         this.sendEnd(
                             evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left,

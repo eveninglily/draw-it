@@ -89,13 +89,15 @@ $('#layers').on('touchstart', function (evt) {
     }
 }).on('mousedown', function(e) {
     if(e.which == 1) {
-        start(e.offsetX, e.offsetY);
+        var n = normalize(e.offsetX, e.offsetY);
+        start(n.x, n.y);
     }
 }).on('mousemove', function(e) {
     if(down) {
         window.getSelection().removeAllRanges()
         e.preventDefault();
-        move(e.offsetX, e.offsetY);
+        var n = normalize(e.offsetX, e.offsetY);
+        move(n.x, n.y);
     }
     if(currTool.name == "Eyedropper") {
         $('#eyedropper-holder').css({left: e.pageX - 55, top: e.pageY - 55});
@@ -111,7 +113,8 @@ $('#layers').on('touchstart', function (evt) {
         $('.eyedropper-wheel').css({display:'block'});
     }
     if(down) {
-        start(e.offsetX, e.offsetY);
+        var n = normalize(e.offsetX, e.offsetY);
+        start(n.x, n.y);
     }
 }).on('mouseleave', function() {
     if(currTool.name == "Eyedropper") {
@@ -137,6 +140,13 @@ $(window).on('beforeunload', function() {
         return 'Are you sure you want to leave? Your drawing will be lost.';
 });
 
+function normalize(x, y) {
+    var xR = width / $('#layers').width();
+    var yR = height / $('#layers').height();
+
+    return {x: x * xR, y: y * yR};
+}
+
 /**
  * Returns a jQuery object of a canvas that contains all layers merged together
  */
@@ -149,7 +159,7 @@ function getMergedCanvas() {
 }
 
 /**
- * Returns a jQuery object of a canvas that contains all layers merged together
+ * Returns a jQuery object of a canvas that contains all visible layers merged together
  */
 function getMergedVisibleCanvas() {
     var merged = $('<canvas>').attr({'width': width, 'height': height});

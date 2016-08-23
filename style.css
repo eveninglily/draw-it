@@ -108,6 +108,7 @@ input[type="file"] {
     width: auto;
     flex-grow: 1;
     background: #494949;
+    max-width: 15%;
 }
 
 .tool-meta {
@@ -180,8 +181,6 @@ input[type="number"] {
 
 #layers {
     position: relative;
-    width: 1280px;
-    height: 720px;
     display: inline-block;
     vertical-align: top;
     border: 1px solid black;
@@ -193,6 +192,11 @@ input[type="number"] {
     position: absolute;
     cursor: crosshair;
     background-color: transparent;
+}
+
+#layers, .layer {
+    width: 65vw;
+    height: calc(65vw * .5625);
 }
 
 /* Right Bar

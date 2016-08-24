@@ -66,10 +66,6 @@ input[type="file"] {
     color: #ffffff;
 }
 
-.action {
-    background: #50cfbb;
-}
-
 #gallery-url-holder {
     display: none;
 }
@@ -85,8 +81,7 @@ input[type="file"] {
 #toolbox {
     display: flex;
     flex-flow: column;
-    justify-content: space-between;
-    padding: 0em .35em 0em .35em;
+    justify-content: space-around;
     background: #e73955;
     min-height: 100%;
 }
@@ -101,6 +96,78 @@ input[type="file"] {
     background: #e73955;
 }
 
+#back:before {
+    width: 80%;
+    padding-bottom: .12em;
+    border-bottom: 3px solid white;
+}
+
+#back:hover {
+    background: #e73955;
+    color: white;
+}
+
+.tool {
+    color: white;
+}
+
+.tool, .action {
+    margin: 0px;
+    padding: 0em .06em 0em .06em;
+    font-size: 3em;
+    width: 1.2em;
+    height: 1.2em;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 1.5em;
+}
+
+.action:before {
+    text-align: center;
+    vertical-align: middle;
+    line-height: 1.5em;
+}
+
+.active, .tool:hover {
+    background: white;
+    color: #e73955;
+}
+
+#undo, #redo {
+    background: none;
+    font-size: 2em;
+}
+
+#undo {
+    color: #e73955;
+}
+
+#redo {
+    color: #50cfbb;
+}
+
+.action {
+    color: #777777;
+    font-size: 2.3em;
+    transition: .3s color;
+}
+
+#invite, #settings,  {
+    font-size: 2.2em;
+}
+
+#load, #save {
+    font-size: 2.6em;
+}
+
+#help {
+    font-size: 2.1em;
+}
+
+.action:hover {
+    color: #50cfbb;
+}
+
 /* Tool Info
 *************/
 
@@ -108,7 +175,7 @@ input[type="file"] {
     width: auto;
     flex-grow: 1;
     background: #494949;
-    max-width: 15%;
+    max-width: 13%;
 }
 
 .tool-meta {
@@ -122,8 +189,8 @@ input[type="file"] {
 }
 
 #color1, #color2 {
-    width: 48px;
-    height: 48px;
+    width: 36px;
+    height: 36px;
     display: inline-block;
 }
 
@@ -213,7 +280,6 @@ input[type="number"] {
 
 #layer-controls {
     background: #494949;
-
     width: 100%;
 }
 
@@ -257,6 +323,20 @@ input[type="number"] {
 .layer-actions img {
     width: 24px;
     height: 24px;
+}
+
+#layer-tools .action {
+    font-size: 3em;
+    color: #50cfbb;
+    transition: .3s all;
+}
+
+#layer-tools .action:hover {
+    color: #fbfbfb;
+}
+
+#layer-remove:hover {
+    color: #e73955 !important;
 }
 
 /* Eyedropper
@@ -315,6 +395,7 @@ input[type="number"] {
     z-index: 10000;
     align-items: center;
     justify-content: center;
+    align-self: center;
 }
 
 .modal {
@@ -366,8 +447,14 @@ input[type="number"] {
 **************/
 
 #wheel canvas {
-    width: 15vw;
-    height: 15vw;
+    width: 12vw;
+    height: 12vw;
+}
+
+#wheel {
+    margin: auto;
+    width: 12vw;
+    height: 12vw;
 }
 
 /* Buttons
@@ -381,6 +468,7 @@ input[type="number"] {
     width: 5em;
     border-radius: 4px;
     margin: 0em .1em 0em .1em;
+    transition: all .5s;
 }
 
 .button a {

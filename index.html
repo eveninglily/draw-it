@@ -5,26 +5,27 @@
         <title> AmiDraw ❤ </title>
         <meta charset="utf-8" />
 
-        <link rel="stylesheet" href='style.css' />
+        <link rel="stylesheet" href='style.css' type='text/css'/>
+        <link rel="stylesheet" href='img/icons.css' type='text/css'/>
         <script src="jquery.js"></script>
         <script src="canvas.js"></script>
         <script src='colorwheel.js/colorwheel.js'></script>
     </head>
     <body>
         <div id='toolbox'>
-            <!--TODO: These will be replaced by an icon font -->
-            <img id="pencil" src="img/icons/active/brush.png" class="active tool" data-options='brush-settings' alt="Brush"/>
-            <img id="eraser" src="img/icons/eraser.png" class="tool" data-options='eraser-settings' alt="Eraser"/>
-            <img id="eyedropper" src="img/icons/eyedropper.png" class="tool" alt="Eyedropper"/>
-            <img id="select" src="img/icons/select.png" class="tool" alt="Selection"/>
-            <img id="shapes" src="img/icons/shapes.png" class="tool" alt="Shapes"/>
-            <img id="line" src="img/icons/line.png" class="tool" alt="Line"/>
-            <img id="bucket" src="img/icons/fill.png" class="tool" alt="Bucket"/>
-            <img id="blur" src="img/icons/blur.png" class="tool" alt="Blur"/>
-            <img id="text" src="img/icons/text.png" class="tool" data-options='text-settings' alt="Text"/>
-            <img id="pointer" src="img/icons/pointer.png" class="tool" alt="Pointer"/>
-            <img id="pan" src="img/icons/pan.png" class="tool" alt="Pan"/>
-            <img id="clear" src="img/icons/clear.png" class="action" alt="Clear"/>
+            <span id='back' class='icon-arrow tool'></span>
+            <span id='brush' class='icon-brush active tool' data-options='brush-settings'></span>
+            <span id='eraser' class='icon-eraser tool' data-options='eraser-settings'></span>
+            <span id='eyedropper' class='icon-eyedropper tool'></span>
+            <span id='select' class='icon-select tool'></span>
+            <span id='shapes' class='icon-shapes tool'></span>
+            <span id='line' class='icon-line tool'></span>
+            <span id='bucket' class='icon-fill tool'></span>
+            <span id='blur' class='icon-blur tool'></span>
+            <span id='text' class='icon-text1 tool' data-options='text-settings'></span>
+            <span id='pointer' class='icon-laser tool'></span>
+            <span id='pan' class='icon-pan tool'></span>
+            <span id='clear' class='icon-trash tool'></span>
         </div>
         <div id='tool-info'>
             <input type="text" id="hexValue"/>
@@ -76,15 +77,15 @@
         </div>
         <div id="center">
             <div id="actions">
-                <img id="undo" src="img/icons/undo.png" class="action" alt="Undo"/>
-                <img id="redo" src="img/icons/redo.png" class="action" alt="Redo"/>
+                <span id="undo" class='action icon-undo'/></span>
+                <span id="redo" class='action icon-redo'/></span>
                 <div class='right'>
                     <div id='server-status' style='display: none'>Connected to #<span id='server-name'></span></div>
-                    <img id="invite" src="img/icons/invite.png" class="action" alt="Invite"/>
-                    <img id="save" src="img/icons/save.png" class="action" alt="Save"/>
-                    <label><img id="load" src="img/icons/upload.png" class="action" alt="Load"/><input id="loadFile" type='file' accept='.json'></label>
-                    <img id="settings" src="img/icons/settings.png" class="action" alt="Settings"/>
-                    <img id="help" src="img/icons/help.png" class="action" alt="Help"/>
+                    <span id="invite" class='action icon-invite'/></span>
+                    <span id="save" class='action icon-save'/></span>
+                    <label><span id="load" class='action icon-upload'/></span><input id="loadFile" type='file' accept='.json'></label>
+                    <span id="settings" class='action icon-settings'/></span>
+                    <span id="help" class='action icon-help'/></span>
                 </div>
             </div>
             <div id='layers'></div>
@@ -106,16 +107,12 @@
                 </tr>
             </table>
             <div id="layer-scroll"><table id="layer-list"></table></div>
-            <table>
-                <tr id='layer-tools'>
-                    <td class='action' id='layer-add'><img src='img/icons/layerAdd.png'></td>
-                    <td class='action' id='layer-remove'><img src='img/icons/layerRemove.png'></td>
-                    <td class='action' id='layer-clear'><img src='img/icons/layerErase.png'></td>
-                    <td class='action' id='layer-mergeup'><img src='img/icons/layerMergeUp.png'></td>
-                    <td class='action' id='layer-mergedown'><img src='img/icons/layerMergeDown.png'></td>
-                </tr>
-            </table>
+            <div id='layer-tools'>
+                <span id='layer-add' class='icon-new-layer action'/></span>
+                <span id='layer-clear' class='icon-clear-layer action'/></span>
+                <span id='layer-remove' class='icon-trash action'/></span>
             </div>
+        </div>
         </div>
         <div id="eyedropper-holder" class="eyedropper-wheel">
             <div id="eyedropper-outer" class="eyedropper-wheel">&nbsp</div>

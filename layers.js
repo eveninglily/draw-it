@@ -42,15 +42,11 @@ class Layer {
         });
 
         nRow.children('.layer-actions').append(
-            $('<img>').attr({'src':'img/icons/layervisible.png'}).on('click', function() {
+            $('<span>').addClass('icon-visible-layer').on('click', function() {
                 var can = layers[currentLayer].canvas.canvas;
                 _this.isVisible = !_this.isVisible;
                 $(can).toggle();
-                if (_this.isVisible) {
-                    $(this).attr('src', 'img/icons/layervisible.png');
-                } else {
-                    $(this).attr('src', 'img/icons/layerhidden.png');
-                };
+                //$(this).toggle();
             }));
 
         nRow.children('.layer-info').append($('<div>').attr({'class':'layer-name'}))

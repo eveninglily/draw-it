@@ -25,19 +25,10 @@ var eyedropper = new Tool("Eyedropper");
 
 //TODO: Clean up a lot of this when SVGs are used
 $('.tool').on('click', function() {
-    var s = $('.active').attr('src');
-    $('.active').attr('src', s.replace('/active', ''));
-
     $('.active').removeClass('active');
     $('.activeTool').removeClass('activeTool');
     $(this).addClass('active');
     $('#' + $(this).attr('data-options')).addClass('activeTool');
-
-    var sr = $(this).attr('src').split('/');
-    sr.splice(2,0, 'active');
-    var src = sr.join('/');
-    $(this).attr('src', src);
-    $('#mergedLayer').remove();
 });
 
 $("#pencil").on('click', () => currTool = pencil);

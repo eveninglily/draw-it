@@ -76,6 +76,7 @@ class DrawingCanvas {
 
     /**
      * Draws a canvas onto the visible canvas
+     * @param {object} otherCanvas - The other canvas to draw
      */
     drawCanvas(otherCanvas) {
         this.ctx.drawImage(otherCanvas, 0, 0);
@@ -83,6 +84,7 @@ class DrawingCanvas {
 
     /**
      * Draws a canvas onto the buffer canvas
+     * @param {object} other - The canvas to draw
      */
     drawCanvasOntoBuffer(otherCanvas) {
         this.bCtx.drawImage(otherCanvas, 0, 0);
@@ -90,6 +92,9 @@ class DrawingCanvas {
 
     /**
      * Draws a blob onto the canvas
+     * @param {object} blob - The blob to draw
+     * @param {number} x - X coordinate to draw at
+     * @param {number} y - Y coordinate to draw at
      */
     drawBlob(blob, x, y) {
         var reader = new FileReader();
@@ -107,6 +112,7 @@ class DrawingCanvas {
     /**
      * Ensures that all the ctx values are what they should be
      * Checks before setting as to not affect performance too much
+     * @param {object} tool - The tool to match to values to
      */
     setContextValues(tool) {
         if (this.ctx.globalAlpha != tool.opacity) { this.ctx.globalAlpha = tool.opacity; }
@@ -121,19 +127,31 @@ class DrawingCanvas {
     }
 
     /**
-     * Creates text at the given point
-     * TODO: Improve and document
+     * Creates text at the given point on the given context
+     * @param {object} ctx - Context to draw onto
+     * @param {object} tool - The tool to draw it with
+     * @param {string} text - The text to draw
+     * @param {number} x - The x coordinate
+     * @param {number} y - The y coordinate
      */
-    createText(text, tool, x, y) {
-        this.ctx.fillStyle = tool.color;
-        this.ctx.font = fontSize.value + "px serif";
-        this.ctx.fillText(text, x, y);
+    drawText(ctx, tool, text, x, y) {
+        ctx.fillStyle = tool.color;
+        ctx.font = fontSize.value + "px serif";
+        ctx.fillText(text, x, y);
     }
 
+    /**
+     * Creates text at the given point by drawing it onto the main canvas
+     */
+    createText(text, tool, x, y) {
+        this.drawText(this.ctx, tool, text, x, y);
+    }
+
+    /**
+     * Finalizes text at the given point by drawing it onto the back canvas
+     */
     finalizeText(text, tool, x, y) {
-        this.bCtx.fillStyle = tool.color;
-        this.bCtx.font = fontSize.value + "px serif";
-        this.bCtx.fillText(text, x, y);
+        this.drawText(this.bCtx, tool, text, x, y);
     }
 
     /**

@@ -116,13 +116,13 @@ function addPaletteItem(color) {
     var paletteItem = $('<div>')
         .addClass('color')
         .css({background: color})
-        .on('click', function(e) {
+        .on('click', () => {
             currTool.color = color;
             updateColorDisplays(color)
-        }).on('mousedown', function(e) {
+        }).on('mousedown', () => {
             $('.currColor').removeClass('currColor');
             $(this).addClass('currColor');
-        }).on('contextmenu', function(e) {
+        }).on('contextmenu', () => {
             $("<div>").on('click', function() {
                 paletteItem.remove();
                 $(this).remove();

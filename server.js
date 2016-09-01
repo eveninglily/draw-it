@@ -1,6 +1,9 @@
 "use strict";
 
 var fs = require('fs');
+var redis = require('redis');
+
+var url = 'https://nodedraw.com/draw/';
 
 class Room {
     constructor(id, name) {
@@ -11,6 +14,7 @@ class Room {
 }
 
 var io = require('socket.io')().listen(3000);
+var rClient = redis.createClient();
 var rooms = [];
 
 io.on('connection', function(socket) {
@@ -65,11 +69,17 @@ io.on('connection', function(socket) {
         var image = data.b64.replace(/^data:image\/\w+;base64,/, "");
         var buffer = new Buffer(image, 'base64');
         var uuid = getUUID().split('-')[0];
-        fs.writeFile("gallery/"+uuid+".png", buffer);
-        console.log('saving at https://nodedraw.com/draw/gallery/' + uuid + '.png');
-        fn({'url':'https://nodedraw.com/draw/gallery/' + uuid + '.png'});
+        fs.writeFile(url + 'gallery/'+uuid+'.png', buffer);
+        console.log('saving at /gallery/' + uuid + '.png');
+        fn({'url': url + 'gallery/' + uuid + '.png'});
     });
 });
+
+rClient.on('connect', function() {
+    console.log('Redis Client initialized');
+});
+
+
 
 /**
  * UUID generator from https://jsfiddle.net/xg7tek9j/7/, a RFC4122-compliant solution

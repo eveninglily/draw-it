@@ -23,7 +23,6 @@ var eraser = new Tool("Eraser", 3, "destination-out", "rgba(255,255,255,1)");
 var text = new Tool("Text", "32px serif", "", "#000000");
 var eyedropper = new Tool("Eyedropper");
 
-//TODO: Clean up a lot of this when SVGs are used
 $('.tool').on('click', function() {
     $('.active').removeClass('active');
     $('.activeTool').removeClass('activeTool');

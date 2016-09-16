@@ -180,6 +180,15 @@ class DrawingCanvas {
         this.bCtx.drawImage(this.canvas, 0, 0);
     }
 
+    clearArea(stroke) {
+        if(stroke.length < 3) {
+            this.clear();
+            this.drawCanvas(this.backCanvas);
+            return;
+        }
+
+    }
+
     /**
      * Updates strokes by their ids
      * @param {string[]} - The stroke IDs to draw
@@ -268,6 +277,10 @@ class Stroke {
         this.tool = tool;
         this.path = [];
         this.controlPoints = [];
+
+        /* Used to create redraw bounds */
+        this.min = { x: Number.MAX_VALUE, y: Number.MAX_VALUE };
+        this.max = { x: Number.MIN_VALUE, y: Number.MIN_VALUE };
     }
 
     /**
@@ -278,6 +291,19 @@ class Stroke {
             'x':x,
             'y':y
         });
+
+        if(x > this.max.x) {
+            this.max.x = x;
+        } else if(x < this.min.x) {
+            this.min.x = x;
+        }
+
+        if(y > this.max.y) {
+            this.max.y = y;
+        } else if(y < this.min.y) {
+            this.min.y = y;
+        }
+
         if(this.path.length > 3) {
             var pLen = this.path.length - 1;
             this.controlPoints = this.controlPoints.concat(

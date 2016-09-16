@@ -86,6 +86,7 @@ $('#layers').on('touchstart', function (evt) {
             (evt.originalEvent.touches[0].clientX - $('#layers').offset().left) + $(window).scrollLeft(),
             (evt.originalEvent.touches[0].clientY - $('#layers').offset().top) + $(window).scrollTop()
         );
+        console.log('touch');
     }
 }).on('mousedown', function(e) {
     if(e.which == 1) {

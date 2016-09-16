@@ -168,8 +168,8 @@ class Client {
             );
         });
 
-        $(document).on('mouseup', e => {
-                        var n = normalize(e.offsetX, e.offsetY);
+        $(document).on('mouseup', evt => {
+                        var n = normalize(evt.offsetX, evt.offsetY);
                         this.sendEnd(n.x, n.y);
                     })
                    .on('touchend touchcancel', evt =>

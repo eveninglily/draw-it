@@ -161,9 +161,9 @@ class DrawingCanvas {
      * @param {number} x - The y coordinate
      * @param {string} id - The id of the stroke
      */
-    beginStroke(tool, x, y, id) {
+    beginStroke(tool, x, y, p, id) {
         var s = new Stroke(JSON.parse(JSON.stringify(tool)));
-        s.addPoint(x, y);
+        s.addPoint(x, y, p);
         this.strokes[id] = s;
     }
 
@@ -218,7 +218,7 @@ class DrawingCanvas {
             var len = stroke.path.length;
             var controls = stroke.controlPoints.concat(
                 stroke.getControlPoints(stroke.path[len-3].x,
-                                        stroke.path[len - 3].y,
+                                        stroke.path[len-3].y,
                                         stroke.path[len-2].x,
                                         stroke.path[len-2].y,
                                         stroke.path[len-1].x,
@@ -227,15 +227,23 @@ class DrawingCanvas {
             var cLen = controls.length;
 
             this.ctx.beginPath();
-            this.ctx.moveTo(stroke.path[0].x,stroke.path[0].y);
-            this.ctx.quadraticCurveTo(controls[0],controls[1],stroke.path[1].x,stroke.path[1].y);
+                this.ctx.lineWidth = stroke.tool.size  * ( 2 * stroke.path[0].p);
+                this.ctx.moveTo(stroke.path[0].x,stroke.path[0].y);
+                this.ctx.quadraticCurveTo(controls[0],controls[1],stroke.path[1].x,stroke.path[1].y);
+                this.ctx.stroke();
+                this.ctx.closePath();
 
             for(var i = 0; i < len - 1; i += 1) {
-                this.ctx.moveTo(stroke.path[i].x,stroke.path[i].y);
+                this.ctx.beginPath();
+                this.ctx.moveTo(stroke.path[i].x, stroke.path[i].y);
+                this.ctx.lineWidth = (stroke.tool.size) * (stroke.path[i].p * 2);
                 //controls.length == x.length * 4
                 this.ctx.bezierCurveTo(controls[4*i-2],controls[4*i-1],controls[4*i],controls[4*i+1],stroke.path[i + 1].x,stroke.path[i + 1].y);
+                this.ctx.stroke();
+                this.ctx.closePath();
             }
-
+            this.ctx.beginPath();
+            this.ctx.lineWidth = stroke.tool.size * stroke.path[len - 2].p * 2;
             this.ctx.moveTo(stroke.path[len-2].x,stroke.path[len-2].y);
             this.ctx.quadraticCurveTo(controls[cLen - 2],controls[cLen-1],stroke.path[len-1].x,stroke.path[len-1].y);
             this.ctx.stroke();
@@ -243,7 +251,7 @@ class DrawingCanvas {
         } else {
             //There are too few points to do a bezier curve, so we just draw the point
             this.ctx.lineWidth = 1;
-            this.ctx.arc(stroke.path[0].x, stroke.path[0].y, stroke.tool.size, 0, 2 * Math.PI, false);
+            this.ctx.arc(stroke.path[0].x, stroke.path[0].y, stroke.tool.size * (stroke.path[0].p), 0, 2 * Math.PI, false);
             this.ctx.fill();
         }
         this.ctx.stroke();
@@ -286,10 +294,11 @@ class Stroke {
     /**
      * Adds a (x,y) pair to the stroke, calculates control points if need be
      */
-    addPoint(x, y) {
+    addPoint(x, y, p) {
         this.path.push({
-            'x':x,
-            'y':y
+            'x': x,
+            'y': y,
+            'p': p
         });
 
         if(x > this.max.x) {
@@ -319,7 +328,7 @@ class Stroke {
      */
     addPoints(points) {
         for(var i = 0; i < points.length; i++) {
-            this.addPoint(points[i].x, points[i].y);
+            this.addPoint(points[i].x, points[i].y, points[i].p);
         }
     }
 

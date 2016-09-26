@@ -14,7 +14,8 @@ var currTool = pencil;
 var settings = {
     showLeaveMessage: false,
     whiteBg: false,
-    cache: false
+    cache: false,
+    pointerEvents: false
 };
 
 $(document).ready(function() {
@@ -26,8 +27,24 @@ $(document).ready(function() {
     }, 0);
 });
 
+function initPointerEvents() {
+    $('#layers').on('pointerdown', function(evt) {
+        var n = normalize(evt.offsetX, evt.offsetY);
+        start(n.x, n.y, evt.originalEvent.pressure);
+        console.log(evt.originalEvent.isPrimary);
+    }).on('pointermove', function(evt) {
+        if(down) {
+            window.getSelection().removeAllRanges()
+            evt.preventDefault();
+            var n = normalize(evt.offsetX, evt.offsetY);
+            console.log(evt.originalEvent.pressure);
+            move(n.x, n.y, evt.originalEvent.pressure);
+        }
+    }).off('mousedown mousemove');
+}
+
 //TODO: Rewrite inside of this along with tools
-function start(x, y) {
+function start(x, y, p) {
     if($('#hidden-input').val() != "") {
         layers[currentLayer].canvas.finalizeText($('#hidden-input').val(), currTool, $('#hidden-input').data('tx'), $('#hidden-input').data('ty'));
         layers[currentLayer].canvas.clear();
@@ -37,7 +54,7 @@ function start(x, y) {
 
     if(currTool.name == "Pencil" || currTool.name == "Eraser") {
         down = true;
-        layers[currentLayer].canvas.beginStroke(currTool, x, y, 'local');
+        layers[currentLayer].canvas.beginStroke(currTool, x, y, .5, 'local');
         layers[currentLayer].activeStrokes.push('local');
         layers[currentLayer].stroke();
     } else {
@@ -58,8 +75,8 @@ function start(x, y) {
     }
 }
 
-function move(x, y) {
-    layers[currentLayer].canvas.strokes['local'].addPoint(x, y);
+function move(x, y, p) {
+    layers[currentLayer].canvas.strokes['local'].addPoint(x, y, p);
     layers[currentLayer].stroke();
 }
 
@@ -78,27 +95,27 @@ function end() {
 
 $('#layers').on('touchstart', function (evt) {
     start((evt.originalEvent.changedTouches[0].clientX - $('#layers').offset().left) + $(window).scrollLeft(),
-          (evt.originalEvent.changedTouches[0].clientY - $('#layers').offset().top) + $(window).scrollTop());
+          (evt.originalEvent.changedTouches[0].clientY - $('#layers').offset().top) + $(window).scrollTop(), .5);
 }).on('touchmove', function (evt) {
     evt.preventDefault();
     if(down){
         move(
             (evt.originalEvent.touches[0].clientX - $('#layers').offset().left) + $(window).scrollLeft(),
-            (evt.originalEvent.touches[0].clientY - $('#layers').offset().top) + $(window).scrollTop()
+            (evt.originalEvent.touches[0].clientY - $('#layers').offset().top) + $(window).scrollTop(),.5
         );
         console.log('touch');
     }
 }).on('mousedown', function(e) {
     if(e.which == 1) {
         var n = normalize(e.offsetX, e.offsetY);
-        start(n.x, n.y);
+        start(n.x, n.y, .5);
     }
 }).on('mousemove', function(e) {
     if(down) {
         window.getSelection().removeAllRanges()
         e.preventDefault();
         var n = normalize(e.offsetX, e.offsetY);
-        move(n.x, n.y);
+        move(n.x, n.y,.5);
     }
     if(currTool.name == "Eyedropper") {
         $('#eyedropper-holder').css({left: e.pageX - 55, top: e.pageY - 55});
@@ -115,7 +132,7 @@ $('#layers').on('touchstart', function (evt) {
     }
     if(down) {
         var n = normalize(e.offsetX, e.offsetY);
-        start(n.x, n.y);
+        start(n.x, n.y, .5);
     }
 }).on('mouseleave', function() {
     if(currTool.name == "Eyedropper") {
@@ -129,7 +146,7 @@ $('#layers').on('touchstart', function (evt) {
     return false;
 });
 
-$(document).on('mouseup touchend touchcancel', function(e) {
+$(document).on('mouseup touchend touchcancel pointercancel', function(e) {
     if(down) {
         end();
         down = false;

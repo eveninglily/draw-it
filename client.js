@@ -63,6 +63,7 @@ class Client {
             cId: c,
             x: x,
             y: y,
+            p: .5,
             layer: currentLayer,
             tool: currTool
         });
@@ -72,7 +73,7 @@ class Client {
 
     sendMove(x, y) {
         if(this.down) {
-            this.sending[this.currentUUID].push({'x': x, 'y': y});
+            this.sending[this.currentUUID].push({'x': x, 'y': y, p: .5});
         }
     }
 
@@ -82,7 +83,8 @@ class Client {
                 this.socket.emit('e', {
                     cId: this.currentUUID,
                     x: x,
-                    y: y
+                    y: y,
+                    p: .5
                 });
             }, 45);
             this.down = false;

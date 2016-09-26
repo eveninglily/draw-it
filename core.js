@@ -25,7 +25,88 @@ $(document).ready(function() {
         $('#' + n.id + '-control').trigger('mousedown'); //TODO: this is hacky. Fix?
         $('#' + n.id + '-control').trigger('mouseup');
     }, 0);
+
+    initMouseEvents();
+    initTouchEvents();
+
+    $(document).on('mouseup touchend touchcancel pointercancel', function(e) {
+        if(down) {
+            end();
+            down = false;
+        }
+    });
+
+    $(window).on('beforeunload', function() {
+        if(settings.showLeaveMessage) {
+            return 'Are you sure you want to leave? Your drawing will be lost.';
+        }
+    });
 });
+
+function initMouseEvents() {
+    $("layers").on('mousedown', evt => {
+        if(evt.which == 1) {
+            var n = normalize(evt.offsetX, evt.offsetY);
+            start(n.x, n.y, .5);
+        }
+    }).on('mousemove', evt => {
+        if(down) {
+            window.getSelection().removeAllRanges()
+            evt.preventDefault();
+            var n = normalize(evt.offsetX, evt.offsetY);
+            move(n.x, n.y,.5);
+        }
+        //TODO: Move this; rewrite tools
+        if(currTool.name == "Eyedropper") {
+            $('#eyedropper-holder').css({left: e.pageX - 55, top: e.pageY - 55});
+            var l = $('#layers').position();
+            var c = $('#mergedLayer').get(0).getContext('2d').getImageData(e.pageX - l.left, e.pageY - l.top, 1, 1).data;
+            var nC = 'rgb(' + c[0] +', ' + c[1] + ', ' + c[2] + ')';
+
+            $('#eyedropper-bottom').css({'border-color': pencil.color});
+            $('#eyedropper-top').css({'border-color': nC});
+        }
+    }).on('mouseenter', function(e) {
+        //TODO: Move this; rewrite tools
+        if(currTool.name == "Eyedropper") {
+            $('.eyedropper-wheel').css({display:'block'});
+        }
+        if(down) {
+            var n = normalize(e.offsetX, e.offsetY);
+            start(n.x, n.y, .5);
+        }
+    }).on('mouseleave', function() {
+        //TODO: Move this, rewrite tools
+        if(currTool.name == "Eyedropper") {
+            $('.eyedropper-wheel').css({display:'none'});
+        }
+        if(down) {
+            end();
+        }
+    }).on('contextmenu', function(e) {
+        e.preventDefault();
+        return false;
+    });
+}
+
+function initTouchEvents() {
+    $('#layers').on('touchstart', evt => {
+        start(
+            (evt.originalEvent.changedTouches[0].clientX - $('#layers').offset().left) + $(window).scrollLeft(),
+            (evt.originalEvent.changedTouches[0].clientY - $('#layers').offset().top) + $(window).scrollTop(), 
+            .5
+        );
+    }).on('touchmove', evt => {
+        evt.preventDefault();
+        if(down){
+            move(
+                (evt.originalEvent.touches[0].clientX - $('#layers').offset().left) + $(window).scrollLeft(),
+                (evt.originalEvent.touches[0].clientY - $('#layers').offset().top) + $(window).scrollTop(),
+                .5
+            );
+        }
+    });
+}
 
 function initPointerEvents() {
     $('#layers').on('pointerdown', function(evt) {
@@ -93,76 +174,17 @@ function end() {
     layers[currentLayer].updatePreview();
 }
 
-$('#layers').on('touchstart', function (evt) {
-    start((evt.originalEvent.changedTouches[0].clientX - $('#layers').offset().left) + $(window).scrollLeft(),
-          (evt.originalEvent.changedTouches[0].clientY - $('#layers').offset().top) + $(window).scrollTop(), .5);
-}).on('touchmove', function (evt) {
-    evt.preventDefault();
-    if(down){
-        move(
-            (evt.originalEvent.touches[0].clientX - $('#layers').offset().left) + $(window).scrollLeft(),
-            (evt.originalEvent.touches[0].clientY - $('#layers').offset().top) + $(window).scrollTop(),.5
-        );
-        console.log('touch');
-    }
-}).on('mousedown', function(e) {
-    if(e.which == 1) {
-        var n = normalize(e.offsetX, e.offsetY);
-        start(n.x, n.y, .5);
-    }
-}).on('mousemove', function(e) {
-    if(down) {
-        window.getSelection().removeAllRanges()
-        e.preventDefault();
-        var n = normalize(e.offsetX, e.offsetY);
-        move(n.x, n.y,.5);
-    }
-    if(currTool.name == "Eyedropper") {
-        $('#eyedropper-holder').css({left: e.pageX - 55, top: e.pageY - 55});
-        var l = $('#layers').position();
-        var c = $('#mergedLayer').get(0).getContext('2d').getImageData(e.pageX - l.left, e.pageY - l.top, 1, 1).data;
-        var nC = 'rgb(' + c[0] +', ' + c[1] + ', ' + c[2] + ')';
-
-        $('#eyedropper-bottom').css({'border-color': pencil.color});
-        $('#eyedropper-top').css({'border-color': nC});
-    }
-}).on('mouseenter', function(e) {
-    if(currTool.name == "Eyedropper") {
-        $('.eyedropper-wheel').css({display:'block'});
-    }
-    if(down) {
-        var n = normalize(e.offsetX, e.offsetY);
-        start(n.x, n.y, .5);
-    }
-}).on('mouseleave', function() {
-    if(currTool.name == "Eyedropper") {
-        $('.eyedropper-wheel').css({display:'none'});
-    }
-    if(down) {
-        end();
-    }
-}).on('contextmenu', function(e) {
-    e.preventDefault();
-    return false;
-});
-
-$(document).on('mouseup touchend touchcancel pointercancel', function(e) {
-    if(down) {
-        end();
-        down = false;
-    }
-});
-
-$(window).on('beforeunload', function() {
-    if(settings.showLeaveMessage)
-        return 'Are you sure you want to leave? Your drawing will be lost.';
-});
-
+/**
+ * Normalizes a point do adapt to all display sizes
+ */
 function normalize(x, y) {
     var xR = width / $('#layers').width();
     var yR = height / $('#layers').height();
 
-    return {x: x * xR, y: y * yR};
+    return { 
+        x: x * xR, 
+        y: y * yR 
+    };
 }
 
 /**

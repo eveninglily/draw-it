@@ -1,7 +1,6 @@
 "use strict";
 
 var fs = require('fs');
-var redis = require('redis');
 
 var url = 'https://nodedraw.com/draw/';
 
@@ -14,7 +13,6 @@ class Room {
 }
 
 var io = require('socket.io')().listen(3000);
-var rClient = redis.createClient();
 var rooms = [];
 
 io.on('connection', function(socket) {
@@ -57,14 +55,10 @@ io.on('connection', function(socket) {
         roomId = id;
     }).on('disconnect', function() {
         console.log('Client ' + this.id + ' disconnected from #' + roomId);
-    }).on('s', function(data) {
-        socket.broadcast.to(roomId).emit('s', data);
-    }).on('u', function(data) {
-        socket.broadcast.to(roomId).emit('u', data);
-    }).on('e', function(data) {
-        socket.broadcast.to(roomId).emit('e', data);
-    }).on('nl', function(data) {
-        socket.broadcast.to(roomId).emit('nl', data);
+    }).on('s', data => { socket.broadcast.to(roomId).emit('s', data);
+    }).on('u', data => { socket.broadcast.to(roomId).emit('u', data);
+    }).on('e', data => { socket.broadcast.to(roomId).emit('e', data);
+    }).on('nl', data => { socket.broadcast.to(roomId).emit('nl', data);
     }).on('save', function(data, fn) {
         var image = data.b64.replace(/^data:image\/\w+;base64,/, "");
         var buffer = new Buffer(image, 'base64');
@@ -74,12 +68,6 @@ io.on('connection', function(socket) {
         fn({'url': url + 'gallery/' + uuid + '.png'});
     });
 });
-
-rClient.on('connect', function() {
-    console.log('Redis Client initialized');
-});
-
-
 
 /**
  * UUID generator from https://jsfiddle.net/xg7tek9j/7/, a RFC4122-compliant solution

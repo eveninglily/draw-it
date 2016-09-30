@@ -246,6 +246,11 @@ input[type="number"] {
 /* Layers
 **********/
 
+#center {
+    width: auto;
+}
+
+
 #layers {
     position: relative;
     display: inline-block;

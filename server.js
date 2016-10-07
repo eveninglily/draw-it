@@ -3,28 +3,27 @@
 var fs = require('fs');
 
 var url = 'https://nodedraw.com/draw/';
+var io = require('socket.io')().listen(3000);
+var rooms = {};
 
 class Room {
-    constructor(id, name) {
+    constructor(id, name, socket) {
         this.id = id;
         this.name = name;
+        this.socket = socket;
         this.clients = [];
+        this.strokes = {};
     }
-}
 
-var io = require('socket.io')().listen(3000);
-var rooms = [];
+    static onConnect(data, socket) {
+        var id = data.id;
+        var name = data.name;
 
-io.on('connection', function(socket) {
-    var roomId = '';
-    socket.on('join-room', function(data) {
-        var id;
-        var name;
-
-        if(data['id'] == '') {
-            id = getUUID();
-            id = id.split('-')[4];
-            console.log('Creating room #' + id);
+        if(!(data.id in rooms)) {
+            if(data['id'] == '') {
+                id = getUUID();
+                id = id.split('-')[4];
+            }
 
             if(data.name == '') {
                 name = id;
@@ -32,32 +31,60 @@ io.on('connection', function(socket) {
                 name = data.name;
             }
 
-            var room = new Room(id, name);
-            room.clients.push(socket);
-            rooms.push(room);
-            room.admin = socket.id;
-        } else {
-            console.log('Client ' + this.id + ' joined #' + data.id);
-            id = data.id;
-            for(var i = 0; i < rooms.length; i++) {
-                if(rooms[i].id == data.id) {
-                    name = rooms[i].name;
-                    break;
-                }
-            }
+            rooms[id] = new Room(id, name, socket);
+            rooms[id].admin = socket.id;
+
+            console.log("Room["+ id +"] created");
         }
+
+        if(data.name == '') {
+                name = id;
+            } else {
+                name = data.name;
+            }
+
+        rooms[id].clients.push(socket);
         socket.join(id);
         socket.emit('handshake', {
             'id': id,
             'name': name,
             'cId': socket.id
         });
-        roomId = id;
+
+        console.log("Client[" + socket.id + "] joined Room[" + id + "]");
+        return rooms[id];
+    }
+
+    save() {
+
+    }
+}
+
+io.on('connection', function(socket) {
+    var room;
+    var roomId = '';
+
+    socket.on('join-room', data => {
+        room = Room.onConnect(data, socket);
+        roomId = room.id;
     }).on('disconnect', function() {
         console.log('Client ' + this.id + ' disconnected from #' + roomId);
-    }).on('s', data => { socket.broadcast.to(roomId).emit('s', data);
-    }).on('u', data => { socket.broadcast.to(roomId).emit('u', data);
-    }).on('e', data => { socket.broadcast.to(roomId).emit('e', data);
+    }).on('s', data => {
+        socket.broadcast.to(roomId).emit('s', data);
+        room.strokes[data.cId] = {};
+        room.strokes[data.cId].layer = data.layer;
+        room.strokes[data.cId].tool = data.tool;
+        room.strokes[data.cId].path = [];
+        room.strokes[data.cId].path.push({ x: data.x, y: data.y, p: data.p });
+    }).on('u', data => {
+        socket.broadcast.to(roomId).emit('u', data);
+        for(var i = 0; i < data.positions.length; i++) {
+            var point = data.positions[i];
+            room.strokes[data.cId].path.push({ x: point.x, y: point.y, p: point.p });
+        }
+    }).on('e', data => {
+        socket.broadcast.to(roomId).emit('e', data);
+        room.strokes[data.cId].path.push({ x: data.x, y: data.y, p: data.p });
     }).on('nl', data => { socket.broadcast.to(roomId).emit('nl', data);
     }).on('save', function(data, fn) {
         var image = data.b64.replace(/^data:image\/\w+;base64,/, "");
@@ -66,6 +93,8 @@ io.on('connection', function(socket) {
         fs.writeFile(url + 'gallery/'+uuid+'.png', buffer);
         console.log('saving at /gallery/' + uuid + '.png');
         fn({'url': url + 'gallery/' + uuid + '.png'});
+    }).on('init_data', () => {
+        socket.emit('board_data', {'strokes': room.strokes});
     });
 });
 

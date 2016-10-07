@@ -44,7 +44,7 @@ $(document).ready(function() {
 });
 
 function initMouseEvents() {
-    $("layers").on('mousedown', evt => {
+    $("#layers").on('mousedown', evt => {
         if(evt.which == 1) {
             var n = normalize(evt.offsetX, evt.offsetY);
             start(n.x, n.y, .5);

@@ -52,7 +52,18 @@ class Client {
                    .on('s', data => this._recieveStart(data))
                    .on('u', data => this._recieveUpdate(data))
                    .on('e', data => this._recieveEnd(data))
-                   .on('nl', data => addLayer(data.id));
+                   .on('nl', data => addLayer(data.id))
+                   .on('board_data', data => {
+                        for(var key in data.strokes) {
+                            console.log(data.strokes[key]);
+                            if(data.strokes.hasOwnProperty(key)) {
+                                var layer = data.strokes[key].layer;
+                                var stroke = new Stroke(data.strokes[key].tool);
+                                stroke.addPoints(data.strokes[key].path);
+                                layers[layer].canvas.completeStroke(stroke);
+                            }
+                        }
+                   });
         _this._initListeners();
     }
 
@@ -120,7 +131,7 @@ class Client {
     _recieveStart(data) {
         this.recieving[data.cId] = data.layer;
         var layer = data.layer;
-        layers[layer].canvas.beginStroke(data.tool, data.x, data.y, data.cId);
+        layers[layer].canvas.beginStroke(data.tool, data.x, data.y, data.p, data.cId);
         layers[layer].activeStrokes.push(data.cId);
         layers[layer].canvas.doStrokes(layers[layer].activeStrokes);
     }
@@ -195,6 +206,10 @@ class Client {
                 }
             }
         }, 40);
+    }
+
+    requestData() {
+        this.socket.emit('init_data');
     }
 }
 

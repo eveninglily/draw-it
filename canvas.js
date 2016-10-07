@@ -186,7 +186,6 @@ class DrawingCanvas {
             this.drawCanvas(this.backCanvas);
             return;
         }
-
     }
 
     /**

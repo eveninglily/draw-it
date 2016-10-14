@@ -30,7 +30,7 @@ $('.tool').on('click', function() {
     $('#' + $(this).attr('data-options')).addClass('activeTool');
 });
 
-$("#pencil").on('click', () => currTool = pencil);
+$("#brush").on('click', () => currTool = pencil);
 $("#eraser").on('click', () => currTool = eraser);
 $("#text").on('click', () => currTool = text);
 

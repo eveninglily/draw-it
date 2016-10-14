@@ -207,6 +207,7 @@ class DrawingCanvas {
     /**
      * Draws a stroke onto the canvas
      * TODO: document the inside of this function
+     * TODO: Commented out stuff in here makes pen pressure work
      * @param {Object} stroke - The Stroke to draw
      */
     drawStroke(stroke) {
@@ -226,22 +227,22 @@ class DrawingCanvas {
             var cLen = controls.length;
 
             this.ctx.beginPath();
-                this.ctx.lineWidth = stroke.tool.size  * ( 2 * stroke.path[0].p);
-                this.ctx.moveTo(stroke.path[0].x,stroke.path[0].y);
-                this.ctx.quadraticCurveTo(controls[0],controls[1],stroke.path[1].x,stroke.path[1].y);
-                this.ctx.stroke();
-                this.ctx.closePath();
+            this.ctx.lineWidth = stroke.tool.size  * ( 2 * stroke.path[0].p);
+            this.ctx.moveTo(stroke.path[0].x,stroke.path[0].y);
+            this.ctx.quadraticCurveTo(controls[0],controls[1],stroke.path[1].x,stroke.path[1].y);
+            //this.ctx.stroke();
+            //this.ctx.closePath();
 
             for(var i = 0; i < len - 1; i += 1) {
-                this.ctx.beginPath();
+                //this.ctx.beginPath();
                 this.ctx.moveTo(stroke.path[i].x, stroke.path[i].y);
                 this.ctx.lineWidth = (stroke.tool.size) * (stroke.path[i].p * 2);
                 //controls.length == x.length * 4
                 this.ctx.bezierCurveTo(controls[4*i-2],controls[4*i-1],controls[4*i],controls[4*i+1],stroke.path[i + 1].x,stroke.path[i + 1].y);
-                this.ctx.stroke();
-                this.ctx.closePath();
+                //this.ctx.stroke();
+                //this.ctx.closePath();
             }
-            this.ctx.beginPath();
+            //this.ctx.beginPath();
             this.ctx.lineWidth = stroke.tool.size * stroke.path[len - 2].p * 2;
             this.ctx.moveTo(stroke.path[len-2].x,stroke.path[len-2].y);
             this.ctx.quadraticCurveTo(controls[cLen - 2],controls[cLen-1],stroke.path[len-1].x,stroke.path[len-1].y);

@@ -58,9 +58,9 @@ function initMouseEvents() {
         }
         //TODO: Move this; rewrite tools
         if(currTool.name == "Eyedropper") {
-            $('#eyedropper-holder').css({left: e.pageX - 55, top: e.pageY - 55});
+            $('#eyedropper-holder').css({left: evt.pageX - 55, top: evt.pageY - 55});
             var l = $('#layers').position();
-            var c = $('#mergedLayer').get(0).getContext('2d').getImageData(e.pageX - l.left, e.pageY - l.top, 1, 1).data;
+            var c = $('#mergedLayer').get(0).getContext('2d').getImageData(evt.pageX - l.left, evt.pageY - l.top, 1, 1).data;
             var nC = 'rgb(' + c[0] +', ' + c[1] + ', ' + c[2] + ')';
 
             $('#eyedropper-bottom').css({'border-color': pencil.color});
@@ -112,13 +112,11 @@ function initPointerEvents() {
     $('#layers').on('pointerdown', function(evt) {
         var n = normalize(evt.offsetX, evt.offsetY);
         start(n.x, n.y, evt.originalEvent.pressure);
-        console.log(evt.originalEvent.isPrimary);
     }).on('pointermove', function(evt) {
         if(down) {
             window.getSelection().removeAllRanges()
             evt.preventDefault();
             var n = normalize(evt.offsetX, evt.offsetY);
-            console.log(evt.originalEvent.pressure);
             move(n.x, n.y, evt.originalEvent.pressure);
         }
     }).off('mousedown mousemove');

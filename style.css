@@ -81,7 +81,7 @@ input[type="file"] {
 #toolbox {
     display: flex;
     flex-flow: column;
-    justify-content: space-around;
+    justify-content: flex-start;
     background: #e73955;
     min-height: 100%;
 }
@@ -113,6 +113,7 @@ input[type="file"] {
 
 .tool, .action {
     margin: 0px;
+    margin-top: .5em;
     padding: 0em .06em 0em .06em;
     font-size: 3em;
     width: 1.2em;
@@ -120,6 +121,7 @@ input[type="file"] {
     text-align: center;
     vertical-align: middle;
     line-height: 1.5em;
+    
 }
 
 .action:before {
@@ -128,9 +130,13 @@ input[type="file"] {
     line-height: 1.5em;
 }
 
-.active, .tool:hover {
+.active, .tool:hover, #clear:hover {
     background: white;
     color: #e73955;
+}
+
+#back {
+    margin: 0px;
 }
 
 #undo, #redo {
@@ -196,7 +202,7 @@ input[type="file"] {
 
 #hexValue {
     width: 5em;
-    display: block;
+    /*display: block;*/
 }
 
 .tool-meta:not(.activeTool) {
@@ -249,7 +255,6 @@ input[type="number"] {
 #center {
     width: auto;
 }
-
 
 #layers {
     position: relative;

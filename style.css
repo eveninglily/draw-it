@@ -298,8 +298,8 @@ input[type="number"] {
 }
 
 #layers, .layer {
-    width: 65vw;
-    height: calc(65vw * .5625);
+    width: 70vw;
+    height: calc(70vw * .5625);
 }
 
 /* Right Bar

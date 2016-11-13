@@ -113,11 +113,10 @@ input[type="file"] {
 
 .tool, .action {
     margin: 0px;
-    margin-top: .5em;
-    padding: 0em .06em 0em .06em;
+    padding: .075em;
     font-size: 3em;
-    width: 1.2em;
-    height: 1.2em;
+    width: 1.1em;
+    height: 1.1em;
     text-align: center;
     vertical-align: middle;
     line-height: 1.5em;
@@ -140,8 +139,7 @@ input[type="file"] {
 }
 
 #undo, #redo {
-    background: none;
-    font-size: 2em;
+    
 }
 
 #undo {
@@ -172,6 +170,34 @@ input[type="file"] {
 
 .action:hover {
     color: #50cfbb;
+}
+
+@media (max-device-width: 640px) {
+    body{
+        flex-flow: column wrap;
+    }
+
+    #toolbox{ 
+        flex-flow: row;
+        min-height: 0%;
+    }
+
+    #tool-info {
+        order: 2;
+        max-width: 100% !important;
+        flex-grow: 0 !important;
+    }
+
+    #right-bar {
+        order: 3;
+        max-width: 49%;
+        display: none !important;
+    }
+
+    #layers, .layer {
+        width: 100vw !important;
+        height: calc(100vw * .78125) !important;
+    }
 }
 
 /* Tool Info
@@ -281,8 +307,7 @@ input[type="number"] {
 
 #right-bar {
     display: inline-block;
-    position: relative;
-    width: auto;
+    width: 100%;
 }
 
 /* Layer Controls

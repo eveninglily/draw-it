@@ -91,19 +91,19 @@ function initMouseEvents() {
 
 function initTouchEvents() {
     $('#layers').on('touchstart', evt => {
-        start(
-            (evt.originalEvent.changedTouches[0].clientX - $('#layers').offset().left) + $(window).scrollLeft(),
-            (evt.originalEvent.changedTouches[0].clientY - $('#layers').offset().top) + $(window).scrollTop(), 
-            .5
+        var n = normalize(
+            (evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left),
+            (evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top)
         );
+        start(n.x, n.y, .5);
     }).on('touchmove', evt => {
         evt.preventDefault();
         if(down){
-            move(
-                (evt.originalEvent.touches[0].clientX - $('#layers').offset().left) + $(window).scrollLeft(),
-                (evt.originalEvent.touches[0].clientY - $('#layers').offset().top) + $(window).scrollTop(),
-                .5
+            var n = normalize(
+                (evt.originalEvent.touches[0].pageX - $('#layers').offset().left),
+                (evt.originalEvent.touches[0].pageY - $('#layers').offset().top)
             );
+            move(n.x, n.y, .5);
         }
     });
 }

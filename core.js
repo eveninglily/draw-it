@@ -143,6 +143,7 @@ function start(x, y, p) {
             pencil.color = nC;
             colorWheel.setColor(c[0], c[1], c[2]);
         } else if (currTool.name == "Text") {
+            $('#hidden-input').remove();
             $('<input>').attr('id', 'hidden-input').data('tx', x).data('ty', y).on('input',function(){
                 layers[currentLayer].canvas.clear();
                 layers[currentLayer].canvas.drawBuffer();

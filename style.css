@@ -138,15 +138,11 @@ input[type="file"] {
     margin: 0px;
 }
 
-#undo, #redo {
-    
-}
-
-#undo {
+#undo:hover {
     color: #e73955;
 }
 
-#redo {
+#redo:hover {
     color: #50cfbb;
 }
 

@@ -173,11 +173,18 @@ class Client {
                 this.sendMove(n.x, n.y);
             }
         }).on('touchstart', function (evt) {
-            _this.sendStart(evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left, evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top);
+            var n = normalize(
+                (evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left),
+                (evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top)
+            );
+            _this.sendStart(n.x, n.y);
         }).on('touchmove', function (evt) {
-        _this.sendMove(
-                evt.originalEvent.touches[0].pageX - $('#layers').offset().left,
-                evt.originalEvent.touches[0].pageY - $('#layers').offset().top
+            var n = normalize(
+                (evt.originalEvent.touches[0].pageX - $('#layers').offset().left),
+                (evt.originalEvent.touches[0].pageY - $('#layers').offset().top)
+            );
+            _this.sendMove(
+                n.x, n.y
             );
         });
 

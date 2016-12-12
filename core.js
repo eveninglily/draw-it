@@ -2,8 +2,8 @@
  * Sets up the canvas and binds all the core events
  */
 
-var width = 1280;
-var height = 720;
+var width = 1920;
+var height = 1080;
 
 var down = false;
 

@@ -126,6 +126,7 @@ class Client {
         $('#server-status').show();
         $('#server-name').text(data.name);
         this.inRoom = true;
+        this.socket.emit('init_data');
     }
 
     _recieveStart(data) {
@@ -213,10 +214,6 @@ class Client {
                 }
             }
         }, 40);
-    }
-
-    requestData() {
-        this.socket.emit('init_data');
     }
 }
 

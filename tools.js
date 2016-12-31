@@ -41,8 +41,8 @@ $("#eyedropper").on('click', function(e) {
     $('#layers').append(merged);
 });
 
-$('#undo').on('click', undo);
-$('#redo').on('click', redo);
+$('#undo').on('click', () => undo());
+$('#redo').on('click', () => redo());
 
 $("#clear").on('click', function(e) {
     if(confirm("Clear all layers? This can not be undone. All history will be lost.")) {

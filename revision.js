@@ -5,24 +5,39 @@
  * TODO: Add more types of changes
  */
 class Change {
-    constructor(stroke, layer) {
-        this.stroke = stroke;
+    constructor(type, layer, data) {
+        this.type = type;
         this.layer = layer;
+        this.data = data;
     }
 }
 
 var changes = [];
 var currentChange = 0;
 
+changes.push(new Change("clear", "layer0", null));
+
 /**
  * Adds a change to the list of changes; splices changes if the current state is behind
  */
 function addChange(stroke) {
-    if (currentChange != changes.length) {
+    console.log(currentChange);
+    if ((currentChange + 1) != changes.length) {
         changes.splice(currentChange, changes.length - currentChange);
     }
     currentChange++;
-    changes.push(new Change(stroke, layers[currentLayer].id));
+    changes.push(new Change("stroke", layers[currentLayer].id, stroke));
+}
+
+/**
+ * Adds a layer clear to the history
+ */
+function addClear() {
+    if (currentChange + 1 != changes.length) {
+        changes.splice(currentChange, changes.length - currentChange);
+    }
+    currentChange++;
+    changes.push(new Change("clear", layers[currentLayer].id, null));
 }
 
 /**
@@ -32,11 +47,6 @@ function undo() {
     if(currentChange > 0) {
         currentChange--;
         updateCanvas();
-    } else {
-        for(var i = 0; i < layers.length; i++) {
-            layers[i].canvas.clear();
-            layers[i].canvas.clearBuffer();
-        }
     }
 }
 
@@ -44,14 +54,14 @@ function undo() {
  * Redoes a change
  */
 function redo() {
-    if(currentChange <= changes.length - 1) {
+    if(currentChange < changes.length - 1) {
         currentChange++;
         updateCanvas();
     }
 }
 
 /**
- * Redraws and layers that need to get redrawn based on currentChange
+ * Redraws any layers that need to get redrawn based on currentChange
  */
 function updateCanvas() {
     var needsRedraw = [];
@@ -63,6 +73,14 @@ function updateCanvas() {
         }
     }
 
+    if(changes[currentChange].type == "clear") {
+        var layer = layerMap[changes[currentChange].layer];
+        layers[layer].canvas.clear();
+        layers[layer].canvas.clearBuffer();
+        layers[layer].updatePreview();
+        return;
+    }
+
     for(var i = currentChange; i < changes.length; i++) {
         var l = layerMap[changes[i].layer];
         layers[l].canvas.clear();
@@ -70,18 +88,16 @@ function updateCanvas() {
         needsRedraw.push(l);
     }
 
-    if(currentChange == changes.length) {
+    if((currentChange == changes.length) || (currentChange != 0)) {
         needsRedraw.push(layerMap[changes[currentChange - 1].layer]);
     }
 
-    if(currentChange != 0) {
-        needsRedraw.push(layerMap[changes[currentChange - 1].layer]);
-    }
-
-    for(var i = 0; i < currentChange; i++) {
+    for(var i = 0; i <= currentChange; i++) {
         var l = layerMap[changes[i].layer];
         if(needsRedraw.indexOf(l) != -1) {
-            layers[l].canvas.completeStroke(changes[i].stroke);
+            if(changes[i].type == "stroke") {
+                layers[l].canvas.completeStroke(changes[i].data);
+            }
         }
     }
     //TODO: find a way to implement this without it slowing everything down

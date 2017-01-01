@@ -31,27 +31,19 @@ class Room {
 
             if(data.name == '') {
                 name = id;
-            } else {
-                name = data.name;
             }
 
             rooms[id] = new Room(id, name, socket);
             rooms[id].admin = socket.id;
 
-            console.log("Room["+ id +"] created");
+            console.log("Room["+ id +"] created, name: " + name);
         }
-
-        if(data.name == '') {
-                name = id;
-            } else {
-                name = data.name;
-            }
 
         rooms[id].clients.push(socket);
         socket.join(id);
         socket.emit('join', {
             'id': id,
-            'name': name,
+            'name': rooms[id].name,
             'cId': socket.id
         });
 

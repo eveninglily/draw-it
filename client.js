@@ -6,9 +6,9 @@ var client;
 
 $(document).ready(function() {
     client = new Client('https://nodedraw.com');
+    client.connect();
     var l = window.location.href.split('#');
     if(l.length == 2) {
-        client.connect();
         client.joinRoom(l[1]);
     }
 });
@@ -33,9 +33,12 @@ class Client {
     connect() {
         this.socket = io(this.server);
         var _t = this;
+
+        console.log("Connecting");
+
         this.socket.on('connect', function() {
             _t.connected = true;
-            console.log('connected!')
+            console.log('[Connected]')
         }).on('disconnect', function() {
             _t.connected = false;
         });
@@ -48,7 +51,7 @@ class Client {
         });
 
         var _this = this;
-        this.socket.on('handshake', data => this._handshake(data))
+        this.socket.on('join', data => this._join(data))
                    .on('s', data => this._recieveStart(data))
                    .on('u', data => this._recieveUpdate(data))
                    .on('e', data => this._recieveEnd(data))
@@ -117,7 +120,7 @@ class Client {
         });
     }
 
-    _handshake(data) {
+    _join(data) {
         console.log('Connected to server! Room ID: ' + data.id);
         window.location.href = "#" + data.id
         this.id = data.id;

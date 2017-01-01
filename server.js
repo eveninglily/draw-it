@@ -1,6 +1,10 @@
 "use strict";
 
 var fs = require('fs');
+var request = require('request');
+
+//TODO: Replace if open sourced
+var API_KEY = "7fd895d5-b1a8-441f-b4f1-1cc7995a8218";
 
 var url = 'https://nodedraw.com/draw/';
 var io = require('socket.io')().listen(3000);
@@ -45,7 +49,7 @@ class Room {
 
         rooms[id].clients.push(socket);
         socket.join(id);
-        socket.emit('handshake', {
+        socket.emit('join', {
             'id': id,
             'name': name,
             'cId': socket.id
@@ -90,9 +94,27 @@ io.on('connection', function(socket) {
         var image = data.b64.replace(/^data:image\/\w+;base64,/, "");
         var buffer = new Buffer(image, 'base64');
         var uuid = getUUID().split('-')[0];
-        fs.writeFile(url + 'gallery/'+uuid+'.png', buffer);
-        console.log('saving at /gallery/' + uuid + '.png');
-        fn({'url': url + 'gallery/' + uuid + '.png'});
+
+        fs.writeFile('/var/www/amidraw/amidraw-webservices/public/gallery/img/' + uuid + '.png', buffer);
+        console.log('saving at gallery/img/' + uuid + '.png');
+
+        request.post('https://amidraw.com/gallery/api/post', {
+            'json': {
+                "apikey": API_KEY,
+                "title": "Upload",
+                "description": "",
+                "path": "https://amidraw.com/gallery/img/" + uuid + ".png",
+                "user": 1
+            }
+        }, function(error, response, body) {
+            if(!error && response.statusCode == 200) {
+                console.log('API Call Accepted');
+            } else {
+                console.log("Error :(")
+            }
+        });
+
+        fn({'url': 'https://amidraw.com/gallery/img/' + uuid + '.png'});
     }).on('init_data', () => {
         socket.emit('board_data', {'strokes': room.strokes});
     });

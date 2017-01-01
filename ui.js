@@ -141,8 +141,9 @@ $("#save").on('click', function(e) {
     $('#dl-link').attr('href', saveToPNG()).on('click', function() {
         if($('#upload').is(':checked')) {
             client.save();
+        } else {
+            hideModals();
         }
-        hideModals()
     });
 
     $('#gallery-error').data('interval', setInterval(checkGalleryConnection, 500));

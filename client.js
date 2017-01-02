@@ -137,14 +137,14 @@ class Client {
         var layer = data.layer;
         layers[layer].canvas.beginStroke(data.tool, data.x, data.y, data.p, data.cId);
         layers[layer].activeStrokes.push(data.cId);
-        layers[layer].canvas.doStrokes(layers[layer].activeStrokes);
+        layers[layer].stroke();
     }
 
     _recieveUpdate(data) {
         var layer = this.recieving[data.cId];
         layers[layer].canvas.strokes[data.cId].addPoints(data.positions);
         setTimeout(function(){
-            layers[layer].canvas.doStrokes(layers[layer].activeStrokes);
+            layers[layer].stroke();
         }, 0);
     }
 
@@ -155,7 +155,7 @@ class Client {
             layers[layer].canvas.completeStroke(layers[layer].canvas.strokes[data.cId]);
             addChange(layers[layer].canvas.strokes[data.cId]);
             for(var i = 0; i < layers[layer].activeStrokes.length; i++) {
-                if(layers[layer].activeStrokes[i].id == data.cId) {
+                if(layers[layer].activeStrokes[i] == data.cId) {
                     layers[layer].activeStrokes.splice(i, 1);
                     break;
                 }

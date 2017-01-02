@@ -99,6 +99,7 @@ $(document).ready(function() {
         $('#modal-bg').show().css('display','flex');
         if(client.inRoom) {
             $('#room-create').hide();
+            $('#room-manage').show();
         } else {
             $('#room-manage').hide();
         }
@@ -111,6 +112,12 @@ $(document).ready(function() {
         client.joinRoom('');
         $('#modal-bg').hide();
         $('#dialog-invite').hide();
+    });
+
+    $('#new-room-name').on('keydown', evt => {
+        if(evt.which == 13) {
+            $('#create-room').click();
+        }
     });
 
     $('#fileName').on('input', () => {

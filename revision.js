@@ -22,8 +22,8 @@ changes.push(new Change("clear", "layer0", null));
  */
 function addChange(stroke) {
     console.log(currentChange);
-    if ((currentChange + 1) != changes.length) {
-        changes.splice(currentChange, changes.length - currentChange);
+    if ((currentChange + 1) != changes.length && currentChange != 0) {
+        changes.splice(currentChange + 1, changes.length - currentChange);
     }
     currentChange++;
     changes.push(new Change("stroke", layers[currentLayer].id, stroke));
@@ -33,8 +33,8 @@ function addChange(stroke) {
  * Adds a layer clear to the history
  */
 function addClear() {
-    if (currentChange + 1 != changes.length) {
-        changes.splice(currentChange, changes.length - currentChange);
+    if ((currentChange + 1) != changes.length  && currentChange != 0) {
+        changes.splice(currentChange + 1, changes.length - currentChange);
     }
     currentChange++;
     changes.push(new Change("clear", layers[currentLayer].id, null));
@@ -46,6 +46,8 @@ function addClear() {
 function undo() {
     if(currentChange > 0) {
         currentChange--;
+        updateCanvas();
+    } else {
         updateCanvas();
     }
 }

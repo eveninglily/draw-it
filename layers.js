@@ -201,6 +201,7 @@ $(document).ready(function(){
             layers[currentLayer].canvas.clear();
             layers[currentLayer].canvas.clearBuffer();
             layers[currentLayer].updatePreview();
+            addClear();
         }
     });
 

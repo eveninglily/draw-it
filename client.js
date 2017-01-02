@@ -58,7 +58,7 @@ class Client {
                    .on('nl', data => addLayer(data.id))
                    .on('board_data', data => {
                         for(var key in data.strokes) {
-                            console.log(data.strokes[key]);
+                            //console.log(data.strokes[key]);
                             if(data.strokes.hasOwnProperty(key)) {
                                 var layer = data.strokes[key].layer;
                                 var stroke = new Stroke(data.strokes[key].tool);
@@ -167,41 +167,47 @@ class Client {
 
     _initListeners() {
         var _this = this;
-        $('#layers').on('mousedown', e => {
-            var n = normalize(e.offsetX, e.offsetY);
+        $('#layers').on('mousedown', evt => {
+            var n = normalize(evt.offsetX, evt.offsetY);
             this.sendStart(n.x, n.y);
-        })
-        .on('mousemove', e => {
+        }).on('mousemove', evt => {
             if(down) {
-                var n = normalize(e.offsetX, e.offsetY);
+                var n = normalize(evt.offsetX, evt.offsetY);
                 this.sendMove(n.x, n.y);
             }
-        }).on('touchstart', function (evt) {
+        }).on('touchstart', evt => {
             var n = normalize(
                 (evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left),
                 (evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top)
             );
-            _this.sendStart(n.x, n.y);
-        }).on('touchmove', function (evt) {
+            this.sendStart(n.x, n.y);
+        }).on('touchmove', evt => {
             var n = normalize(
                 (evt.originalEvent.touches[0].pageX - $('#layers').offset().left),
                 (evt.originalEvent.touches[0].pageY - $('#layers').offset().top)
             );
-            _this.sendMove(
+            this.sendMove(
                 n.x, n.y
             );
+        }).on('mouseenter', evt => {
+            if(down) {
+                var n = normalize(evt.offsetX, evt.offsetY);
+                this.sendStart(n.x, n.y);
+            }
+        }).on('mouseleave', evt => {
+            var n = normalize(evt.offsetX, evt.offsetY);
+            this.sendEnd(n.x, n.y);
         });
 
         $(document).on('mouseup', evt => {
-                        var n = normalize(evt.offsetX, evt.offsetY);
-                        this.sendEnd(n.x, n.y);
-                    })
-                   .on('touchend touchcancel', evt =>
-                        this.sendEnd(
-                            evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left,
-                            evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top
-                        )
-                    );
+            var n = normalize(evt.offsetX, evt.offsetY);
+            this.sendEnd(n.x, n.y);
+        }).on('touchend touchcancel', evt =>
+            this.sendEnd(
+                evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left,
+                evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top
+            )
+        );
 
         setInterval(() => {
             for(var key in this.sending) {

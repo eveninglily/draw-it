@@ -66,16 +66,16 @@ function initMouseEvents() {
             $('#eyedropper-bottom').css({'border-color': pencil.color});
             $('#eyedropper-top').css({'border-color': nC});
         }
-    }).on('mouseenter', function(e) {
+    }).on('mouseenter', evt => {
         //TODO: Move this; rewrite tools
         if(currTool.name == "Eyedropper") {
             $('.eyedropper-wheel').css({display:'block'});
         }
         if(down) {
-            var n = normalize(e.offsetX, e.offsetY);
+            var n = normalize(evt.offsetX, evt.offsetY);
             start(n.x, n.y, .5);
         }
-    }).on('mouseleave', function() {
+    }).on('mouseleave', () => {
         //TODO: Move this, rewrite tools
         if(currTool.name == "Eyedropper") {
             $('.eyedropper-wheel').css({display:'none'});
@@ -83,8 +83,8 @@ function initMouseEvents() {
         if(down) {
             end();
         }
-    }).on('contextmenu', function(e) {
-        e.preventDefault();
+    }).on('contextmenu', evt => {
+        evt.preventDefault();
         return false;
     });
 }

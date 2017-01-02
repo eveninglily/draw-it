@@ -30,6 +30,7 @@ function detectLongClick(selector) {
     });
 }
 
+//TODO: Extend extend functionality to move left and right
 function allowReorder(container, selector, upCallback, downCallback) {
     $(container).on('mousemove', function(evt) {
         if($(selector).data('dragging')) {
@@ -55,13 +56,6 @@ function allowReorder(container, selector, upCallback, downCallback) {
         }
     });
 }
-
-$(document).on('mousedown', function(e) {
-    if(!(e.target.className == "context-item"))
-        $('.context-item').remove();
-});
-
-//TODO: write contextmenu class or something
 
 //TODO: All jQuery events in this file should be here
 $(document).ready(function() {
@@ -118,14 +112,21 @@ $(document).ready(function() {
         $('#modal-bg').hide();
         $('#dialog-invite').hide();
     });
-});
 
-$('#fileName').on('input', function() {
-    var name = $('#fileName').val();
-    if(name.length == 0) {
-        name = "amidraw";
-    }
-    $('#dl-link').attr('download', name + '.' + $('#fileType').val());
+    $('#fileName').on('input', () => {
+        var name = $('#fileName').val();
+
+        if(name.length == 0) {
+            name = "amidraw";
+        }
+        $('#dl-link').attr('download', name + '.' + $('#fileType').val());
+    });
+
+    $(document).on('mousedown', evt => {
+        if(!(evt.target.className == "context-item")) {
+            $('.context-item').remove();
+        }
+    });
 });
 
 function hideModals() {

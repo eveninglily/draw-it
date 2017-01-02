@@ -34,7 +34,7 @@ $("#brush").on('click', () => currTool = pencil);
 $("#eraser").on('click', () => currTool = eraser);
 $("#text").on('click', () => currTool = text);
 
-//TODO: There might be some complications with multi-user stuff here
+//TODO: What should happen if another user draws something that changes the result gotten here?
 $("#eyedropper").on('click', function(e) {
     currTool = eyedropper;
     var merged = getMergedVisibleCanvas().attr({'class':'layer','id':'mergedLayer'}).css({'z-index': 999});

@@ -26,10 +26,10 @@ $(window).resize(() => {
 
 colorWheel.setColorHex(color1);
 $('#wheel').prependTo('#tool-info');
-$("#color1").css({background: color1});
-$("#color2").css({background: color2});
+$('#color1').css({ background: color1 });
+$('#color2').css({ background: color2 });
 
-$('#hexValue').val("#"+colorWheel.getHex());
+$('#hexValue').val('#' + colorWheel.getHex());
 
 function updateColorDisplays(hex) {
     colorWheel.setColorHex(hex);

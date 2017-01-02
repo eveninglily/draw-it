@@ -135,7 +135,7 @@ function start(x, y, p) {
         down = true;
         layers[currentLayer].canvas.beginStroke(currTool, x, y, .5, 'local');
         layers[currentLayer].activeStrokes.push('local');
-        layers[currentLayer].stroke();
+        layers[currentLayer].canvas.doStrokes(layers[currentLayer].activeStrokes);
     } else {
         if(currTool.name == "Eyedropper") {
             var c = $('#mergedLayer').get(0).getContext('2d').getImageData(x, y, 1, 1).data;
@@ -174,15 +174,15 @@ function end() {
 }
 
 /**
- * Normalizes a point do adapt to all display sizes
+ * Normalizes a point to adapt to all display sizes
  */
 function normalize(x, y) {
     var xR = width / $('#layers').width();
     var yR = height / $('#layers').height();
 
-    return { 
-        x: x * xR, 
-        y: y * yR 
+    return {
+        x: x * xR,
+        y: y * yR
     };
 }
 

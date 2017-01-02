@@ -197,10 +197,11 @@ $(document).ready(function(){
     });
 
     $('#layer-clear').on('click', function() {
-        if(confirm('Clear current layer?'))
+        if(confirm('Clear current layer?')) {
             layers[currentLayer].canvas.clear();
             layers[currentLayer].canvas.clearBuffer();
             layers[currentLayer].updatePreview();
+        }
     });
 
     $('#layer-save').on('click', function() {

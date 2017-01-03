@@ -201,17 +201,19 @@ function getMergedCanvas() {
 /**
  * Returns a jQuery object of a canvas that contains all visible layers merged together
  */
-function getMergedVisibleCanvas() {
+function getMergedVisibleCanvas(whiteBg) {
     var merged = $('<canvas>').attr({'width': width, 'height': height});
     var ctx = merged.get(0).getContext('2d');
-    if(settings.whiteBg) {
+    if(whiteBg) {
         ctx.fillStyle = 'white';
         ctx.strokeStyle = 'white';
         ctx.fillRect(0, 0, width, height);
     }
     for(var i = 0; i < layers.length; i++) {
-        if(layers[i].isVisible)
+        if(layers[i].isVisible) {
+            ctx.globalAlpha = layers[i].opacity;
             ctx.drawImage(layers[i].canvas.canvas, 0, 0);
+        }
     }
     return merged;
 }

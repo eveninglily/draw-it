@@ -112,7 +112,7 @@ class Client {
     }
 
     save() {
-        this.socket.emit('save', {'b64': getMergedVisibleCanvas().get(0).toDataURL()}, function(data) {
+        this.socket.emit('save', {'b64': getMergedVisibleCanvas(settings.whiteBg).get(0).toDataURL()}, function(data) {
             console.log("Saved to gallery at " + data.url);
             $('#gallery-url-holder').show();
             $('#gallery-url').text(data.url).attr('href', data.url);

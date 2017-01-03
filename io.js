@@ -11,7 +11,7 @@ function saveJSONFile(name, data) {
  * Returns a data url containing the PNG data
  */
 function saveToPNG() {
-    return getMergedVisibleCanvas().get(0).toDataURL('image/png').replace('image/png', 'image/octet-stream');
+    return getMergedVisibleCanvas(settings.whiteBg).get(0).toDataURL('image/png').replace('image/png', 'image/octet-stream');
 }
 
 /**

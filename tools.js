@@ -24,12 +24,15 @@ var text = new Tool("Text", "32px serif", "", "#e73955");
 var eyedropper = new Tool("Eyedropper");
 
 $('.tool').on('click', function() {
+    $('#mergedLayer').remove();
+    if($(this).is('#clear')) {
+        return;
+    }
+
     $('.active').removeClass('active');
     $('.activeTool').removeClass('activeTool');
     $(this).addClass('active');
     $('#' + $(this).attr('data-options')).addClass('activeTool');
-
-    $('#mergedLayer').remove();
 });
 
 $("#brush").on('click', () => currTool = pencil);
@@ -39,7 +42,7 @@ $("#text").on('click', () => currTool = text);
 //TODO: What should happen if another user draws something that changes the result gotten here?
 $("#eyedropper").on('click', function(e) {
     currTool = eyedropper;
-    var merged = getMergedVisibleCanvas().attr({'class':'layer','id':'mergedLayer'}).css({'z-index': 999});
+    var merged = getMergedVisibleCanvas(true).attr({'class':'layer','id':'mergedLayer'}).css({'opacity': 0});
     $('#layers').append(merged);
 });
 

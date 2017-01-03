@@ -237,9 +237,16 @@ $(document).ready(function(){
     });
 
     $('#layer-opacity').on('input', function () {
-            $('#layer-opacity-value').html($(this).val() + "%");
-            $('.selected .layer-opacity').html($(this).val() + "%");
-            layers[currentLayer].opacity = $(this).val() / 100;
-            $('#' + layers[currentLayer].id).css('opacity', $(this).val() / 100);
+        $('#layer-opacity-value').html($(this).val() + "%");
+        $('.selected .layer-opacity').html($(this).val() + "%");
+        layers[currentLayer].opacity = $(this).val() / 100;
+        $('#' + layers[currentLayer].id).css('opacity', $(this).val() / 100);
+
+        //TODO: This is kinda hacky
+        if(currTool.name == "Eyedropper") {
+            var merged = getMergedVisibleCanvas(true).attr({'class':'layer','id':'mergedLayer'}).css({'opacity': 0});
+            $('#mergedLayer').remove();
+            $('#layers').append(merged);
+        }
     });
 });

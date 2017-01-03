@@ -50,17 +50,17 @@ function initMouseEvents() {
             start(n.x, n.y, .5);
         }
     }).on('mousemove', evt => {
+        var n = normalize(evt.offsetX, evt.offsetY);
         if(down) {
             window.getSelection().removeAllRanges()
             evt.preventDefault();
-            var n = normalize(evt.offsetX, evt.offsetY);
             move(n.x, n.y,.5);
         }
         //TODO: Move this; rewrite tools
         if(currTool.name == "Eyedropper") {
             $('#eyedropper-holder').css({left: evt.pageX - 55, top: evt.pageY - 55});
             var l = $('#layers').position();
-            var c = $('#mergedLayer').get(0).getContext('2d').getImageData(evt.pageX - l.left, evt.pageY - l.top, 1, 1).data;
+            var c = $('#mergedLayer').get(0).getContext('2d').getImageData(n.x, n.y, 1, 1).data;
             var nC = 'rgb(' + c[0] +', ' + c[1] + ', ' + c[2] + ')';
 
             $('#eyedropper-bottom').css({'border-color': pencil.color});
@@ -142,6 +142,7 @@ function start(x, y, p) {
             var nC = 'rgb(' + c[0] +', ' + c[1] + ', ' + c[2] + ')';
             pencil.color = nC;
             colorWheel.setColor(c[0], c[1], c[2]);
+            updateColorDisplays('#' + colorWheel.getHex());
         } else if (currTool.name == "Text") {
             $('#hidden-input').remove();
             $('<input>').attr('id', 'hidden-input').data('tx', x).data('ty', y).on('input',function(){

@@ -28,6 +28,8 @@ $('.tool').on('click', function() {
     $('.activeTool').removeClass('activeTool');
     $(this).addClass('active');
     $('#' + $(this).attr('data-options')).addClass('activeTool');
+
+    $('#mergedLayer').remove();
 });
 
 $("#brush").on('click', () => currTool = pencil);

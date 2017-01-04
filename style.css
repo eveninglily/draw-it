@@ -120,7 +120,7 @@ input[type="file"] {
     text-align: center;
     vertical-align: middle;
     line-height: 1.5em;
-    
+
 }
 
 .action:before {
@@ -173,7 +173,7 @@ input[type="file"] {
         flex-flow: column wrap;
     }
 
-    #toolbox{ 
+    #toolbox{
         flex-flow: row;
         min-height: 0%;
     }
@@ -222,16 +222,21 @@ input[type="file"] {
     display: inline-block;
 }
 
+#hex-val-container {
+    position: relative;
+}
+
 #hexValue {
     width: 5em;
-    /*display: block;*/
+    bottom: 0;
+    position: absolute;
 }
 
 .tool-meta:not(.activeTool) {
     display: none;
 }
 
-.tool-meta div{
+.tool-meta div {
     padding: 10px;
 }
 
@@ -244,6 +249,12 @@ input[type="number"] {
     min-width: 10px;
     max-width: 40px;
     width: auto;
+}
+
+#color-settings {
+    margin: 0px 5px 0px 5px;
+    display: flex;
+    justify-content: space-between;
 }
 
 #color-palette {
@@ -267,7 +278,7 @@ input[type="number"] {
     cursor: -webkit-grabbing;
 }
 
-#color-settings, #hsv-settings {
+#palette-holder, #hsv-settings {
     display: none;
 }
 
@@ -486,6 +497,10 @@ input[type="number"] {
     margin: auto;
     width: 12vw;
     height: 12vw;
+}
+
+#wheel-holder {
+    margin: .5em .5em 1em .5em;
 }
 
 /* Buttons

@@ -25,7 +25,7 @@ $(window).resize(() => {
 });
 
 colorWheel.setColorHex(color1);
-$('#wheel').prependTo('#tool-info');
+$('#wheel').prependTo('#wheel-holder');
 $('#color1').css({ background: color1 });
 $('#color2').css({ background: color2 });
 
@@ -140,7 +140,7 @@ function addPaletteItem(color) {
 
 //TODO: write common function for this type of thing
 //TODO: Show where outline was and drag a ghost along
-$('#color-settings').on('mousemove', function(e) {
+$('#palette-holder').on('mousemove', function(e) {
     if($('.currColor').data('dragging')) {
         var r = $('.currColor');
 
@@ -214,7 +214,7 @@ $('#gradient-toggle').on('click', function() {
 });
 
 $('#palette-toggle').on('click', function() {
-    $('#color-settings').toggle();
+    $('#palette-holder').toggle();
 });
 
 //TODO: Make these actually do something

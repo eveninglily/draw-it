@@ -90,7 +90,7 @@ io.on('connection', function(socket) {
         fs.writeFile('/var/www/amidraw/amidraw-webservices/public/gallery/img/' + uuid + '.png', buffer);
         console.log('saving at gallery/img/' + uuid + '.png');
 
-        request.post('https://amidraw.com/gallery/api/post', {
+        request.post('https://amidraw.com/api/gallery/create', {
             'json': {
                 "apikey": API_KEY,
                 "title": "Upload",

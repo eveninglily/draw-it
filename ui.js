@@ -134,6 +134,14 @@ $(document).ready(function() {
             $('.context-item').remove();
         }
     });
+
+    $('#dl-link').on('click', function() {
+        if($('#upload').is(':checked')) {
+            client.save();
+        } else {
+            hideModals();
+        }
+    });
 });
 
 function hideModals() {
@@ -146,13 +154,7 @@ function hideModals() {
 $("#save").on('click', function(e) {
     $('#dialog-save').show().css('display','flex');;
     $('#modal-bg').show().css('display','flex');
-    $('#dl-link').attr('href', saveToPNG()).on('click', function() {
-        if($('#upload').is(':checked')) {
-            client.save();
-        } else {
-            hideModals();
-        }
-    });
+    $('#dl-link').attr('href', saveToPNG())
 
     $('#gallery-error').data('interval', setInterval(checkGalleryConnection, 500));
 });

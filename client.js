@@ -50,13 +50,16 @@ class Client {
             'name': $('#new-room-name').val()
         });
 
-        var _this = this;
         this.socket.on('join', data => this._join(data))
                    .on('s', data => this._recieveStart(data))
                    .on('u', data => this._recieveUpdate(data))
                    .on('e', data => this._recieveEnd(data))
                    .on('nl', data => addLayer(data.id))
                    .on('board_data', data => {
+                       for(var layer in data.layers) {
+                           addLayer(layer);
+                       }
+
                         for(var key in data.strokes) {
                             //console.log(data.strokes[key]);
                             if(data.strokes.hasOwnProperty(key)) {
@@ -66,8 +69,12 @@ class Client {
                                 layers[layer].canvas.completeStroke(stroke);
                             }
                         }
+
+                        for(var i = 0; i < layers.length; i++) {
+                            layers[i].updatePreview();
+                        }
                    });
-        _this._initListeners();
+        this._initListeners();
     }
 
     sendStart(x, y) {

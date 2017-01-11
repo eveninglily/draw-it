@@ -17,6 +17,7 @@ class Room {
         this.socket = socket;
         this.clients = [];
         this.strokes = {};
+        this.layers = [];
     }
 
     static onConnect(data, socket) {
@@ -81,7 +82,9 @@ io.on('connection', function(socket) {
     }).on('e', data => {
         socket.broadcast.to(roomId).emit('e', data);
         room.strokes[data.cId].path.push({ x: data.x, y: data.y, p: data.p });
-    }).on('nl', data => { socket.broadcast.to(roomId).emit('nl', data);
+    }).on('nl', data => {
+        socket.broadcast.to(roomId).emit('nl', data);
+        room.layers.push(data.id);
     }).on('save', function(data, fn) {
         var image = data.b64.replace(/^data:image\/\w+;base64,/, "");
         var buffer = new Buffer(image, 'base64');
@@ -108,7 +111,7 @@ io.on('connection', function(socket) {
 
         fn({'url': 'https://amidraw.com/gallery/img/' + uuid + '.png'});
     }).on('init_data', () => {
-        socket.emit('board_data', {'strokes': room.strokes});
+        socket.emit('board_data', {'strokes': room.strokes, 'layers': room.layers });
     });
 });
 

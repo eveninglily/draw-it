@@ -127,7 +127,7 @@ function addPaletteItem(color) {
                 paletteItem.remove();
                 $(this).remove();
             }).html("Delete")
-            .addClass('context-item').css({
+            .addClass('context-item contextmenu').css({
                 left: e.pageX,
                 top: e.pageY
             }).appendTo('body');
@@ -196,7 +196,7 @@ $('#palette-holder').on('mousemove', function(e) {
     }
 });
 
-$('#addToPalette').on('click', function(e) {
+$('#addToPalette').on('click', function() {
     addPaletteItem(currTool.color);
 });
 

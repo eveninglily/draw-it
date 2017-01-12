@@ -82,6 +82,27 @@ class Layer {
             _this.select();
 
             document.getSelection().removeAllRanges();
+        }).on('contextmenu', evt => {
+            $("<div>").addClass('contextmenu').css({
+                left: evt.pageX,
+                top: evt.pageY
+            }).append(
+                $('<div>').addClass('context-item').html('Merge Up').on('click', () => {
+                    mergeUp(layers.length - nRow.index() - 1);
+                    $('.contextmenu').remove();
+                })
+            ).append(
+                $('<div>').addClass('context-item').html('Merge Down').on('click', () => {
+                    mergeDown(layers.length - nRow.index() - 1);
+                    $('.contextmenu').remove();
+                })
+            ).append(
+                $('<div>').addClass('context-item').html('Duplicate').on('click', () => {
+                    duplicate(layers.length - nRow.index() - 1);
+                    $('.contextmenu').remove();
+                })
+            ).appendTo('body');
+            return false;
         });
 
         $('#layer-list').prepend(nRow);
@@ -109,7 +130,9 @@ class Layer {
     }
 
     stroke() {
-        this.canvas.doStrokes(this.activeStrokes);
+        if(!this.isLocked) {
+            this.canvas.doStrokes(this.activeStrokes);
+        }
     }
 
     toJSON() {
@@ -161,6 +184,37 @@ function removeLayer(pos) {
     layers.splice(pos, 1);
 }
 
+function mergeUp(pos) {
+    if(!(pos == layers.length - 1)) {
+        layers[pos + 1].canvas.drawCanvas(layers[pos].canvas.canvas);
+        layers[pos + 1].canvas.drawCanvasOntoBuffer(layers[pos].canvas.canvas);
+        for(var i = 0; i < layers[pos].ids.length; i++) {
+            layers[pos + 1].ids.push(layers[pos].ids[i]);
+        }
+        removeLayer(pos);
+        layers[pos].select();
+        layers[pos].updatePreview();
+    }
+}
+
+function mergeDown(pos) {
+    if((pos != 0)) {
+        layers[pos - 1].canvas.drawCanvas(layers[pos].canvas.canvas);
+        layers[pos + 1].canvas.drawCanvasOntoBuffer(layers[pos].canvas.canvas);
+        for(var i = 0; i < layers[pos].ids.length; i++) {
+            layers[pos - 1].ids.push(layers[pos].ids[i]);
+        }
+        removeLayer(pos);
+        pos--;
+        layers[pos].select();
+        layers[pos].updatePreview();
+    }
+}
+
+function duplicate(pos) {
+    layers.splice(pos, 0, layers[pos].)
+}
+
 $(document).ready(function(){
     allowReorder('#layer-list', '.selected', function(){
         layers.splice(currentLayer + 1, 0, layers.splice(currentLayer, 1)[0]);
@@ -207,33 +261,6 @@ $(document).ready(function(){
 
     $('#layer-save').on('click', function() {
         layers[currentLayer].canvas.toFile();
-    });
-
-    $('#layer-mergeup').on('click', function() {
-        if(!(currentLayer == layers.length - 1)) {
-            layers[currentLayer + 1].canvas.drawCanvas(layers[currentLayer].canvas.canvas);
-            layers[currentLayer + 1].canvas.drawCanvasOntoBuffer(layers[currentLayer].canvas.canvas);
-            for(var i = 0; i < layers[currentLayer].ids.length; i++) {
-                layers[currentLayer + 1].ids.push(layers[currentLayer].ids[i]);
-            }
-            removeLayer(currentLayer);
-            layers[currentLayer].select();
-            layers[currentLayer].updatePreview();
-        }
-    });
-
-    $('#layer-mergedown').on('click', function() {
-        if((currentLayer != 0)) {
-            layers[currentLayer - 1].canvas.drawCanvas(layers[currentLayer].canvas.canvas);
-            layers[currentLayer + 1].canvas.drawCanvasOntoBuffer(layers[currentLayer].canvas.canvas);
-            for(var i = 0; i < layers[currentLayer].ids.length; i++) {
-                layers[currentLayer - 1].ids.push(layers[currentLayer].ids[i]);
-            }
-            removeLayer(currentLayer);
-            currentLayer--;
-            layers[currentLayer].select();
-            layers[currentLayer].updatePreview();
-        }
     });
 
     $('#layer-opacity').on('input', function () {

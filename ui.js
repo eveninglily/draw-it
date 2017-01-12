@@ -131,7 +131,7 @@ $(document).ready(function() {
 
     $(document).on('mousedown', evt => {
         if(!(evt.target.className == "context-item")) {
-            $('.context-item').remove();
+            $('.contextmenu').remove();
         }
     });
 

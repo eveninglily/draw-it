@@ -212,7 +212,7 @@ function mergeDown(pos) {
 }
 
 function duplicate(pos) {
-    layers.splice(pos, 0, layers[pos].)
+    //layers.splice(pos, 0, layers[pos].)
 }
 
 $(document).ready(function(){

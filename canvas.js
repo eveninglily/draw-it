@@ -12,10 +12,17 @@ class DrawingCanvas {
         this.width = canvas.width;
         this.height = canvas.height;
         this.strokes = {};
+
         this.backCanvas = document.createElement('canvas');
         this.backCanvas.width = canvas.width;
         this.backCanvas.height = canvas.height;
         this.bCtx = this.backCanvas.getContext('2d');
+
+        this.strokeCanvas = document.createElement('canvas');
+        this.strokeCanvas.width = canvas.width;
+        this.strokeCanvas.height = canvas.height;
+        this.sCtx = this.strokeCanvas.getContext('2d');
+
         this._isRedrawing = false;
     }
 
@@ -114,16 +121,17 @@ class DrawingCanvas {
      * Checks before setting as to not affect performance too much
      * @param {object} tool - The tool to match to values to
      */
-    setContextValues(tool) {
-        if (this.ctx.globalAlpha != tool.opacity) { this.ctx.globalAlpha = tool.opacity; }
-        if (this.ctx.lineJoin != 'round') { this.ctx.lineJoin = 'round'; }
-        if (this.ctx.lineCap != 'round') { this.ctx.lineCap = 'round'; }
-        if (this.ctx.lineWidth != (tool.size * 2)) { this.ctx.lineWidth = tool.size * 2; }
-        if (this.ctx.strokeStyle != tool.color) { this.ctx.strokeStyle = tool.color };
-        if (this.ctx.fillStyle != tool.color) { this.ctx.fillStyle = tool.color; }
-        if (this.ctx.globalCompositeOperation != tool.globalCompositeOperation) {
-            this.ctx.globalCompositeOperation = tool.meta;
+    setContextValues(tool, ctx) {
+        //if (ctx.globalAlpha != tool.opacity) { ctx.globalAlpha = tool.opacity; }
+        if (ctx.lineJoin != 'round') { ctx.lineJoin = 'round'; }
+        if (ctx.lineCap != 'round') { ctx.lineCap = 'round'; }
+        if (ctx.lineWidth != (tool.size * 2)) { ctx.lineWidth = tool.size * 2; }
+        if (ctx.strokeStyle != tool.color) { ctx.strokeStyle = tool.color };
+        if (ctx.fillStyle != tool.color) { ctx.fillStyle = tool.color; }
+        if (ctx.globalCompositeOperation != tool.globalCompositeOperation) {
+            ctx.globalCompositeOperation = tool.meta;
         }
+        return ctx;
     }
 
     /**
@@ -211,9 +219,11 @@ class DrawingCanvas {
      * @param {Object} stroke - The Stroke to draw
      */
     drawStroke(stroke) {
-        this.ctx.save();
-        this.setContextValues(stroke.tool); //Ensures that all the context values are correct
-        this.ctx.beginPath();
+        console.time("drawStroke");
+        this.sCtx.save();
+        this.sCtx.clearRect(0, 0, this.width, this.height);
+        this.sCtx = this.setContextValues(stroke.tool, this.sCtx); //Ensures that all the context values are correct
+        this.sCtx.beginPath();
         if(stroke.path.length > 3) {
             var len = stroke.path.length;
             var controls = stroke.controlPoints.concat(
@@ -226,36 +236,44 @@ class DrawingCanvas {
                                         .3));
             var cLen = controls.length;
 
-            this.ctx.beginPath();
-            this.ctx.lineWidth = stroke.tool.size  * ( 2 * stroke.path[0].p);
-            this.ctx.moveTo(stroke.path[0].x,stroke.path[0].y);
-            this.ctx.quadraticCurveTo(controls[0],controls[1],stroke.path[1].x,stroke.path[1].y);
-            //this.ctx.stroke();
-            //this.ctx.closePath();
+            this.sCtx.beginPath();
+            this.sCtx.lineWidth = stroke.tool.size  * ( 2 * stroke.path[0].p);
+            this.sCtx.moveTo(stroke.path[0].x,stroke.path[0].y);
+            this.sCtx.quadraticCurveTo(controls[0],controls[1],stroke.path[1].x,stroke.path[1].y);
+            this.sCtx.stroke();
+            this.sCtx.closePath();
 
             for(var i = 0; i < len - 1; i += 1) {
-                //this.ctx.beginPath();
-                this.ctx.moveTo(stroke.path[i].x, stroke.path[i].y);
-                this.ctx.lineWidth = (stroke.tool.size) * (stroke.path[i].p * 2);
-                //controls.length == x.length * 4
-                this.ctx.bezierCurveTo(controls[4*i-2],controls[4*i-1],controls[4*i],controls[4*i+1],stroke.path[i + 1].x,stroke.path[i + 1].y);
-                //this.ctx.stroke();
-                //this.ctx.closePath();
+                this.sCtx.beginPath();
+                this.sCtx.moveTo(stroke.path[i].x, stroke.path[i].y);
+                this.sCtx.lineWidth = (stroke.tool.size) * (stroke.path[i].p * 2);
+                //controls.length is x.length * 4
+                this.sCtx.bezierCurveTo(controls[4*i-2],controls[4*i-1],controls[4*i],controls[4*i+1],stroke.path[i + 1].x,stroke.path[i + 1].y);
+                this.sCtx.stroke();
+                this.sCtx.closePath();
             }
-            //this.ctx.beginPath();
-            this.ctx.lineWidth = stroke.tool.size * stroke.path[len - 2].p * 2;
-            this.ctx.moveTo(stroke.path[len-2].x,stroke.path[len-2].y);
-            this.ctx.quadraticCurveTo(controls[cLen - 2],controls[cLen-1],stroke.path[len-1].x,stroke.path[len-1].y);
-            this.ctx.stroke();
-            this.ctx.closePath();
+            this.sCtx.beginPath();
+            this.sCtx.lineWidth = stroke.tool.size * stroke.path[len - 2].p * 2;
+            this.sCtx.moveTo(stroke.path[len-2].x,stroke.path[len-2].y);
+            this.sCtx.quadraticCurveTo(controls[cLen - 2],controls[cLen-1],stroke.path[len-1].x,stroke.path[len-1].y);
+            this.sCtx.stroke();
+            this.sCtx.closePath();
         } else {
             //There are too few points to do a bezier curve, so we just draw the point
-            this.ctx.lineWidth = 1;
-            this.ctx.arc(stroke.path[0].x, stroke.path[0].y, stroke.tool.size * (stroke.path[0].p), 0, 2 * Math.PI, false);
-            this.ctx.fill();
+            this.sCtx.lineWidth = 1;
+            this.sCtx.arc(stroke.path[0].x, stroke.path[0].y, stroke.tool.size * (stroke.path[0].p), 0, 2 * Math.PI, false);
+            this.sCtx.fill();
         }
-        this.ctx.stroke();
-        this.ctx.restore();
+        this.sCtx.stroke();
+
+        this.sCtx.globalCompositeOperation = "destination-out";
+        this.sCtx.globalAlpha = 1 - stroke.tool.opacity;
+        this.sCtx.fillStyle = "#ffffff";
+
+        this.sCtx.fillRect(0, 0, this.width, this.height);
+        this.sCtx.restore();
+        this.drawCanvas(this.strokeCanvas);
+        console.timeEnd("drawStroke");
     }
 
     /**

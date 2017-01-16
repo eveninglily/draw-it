@@ -272,6 +272,11 @@ class DrawingCanvas {
 
         this.sCtx.fillRect(0, 0, this.width, this.height);
         this.sCtx.restore();
+
+        if(stroke.tool.name == "Eraser") {
+            this.sCtx.globalCompositeOperation = "destination-out";
+        }
+
         this.drawCanvas(this.strokeCanvas);
         console.timeEnd("drawStroke");
     }

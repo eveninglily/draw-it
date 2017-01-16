@@ -25,19 +25,35 @@ class KeyBinding {
     }
 }
 
-var bindings = [
-    new KeyBinding('undo', 90, false, false, true, function () {
-        undo();
-    }),
-    new KeyBinding('redo', 89, false, false, true, function () {
-        redo();
-    }),
-    new KeyBinding('input', 13, false, false, false, function () {
-        $('input').trigger('blur');
-    })
-];
+function getDefaultBindings() {
+    return [
+        new KeyBinding('undo', 90, false, false, true, function () {
+            undo();
+        }),
+        new KeyBinding('redo', 89, false, false, true, function () {
+            redo();
+        }),
+        new KeyBinding('input', 13, false, false, false, function () {
+            $('input').trigger('blur');
+        }),
+        new KeyBinding('brush', 90, false, false, false, function () {
+            $('#brush').click();
+        }),
+        new KeyBinding('eraser', 88, false, false, false, function () {
+            $('#eraser').click();
+        }),
+        new KeyBinding('eyedropper', 66, false, false, false, function () {
+            $('#eyedropper').click();
+        }),
+        new KeyBinding('text', 84, false, false, false, function () {
+            $('#text').click();
+        })
+    ];
+}
 
-$(document).keydown(function (evt) {
+var bindings = getDefaultBindings();
+
+$(document).keydown(evt => {
     if (down) return;
 
     for (var i = 0; i < bindings.length; i++) {
@@ -51,60 +67,33 @@ $(document).keydown(function (evt) {
     }
 });
 
-/*
-var bindings = [
-    new KeyBinding('switchColor', 88, false, false, false, function () {
-        var temp = color1;
-        color1 = color2;
-        color2 = temp;
-        color = color1;
-        $('#color1').css({ 'background': color });
-        $('#color2').css({ 'background': color2 });
-    }),
-    new KeyBinding('sizeUp', 187, false, false, false, function () {
-        currTool.radius++;
-    }),
-    new KeyBinding('sizeDown', 189, false, false, false, function () {
-        if (currTool.radius > 1) {
-            currTool.radius--;
-        }
-    }),
-    new KeyBinding('opacityUp', 187, true, false, false, function () {
-        if (currTool.opacity < 1.0) {
-            currTool.opacity += 0.01;
-        }
-        $(mouseLayer).css('opacity', currTool.opacity);
-        var o = Math.round(currTool.opacity * 100);
-        $('#brush-opacity-value').html(o);
-        $('#brush-opacity').val(o);
-    }),
-    new KeyBinding('opacityDown', 189, true, false, false, function () {
-        if (currTool.opacity > 0) {
-            currTool.opacity -= 0.01;
-        }
-        $(mouseLayer).css('opacity', currTool.opacity);
-        var o = Math.round(currTool.opacity * 100);
-        $('#brush-opacity-value').html(o);
-        $('#brush-opacity').val(o);
-
-    }),
-    new KeyBinding('save', 83, false, false, true, function (evt) {
-        evt.preventDefault();
-        saveCanvasToImage(merge($('#background').get(0), layers));
-        clearCanvas($('#background').get(0));
-    })
-];
-
-$('#Keybinds input').on('keyup', function (evt) {
-    if (!(evt.which == 16 || evt.which == 17 || evt.which == 18)) {
-        var name = this.id.replace('keybind-', '');
+function loadBindingsFile(json) {
+    for(var key in json) {
         for (var i = 0; i < bindings.length; i++) {
-            if (name == bindings[i].name) {
-                bindings[i].key = evt.which;
-                bindings[i].ctrl = evt.ctrlKey;
-                bindings[i].shift = evt.shiftKey;
-                bindings[i].alt = evt.altKey;
+            if (key == bindings[i].name) {
+                bindings[i].key = json[key].key
+                bindings[i].ctrl = json[key].ctrl;
+                bindings[i].shift = json[key].shift;
+                bindings[i].alt = json[key].alt;
             }
         }
     }
-});*/
+}
+
+function resetBindings() {
+    bindings = getDefaultBindings();
+    settings["keybinds"] = {};
+}
+
+$(document).ready(() => {
+    $('#setting-keybinds').on('change', () => {
+        loadJSONFile($('#setting-keybinds').get(0).files[0], loadBindingsFile);
+    });
+
+    if(localStorage.getItem('settings')) {
+        var s = JSON.parse(localStorage.getItem('settings'));
+        if(s["keybinds"] != {}) {
+            loadBindingsFile(s["keybinds"]);
+        }
+    }
+});

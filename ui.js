@@ -77,8 +77,12 @@ $(document).ready(function() {
             if(!settings.hasOwnProperty(key)) {
                 continue;
             }
-            if(settings[key] == true) {
-                $('#setting-' + key).prop('checked', true);
+            if($('#setting-' + key).is(':checkbox')) {
+                if(settings[key] == true) {
+                    $('#setting-' + key).prop('checked', true);
+                }
+            } else if ($('#setting-' + key).is(':file')) {
+                console.log("dsgdsg");
             }
         }
     }
@@ -90,8 +94,16 @@ $(document).ready(function() {
 
     $('.settings-item').on('change', function() {
         var data = $(this).attr('data-val');
-        settings[data] = $(this).is(':checked');
-        localStorage.setItem('settings', JSON.stringify(settings));
+        if($(this).is(':checkbox')) {
+            settings[data] = $(this).is(':checked');
+            localStorage.setItem('settings', JSON.stringify(settings));
+        } else if($(this).is(':file')) {
+            loadJSONFile($('#setting-keybinds').get(0).files[0], json => {
+                settings[data] = json;
+                localStorage.setItem('settings', JSON.stringify(settings));
+                console.log(settings);
+            });
+        }
     });
 
     $('#invite').on('click', function() {

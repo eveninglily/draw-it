@@ -15,7 +15,8 @@ var settings = {
     showLeaveMessage: false,
     whiteBg: false,
     cache: false,
-    pointerEvents: false
+    pointerEvents: false,
+    keybinds: {}
 };
 
 $(document).ready(function() {

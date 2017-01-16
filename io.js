@@ -50,7 +50,7 @@ function loadJSONFile(file, callback) {
         alert('Sorry, your browser can\'t read this file');
         return;
     }
-    console.log(file);
+    //console.log(file);
     var reader = new FileReader();
     reader.onload = function() {
         var json = JSON.parse(reader.result);

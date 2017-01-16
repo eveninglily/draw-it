@@ -185,3 +185,9 @@ $('#fileType').on('change', function() {
         $('#dl-link').attr('href', saveLayersToJSON());
     }
 });
+
+$('#toolbox').on('dblclick', () => {
+    $('#tool-info').toggle();
+    $('#right-bar').toggle();
+    $('.layer, #layers').toggleClass('layer-expanded');
+});

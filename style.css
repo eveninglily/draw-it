@@ -312,6 +312,11 @@ input[type="number"] {
     height: calc(70vw * .5625);
 }
 
+.layer-expanded {
+    width: 85vw !important;
+    height: calc(85vw * .5625) !important;
+}
+
 /* Right Bar
 *************/
 

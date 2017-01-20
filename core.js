@@ -30,14 +30,14 @@ $(document).ready(function() {
     initMouseEvents();
     initTouchEvents();
 
-    $(document).on('mouseup touchend touchcancel pointercancel', function(e) {
+    $(document).on('mouseup touchend touchcancel pointercancel pointerup', () => {
         if(down) {
             end();
             down = false;
         }
     });
 
-    $(window).on('beforeunload', function() {
+    $(window).on('beforeunload', () => {
         if(settings.showLeaveMessage) {
             return 'Are you sure you want to leave? Your drawing will be lost.';
         }
@@ -121,6 +121,7 @@ function initPointerEvents() {
             move(n.x, n.y, evt.originalEvent.pressure);
         }
     }).off('mousedown mousemove');
+    client._initPointers();
 }
 
 //TODO: Rewrite inside of this along with tools

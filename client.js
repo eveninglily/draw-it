@@ -5,7 +5,7 @@
 var client;
 
 $(document).ready(function() {
-    client = new Client('https://nodedraw.com');
+    client = new Client('https://amidraw.com');
     client.connect();
     var l = window.location.href.split('#');
     if(l.length == 2) {
@@ -74,17 +74,33 @@ class Client {
                             layers[i].updatePreview();
                         }
                    });
-        this._initListeners();
+        setInterval(() => {
+            for(var key in this.sending) {
+                if(!this.sending.hasOwnProperty(key)) {
+                    continue;
+                }
+                if(!this.sending[key].length == 0) {
+                    this.socket.emit('u', {
+                        cId: key,
+                        positions: this.sending[key]
+                    });
+                    this.sending[key] = [];
+                }
+            }
+        }, 40);
+        this._initMouseEvents();
+        this._initTouchEvents();
     }
 
-    sendStart(x, y) {
+    sendStart(x, y, p) {
         this.currentUUID = getUUID();
         var c = this.currentUUID;
+        this.len = 1;
         this.socket.emit('s', {
             cId: c,
             x: x,
             y: y,
-            p: .5,
+            p: p,
             layer: currentLayer,
             tool: currTool
         });
@@ -92,20 +108,23 @@ class Client {
         this.sending[c] = [];
     }
 
-    sendMove(x, y) {
+    sendMove(x, y, p) {
         if(this.down) {
-            this.sending[this.currentUUID].push({'x': x, 'y': y, p: .5});
+            this.len += 1;
+            this.sending[this.currentUUID].push({'x': x, 'y': y, p: p});
         }
     }
 
-    sendEnd(x, y) {
+    sendEnd(x, y, p) {
         if(this.down) {
             setTimeout(() => {
+                console.log("len::" + this.len);
                 this.socket.emit('e', {
                     cId: this.currentUUID,
                     x: x,
                     y: y,
-                    p: .5
+                    p: p,
+                    l: this.len
                 });
             }, 45);
             this.down = false;
@@ -140,7 +159,7 @@ class Client {
     }
 
     _recieveStart(data) {
-        this.recieving[data.cId] = data.layer;
+        this.recieving[data.cId] = {'layer': data.layer, 'len': 0};
         var layer = data.layer;
         layers[layer].canvas.beginStroke(data.tool, data.x, data.y, data.p, data.cId);
         layers[layer].activeStrokes.push(data.cId);
@@ -148,88 +167,114 @@ class Client {
     }
 
     _recieveUpdate(data) {
-        var layer = this.recieving[data.cId];
-        layers[layer].canvas.strokes[data.cId].addPoints(data.positions);
-        setTimeout(function(){
-            layers[layer].stroke();
-        }, 0);
+        if(this.recieving[data.cId] != null) {
+            var layer = this.recieving[data.cId].layer;
+            console.log(data.positions.length);
+            this.recieving[data.cId].len += data.positions.length;
+            layers[layer].canvas.strokes[data.cId].addPoints(data.positions);
+            setTimeout(() => {
+                layers[layer].stroke();
+            }, 0);
+        }
     }
 
     _recieveEnd(data) {
-        setTimeout(() => {
-            var layer = this.recieving[data.cId];
+        var interval = setInterval(() => {
+            if(this.recieving[data.cId].len != data.len) {
+                return;
+            }
 
-            layers[layer].canvas.completeStroke(layers[layer].canvas.strokes[data.cId]);
-            addChange(layers[layer].canvas.strokes[data.cId]);
-            for(var i = 0; i < layers[layer].activeStrokes.length; i++) {
-                if(layers[layer].activeStrokes[i] == data.cId) {
-                    layers[layer].activeStrokes.splice(i, 1);
+            var layer = layers[this.recieving[data.cId]].layer;
+
+            layer.canvas.completeStroke(layer.canvas.strokes[data.cId]);
+            addChange(layer.canvas.strokes[data.cId]);
+            for(var i = 0; i < layer.activeStrokes.length; i++) {
+                if(layer.activeStrokes[i] == data.cId) {
+                    layer.activeStrokes.splice(i, 1);
                     break;
                 }
             }
             delete this.recieving[data.cId];
-            layers[layer].updatePreview();
-        }, 0);
+            layer.updatePreview();
+            clearInterval(interval);
+        }, 50);
     }
 
-    _initListeners() {
-        var _this = this;
+    _initMouseEvents() {
         $('#layers').on('mousedown', evt => {
             var n = normalize(evt.offsetX, evt.offsetY);
-            this.sendStart(n.x, n.y);
+            this.sendStart(n.x, n.y, .5);
         }).on('mousemove', evt => {
             if(down) {
                 var n = normalize(evt.offsetX, evt.offsetY);
-                this.sendMove(n.x, n.y);
+                this.sendMove(n.x, n.y, .5);
             }
-        }).on('touchstart', evt => {
+        }).on('mouseenter', evt => {
+            if(down) {
+                var n = normalize(evt.offsetX, evt.offsetY);
+                this.sendStart(n.x, n.y, .5);
+            }
+        }).on('mouseleave', evt => {
+            var n = normalize(evt.offsetX, evt.offsetY);
+            this.sendEnd(n.x, n.y, .5);
+        });
+
+        $(document).on('mouseup', evt => {
+            var n = normalize(evt.offsetX, evt.offsetY);
+            this.sendEnd(n.x, n.y, .5);
+        });
+    }
+
+    _initTouchEvents() {
+        $('#layers').on('touchstart', evt => {
             var n = normalize(
                 (evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left),
                 (evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top)
             );
-            this.sendStart(n.x, n.y);
+            this.sendStart(n.x, n.y, .5);
         }).on('touchmove', evt => {
             var n = normalize(
                 (evt.originalEvent.touches[0].pageX - $('#layers').offset().left),
                 (evt.originalEvent.touches[0].pageY - $('#layers').offset().top)
             );
             this.sendMove(
-                n.x, n.y
+                n.x, n.y, .5
             );
-        }).on('mouseenter', evt => {
-            if(down) {
-                var n = normalize(evt.offsetX, evt.offsetY);
-                this.sendStart(n.x, n.y);
-            }
-        }).on('mouseleave', evt => {
-            var n = normalize(evt.offsetX, evt.offsetY);
-            this.sendEnd(n.x, n.y);
         });
 
-        $(document).on('mouseup', evt => {
-            var n = normalize(evt.offsetX, evt.offsetY);
-            this.sendEnd(n.x, n.y);
-        }).on('touchend touchcancel', evt =>
-            this.sendEnd(
+        $(document).on('touchend touchcancel', evt => {
+            var n = normalize(
                 evt.originalEvent.changedTouches[0].pageX - $('#layers').offset().left,
                 evt.originalEvent.changedTouches[0].pageY - $('#layers').offset().top
-            )
-        );
+            );
+            this.sendEnd(n.x, n.y, .5);
+        });
+    }
 
-        setInterval(() => {
-            for(var key in this.sending) {
-                if(!this.sending.hasOwnProperty(key)) {
-                    continue;
-                }
-                if(!this.sending[key].length == 0) {
-                    this.socket.emit('u', {
-                        cId: key,
-                        positions: this.sending[key]
-                    });
-                    this.sending[key] = [];
-                }
+    _initPointers() {
+        var _this = this;
+        $('#layers').on('pointerdown', evt => {
+            var n = normalize(evt.offsetX, evt.offsetY);
+            this.sendStart(n.x, n.y, evt.originalEvent.pressure);
+        }).on('pointermove', evt => {
+            if(down) {
+                var n = normalize(evt.offsetX, evt.offsetY);
+                this.sendMove(n.x, n.y, evt.originalEvent.pressure);
             }
-        }, 40);
+        }).on('pointerenter', evt => {
+            if(down) {
+                var n = normalize(evt.offsetX, evt.offsetY);
+                this.sendStart(n.x, n.y, .5);
+            }
+        }).on('pointerleave', evt => {
+            var n = normalize(evt.offsetX, evt.offsetY);
+            this.sendEnd(n.x, n.y, .5);
+        });;
+
+        $(document).on('pointerend', evt => {
+            var n = normalize(evt.offsetX, evt.offsetY);
+            this.sendEnd(n.x, n.y, evt.originalEvent.pressure);
+        });
     }
 }
 

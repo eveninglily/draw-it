@@ -6,7 +6,7 @@ var request = require('request');
 //TODO: Replace if open sourced
 var API_KEY = "7fd895d5-b1a8-441f-b4f1-1cc7995a8218";
 
-var url = 'https://nodedraw.com/draw/';
+var url = 'https://amidraw.com/draw/';
 var io = require('socket.io')().listen(3000);
 var rooms = {};
 

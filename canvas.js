@@ -219,7 +219,6 @@ class DrawingCanvas {
      * @param {Object} stroke - The Stroke to draw
      */
     drawStroke(stroke) {
-        console.time("drawStroke");
         this.sCtx.save();
         this.sCtx.clearRect(0, 0, this.width, this.height);
         this.sCtx = this.setContextValues(stroke.tool, this.sCtx); //Ensures that all the context values are correct
@@ -274,11 +273,13 @@ class DrawingCanvas {
         this.sCtx.restore();
 
         if(stroke.tool.name == "Eraser") {
-            this.sCtx.globalCompositeOperation = "destination-out";
+            this.ctx.save();
+            this.ctx.globalCompositeOperation = "destination-out";
+            this.ctx.globalAlpha = 1;
         }
 
         this.drawCanvas(this.strokeCanvas);
-        console.timeEnd("drawStroke");
+        this.ctx.restore();
     }
 
     /**

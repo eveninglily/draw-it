@@ -88,11 +88,13 @@ class Layer {
                 top: evt.pageY
             }).append(
                 $('<div>').addClass('context-item').html('Merge Up').on('click', () => {
+                    console.log(layers.length - nRow.index() - 1)
                     mergeUp(layers.length - nRow.index() - 1);
                     $('.contextmenu').remove();
                 })
             ).append(
                 $('<div>').addClass('context-item').html('Merge Down').on('click', () => {
+                    console.log(layers.length - nRow.index() - 1)
                     mergeDown(layers.length - nRow.index() - 1);
                     $('.contextmenu').remove();
                 })
@@ -186,11 +188,14 @@ function removeLayer(pos) {
 
 function mergeUp(pos) {
     if(!(pos == layers.length - 1)) {
+        layers[pos + 1].canvas.ctx.save();
+        layers[pos + 1].canvas.ctx.globalAlpha = layers[pos].opacity;
         layers[pos + 1].canvas.drawCanvas(layers[pos].canvas.canvas);
         layers[pos + 1].canvas.drawCanvasOntoBuffer(layers[pos].canvas.canvas);
         for(var i = 0; i < layers[pos].ids.length; i++) {
             layers[pos + 1].ids.push(layers[pos].ids[i]);
         }
+        layers[pos + 1].canvas.ctx.restore();
         removeLayer(pos);
         layers[pos].select();
         layers[pos].updatePreview();
@@ -199,13 +204,20 @@ function mergeUp(pos) {
 
 function mergeDown(pos) {
     if((pos != 0)) {
+        layers[pos - 1].canvas.ctx.save();
+        layers[pos - 1].canvas.ctx.globalAlpha = layers[pos].opacity;
         layers[pos - 1].canvas.drawCanvas(layers[pos].canvas.canvas);
-        layers[pos + 1].canvas.drawCanvasOntoBuffer(layers[pos].canvas.canvas);
+        layers[pos - 1].canvas.drawCanvasOntoBuffer(layers[pos].canvas.canvas);
         for(var i = 0; i < layers[pos].ids.length; i++) {
             layers[pos - 1].ids.push(layers[pos].ids[i]);
         }
+        layers[pos - 1].canvas.ctx.restore();
         removeLayer(pos);
         pos--;
+        currentLayer--;
+        if(pos < 0) {
+            pos = 0;
+        }
         layers[pos].select();
         layers[pos].updatePreview();
     }

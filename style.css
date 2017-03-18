@@ -313,8 +313,8 @@ input[type="number"] {
 }
 
 .layer-expanded {
-    width: 85vw !important;
-    height: calc(85vw * .5625) !important;
+    width: calc(100vh * 1.777777778) !important;
+    height: 100vh !important;
     align-self: center;
 }
 
@@ -537,4 +537,10 @@ input[type="number"] {
 
 .button-blue {
     background: #50cfbb;
+}
+
+
+
+#users-list {
+    background: #494949;
 }

@@ -4,6 +4,7 @@
     <head>
         <title> AmiDraw ❤ </title>
         <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" href="logo.png" type="image/x-icon" />
         <link rel="stylesheet" href='style.css' type='text/css'/>
         <link rel="stylesheet" href='img/icons.css' type='text/css'/>
@@ -98,8 +99,14 @@
             <div id='layers'></div>
         </div>
         <div id="right-bar">
+            <div id='users-list'>
+                <h1>Board Users</h1>
+                <ul id='connected-users'>
+
+                </ul>
+            </div>
             <div id='layer-controls'>
-            Layers
+            <h1>Layers</h1>
             <table id="layer-controls-opacity">
                 <tr>
                     <td>
@@ -129,12 +136,13 @@
         <div id='modal-bg'>
             <div id="dialog-save" class="modal">
                 <h1>Save</h1>
-                <div>Save as <input id="fileName" placeholder="amidraw"/>
+                <div><input id="fileName" placeholder="Title"/>
                     <select id='fileType' name="fileType">
                         <option value="png" selected>.png</option>
                         <option value="json">.json</option>
                     </select>
                 </div>
+                <textarea placeholder='Add a description'></textarea>
                 <div><label><input id="upload" type="checkbox" /> Upload to gallery</label></div>
                 <div id='gallery-url-holder'><a id='gallery-url'></a></div>
                 <div class='err server-error' id='gallery-error'>Unable to connect to server</div>
@@ -169,10 +177,14 @@
                 <div>
                     <label>Load keybinds<input class='settings-item' data-val='keybinds' id="setting-keybinds" type="file" /></label>
                 </div>
+                <div>
+                    <label>Display Name<input class='settings-item' data-val='username' id="setting-username" type="text" /></label>
+                </div>
             </div>
         </div>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.6/socket.io.min.js'></script>
         <script src="layers.js"></script>
+        <script src="client.js"></script>
         <script src="ui.js"></script>
         <script src="tools.js"></script>
         <script src="core.js"></script>
@@ -180,6 +192,6 @@
         <script src="color.js"></script>
         <script src="keybinds.js"></script>
         <script src="io.js"></script>
-        <script src="client.js"></script>
+
     </body>
 </html>

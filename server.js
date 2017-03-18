@@ -15,7 +15,7 @@ class Room {
         this.id = id;
         this.name = name;
         this.socket = socket;
-        this.clients = [];
+        this.clients = {};
         this.strokes = {};
         this.layers = [];
     }
@@ -40,12 +40,17 @@ class Room {
             console.log("Room["+ id +"] created, name: " + name);
         }
 
-        rooms[id].clients.push(socket);
+        rooms[id].clients[socket.id] = data.username;
         socket.join(id);
         socket.emit('join', {
             'id': id,
             'name': rooms[id].name,
             'cId': socket.id
+        });
+
+        io.sockets.in(id).emit('uj', {
+            'id': socket.id,
+            'username': data.username
         });
 
         console.log("Client[" + socket.id + "] joined Room[" + id + "]");
@@ -64,8 +69,24 @@ io.on('connection', function(socket) {
     socket.on('join-room', data => {
         room = Room.onConnect(data, socket);
         roomId = room.id;
+
+        for(var key in room.clients) {
+            if(room.clients.hasOwnProperty(key)) {
+                if(key != socket.id) {
+                    socket.emit('uj', {'id': key, 'username': room.clients[key]});
+                }
+            }
+        }
+
     }).on('disconnect', function() {
         console.log('Client ' + this.id + ' disconnected from #' + roomId);
+        if(room == null) {
+            return;
+        }
+        io.sockets.in(roomId).emit('ul', {
+            'id': socket.id,
+            'username': room.clients[socket.id]
+        });
     }).on('s', data => {
         socket.broadcast.to(roomId).emit('s', data);
         room.strokes[data.cId] = {};
@@ -96,8 +117,8 @@ io.on('connection', function(socket) {
         request.post('https://amidraw.com/api/gallery/create', {
             'json': {
                 "apikey": API_KEY,
-                "title": "Upload",
-                "description": "",
+                "title": data.title,
+                "description": data.description,
                 "path": "https://amidraw.com/gallery/img/" + uuid + ".png",
                 "user": 1
             }
@@ -112,6 +133,9 @@ io.on('connection', function(socket) {
         fn({'url': 'https://amidraw.com/gallery/img/' + uuid + '.png'});
     }).on('init_data', () => {
         socket.emit('board_data', {'strokes': room.strokes, 'layers': room.layers });
+    }).on('update-name', function(data) {
+        io.sockets.in(roomId).emit('update-name', {id: socket.id, name: data.name});
+        room.clients[socket.id] = data.name;
     });
 });
 

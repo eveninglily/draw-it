@@ -16,7 +16,8 @@ var settings = {
     whiteBg: false,
     cache: false,
     pointerEvents: false,
-    keybinds: {}
+    keybinds: {},
+    username: "Anon"
 };
 
 $(document).ready(function() {

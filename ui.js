@@ -82,7 +82,9 @@ $(document).ready(function() {
                     $('#setting-' + key).prop('checked', true);
                 }
             } else if ($('#setting-' + key).is(':file')) {
-                console.log("dsgdsg");
+            } else if($('#setting-' + key).is('[type="text"]')) {
+                $('#setting-' + key).val(settings[key]);
+                client.clientName = settings[key];
             }
         }
     }
@@ -96,14 +98,16 @@ $(document).ready(function() {
         var data = $(this).attr('data-val');
         if($(this).is(':checkbox')) {
             settings[data] = $(this).is(':checked');
-            localStorage.setItem('settings', JSON.stringify(settings));
         } else if($(this).is(':file')) {
             loadJSONFile($('#setting-keybinds').get(0).files[0], json => {
                 settings[data] = json;
-                localStorage.setItem('settings', JSON.stringify(settings));
-                console.log(settings);
             });
+        } else if($(this).is('[type="text"]')) {
+            settings[data] = $(this).val();
+            client.clientName = $(this).val();
+            client.sendUpdateName();
         }
+        localStorage.setItem('settings', JSON.stringify(settings));
     });
 
     $('#invite').on('click', function() {
@@ -111,7 +115,7 @@ $(document).ready(function() {
         $('#modal-bg').show().css('display','flex');
         if(client.inRoom) {
             $('#room-create').hide();
-            $('#room-manage').show();
+            $('#room-manage').show();localStorage
         } else {
             $('#room-manage').hide();
         }
@@ -199,7 +203,13 @@ $('#fileType').on('change', function() {
 });
 
 $('#toolbox').on('dblclick', () => {
+    fullscreen();
+});
+
+function fullscreen() {
     $('#tool-info').toggle();
     $('#right-bar').toggle();
+    $('#actions').toggle();
+    $('#toolbox').toggle();
     $('.layer, #layers').toggleClass('layer-expanded');
-});
+}

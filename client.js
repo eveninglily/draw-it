@@ -25,6 +25,7 @@ class Client {
 
         this.currentUUID;
         this.clientId = '';
+        this.clientName = 'Anon';
 
         this.recieving = {};
         this.sending = {};
@@ -47,7 +48,8 @@ class Client {
     joinRoom(id) {
         this.socket.emit('join-room', {
             'id': id,
-            'name': $('#new-room-name').val()
+            'name': $('#new-room-name').val(),
+            'username': this.clientName
         });
 
         this.socket.on('join', data => this._join(data))
@@ -55,6 +57,9 @@ class Client {
                    .on('u', data => this._recieveUpdate(data))
                    .on('e', data => this._recieveEnd(data))
                    .on('nl', data => addLayer(data.id))
+                   .on('uj', data => this._recieveUserJoin(data))
+                   .on('ul', data => this._recieveUserLeave(data))
+                   .on('update-name', data => this._recieveUpdateName(data))
                    .on('board_data', data => {
                        for(var layer in data.layers) {
                            addLayer(layer);
@@ -137,8 +142,14 @@ class Client {
         });
     }
 
+    sendUpdateName() {
+        this.socket.emit('update-name', {
+            name: this.clientName
+        });
+    }
+
     save() {
-        this.socket.emit('save', {'b64': getMergedVisibleCanvas(settings.whiteBg).get(0).toDataURL()}, function(data) {
+        this.socket.emit('save', {'b64': getMergedVisibleCanvas(settings.whiteBg).get(0).toDataURL(), 'title':'', description: ''}, function(data) {
             console.log("Saved to gallery at " + data.url);
             $('#gallery-url-holder').show();
             $('#gallery-url').text(data.url).attr('href', data.url);
@@ -198,6 +209,21 @@ class Client {
             layer.updatePreview();
             clearInterval(interval);
         }, 50);
+    }
+
+    _recieveUserJoin(data) {
+        $('<li>')
+            .html(data.username)
+            .attr('id', data.id)
+            .appendTo('#connected-users');
+    }
+
+    _recieveUserLeave(data) {
+        $('#' + data.id).remove();
+    }
+
+    _recieveUpdateName(data) {
+        $('#' + data.id).html(data.name);
     }
 
     _initMouseEvents() {

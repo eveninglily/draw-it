@@ -123,20 +123,21 @@ class Client {
     }
 
     sendEnd(x, y, p) {
+        var uuid = this.currentUUID;
+        var len = this.len;
         if(this.down) {
             setTimeout(() => {
                 this.socket.emit('e', {
-                    cId: this.currentUUID,
+                    cId: uuid,
                     clId: this.clientId,
                     x: x,
                     y: y,
                     p: p,
-                    l: this.len
+                    l: len
                 });
             }, 45);
             this.down = false;
         }
-        console.log(this.len);
     }
 
     sendUndo() {
@@ -177,7 +178,7 @@ class Client {
         window.location.href = "#" + data.id
         this.id = data.id;
         this.clientId = data.cId;
-        console.log(data.cId);
+        console.log("Client ID is " + data.cId);
         $('#server-status').show();
         $('#server-name').text(data.name);
         this.inRoom = true;
@@ -185,11 +186,11 @@ class Client {
     }
 
     _recieveStart(data) {
-        this.recieving[data.cId] = {'layer': data.layer, 'len': 0};
         var layer = data.layer;
         layers[layer].canvas.beginStroke(data.tool, data.x, data.y, data.p, data.cId);
         layers[layer].activeStrokes.push(data.cId);
         layers[layer].stroke();
+        this.recieving[data.cId] = {'layer': data.layer, 'len': 1};
     }
 
     _recieveUpdate(data) {
@@ -205,15 +206,14 @@ class Client {
 
     _recieveEnd(data) {
         var interval = setInterval(() => {
-            if(this.recieving[data.cId].len + 1 != data.l) {
-                console.log(this.recieving[data.cId].len + " :: " + data.l);
+            if(this.recieving[data.cId].len != data.l) {
                 return;
             }
 
             var layer = layers[this.recieving[data.cId].layer];
 
             layer.canvas.completeStroke(layer.canvas.strokes[data.cId]);
-            console.log("DATA:::" + data.cId);
+
             addChange(layer.canvas.strokes[data.cId], data.clId);
             for(var i = 0; i < layer.activeStrokes.length; i++) {
                 if(layer.activeStrokes[i] == data.cId) {

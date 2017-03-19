@@ -178,11 +178,8 @@ function removeLayer(pos) {
     for(var i = changes.length - 1; i > 0; i--) {
         if(changes[i].layer == nId) {
             changes.splice(i, 1);
-            if(changes.length - 1 - i < currentChange)
-                r++;
         }
     }
-    currentChange -= r;
     layers.splice(pos, 1);
 }
 
@@ -267,7 +264,7 @@ $(document).ready(function(){
             layers[currentLayer].canvas.clear();
             layers[currentLayer].canvas.clearBuffer();
             layers[currentLayer].updatePreview();
-            addClear();
+            addClear(client.clientId);
         }
     });
 

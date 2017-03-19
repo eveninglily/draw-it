@@ -24,7 +24,7 @@ class Client {
         this.id = 'test';
 
         this.currentUUID;
-        this.clientId = '';
+        this.clientId = 'local';
         this.clientName = 'Anon';
 
         this.recieving = {};
@@ -60,6 +60,8 @@ class Client {
                    .on('uj', data => this._recieveUserJoin(data))
                    .on('ul', data => this._recieveUserLeave(data))
                    .on('update-name', data => this._recieveUpdateName(data))
+                   .on('undo', data => { console.log("ID:  " + data.cId); undo(data.cId); })
+                   .on('redo', data => { console.log(data.cId); redo(data.cId); })
                    .on('board_data', data => {
                        for(var layer in data.layers) {
                            addLayer(layer);
@@ -123,9 +125,9 @@ class Client {
     sendEnd(x, y, p) {
         if(this.down) {
             setTimeout(() => {
-                console.log("len::" + this.len);
                 this.socket.emit('e', {
                     cId: this.currentUUID,
+                    clId: this.clientId,
                     x: x,
                     y: y,
                     p: p,
@@ -134,6 +136,19 @@ class Client {
             }, 45);
             this.down = false;
         }
+        console.log(this.len);
+    }
+
+    sendUndo() {
+        this.socket.emit('undo', {
+            cId: this.clientId
+        });
+    }
+
+    sendRedo() {
+        this.socket.emit('redo', {
+            cId: this.clientId
+        });
     }
 
     sendAddLayer(id) {
@@ -180,7 +195,6 @@ class Client {
     _recieveUpdate(data) {
         if(this.recieving[data.cId] != null) {
             var layer = this.recieving[data.cId].layer;
-            console.log(data.positions.length);
             this.recieving[data.cId].len += data.positions.length;
             layers[layer].canvas.strokes[data.cId].addPoints(data.positions);
             setTimeout(() => {
@@ -191,14 +205,16 @@ class Client {
 
     _recieveEnd(data) {
         var interval = setInterval(() => {
-            if(this.recieving[data.cId].len != data.len) {
+            if(this.recieving[data.cId].len + 1 != data.l) {
+                console.log(this.recieving[data.cId].len + " :: " + data.l);
                 return;
             }
 
-            var layer = layers[this.recieving[data.cId]].layer;
+            var layer = layers[this.recieving[data.cId].layer];
 
             layer.canvas.completeStroke(layer.canvas.strokes[data.cId]);
-            addChange(layer.canvas.strokes[data.cId]);
+            console.log("DATA:::" + data.cId);
+            addChange(layer.canvas.strokes[data.cId], data.clId);
             for(var i = 0; i < layer.activeStrokes.length; i++) {
                 if(layer.activeStrokes[i] == data.cId) {
                     layer.activeStrokes.splice(i, 1);

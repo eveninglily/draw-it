@@ -136,6 +136,10 @@ io.on('connection', function(socket) {
     }).on('update-name', function(data) {
         io.sockets.in(roomId).emit('update-name', {id: socket.id, name: data.name});
         room.clients[socket.id] = data.name;
+    }).on('undo', (data) => {
+        socket.broadcast.to(roomId).emit('undo', data);
+    }).on('redo', (data) => {
+        socket.broadcast.to(roomId).emit('redo', data);
     });
 });
 

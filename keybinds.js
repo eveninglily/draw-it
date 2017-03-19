@@ -1,5 +1,7 @@
 "use strict"
 
+var bindings;
+
 class KeyBinding {
     constructor(name, key, shift, alt, ctrl, onPress) {
         this.name = name;
@@ -28,10 +30,16 @@ class KeyBinding {
 function getDefaultBindings() {
     return [
         new KeyBinding('undo', 90, false, false, true, function () {
-            undo();
+            undo(client.clientId);
+            if(client.connected) {
+                client.sendUndo();
+            }
         }),
         new KeyBinding('redo', 89, false, false, true, function () {
-            redo();
+            redo(client.clientId);
+            if(client.connected) {
+                client.sendRedo();
+            }
         }),
         new KeyBinding('input', 13, false, false, false, function () {
             $('input').trigger('blur');
@@ -53,8 +61,6 @@ function getDefaultBindings() {
         })
     ];
 }
-
-var bindings = getDefaultBindings();
 
 $(document).keydown(evt => {
     if (down) return;
@@ -89,6 +95,7 @@ function resetBindings() {
 }
 
 $(document).ready(() => {
+    bindings = getDefaultBindings();
     $('#setting-keybinds').on('change', () => {
         loadJSONFile($('#setting-keybinds').get(0).files[0], loadBindingsFile);
     });

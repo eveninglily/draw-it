@@ -25,7 +25,7 @@ var eyedropper = new Tool("Eyedropper");
 
 $('.tool').on('click', function() {
     $('#mergedLayer').remove();
-    if($(this).is('#clear')) {
+    if($(this).is('#clear') || $(this).is('#back')) {
         return;
     }
 
@@ -46,8 +46,19 @@ $("#eyedropper").on('click', function(e) {
     $('#layers').append(merged);
 });
 
-$('#undo').on('click', () => undo());
-$('#redo').on('click', () => redo());
+$('#undo').on('click', () => {
+    undo(client.clientId);
+    if(client.connected) {
+        client.sendUndo();
+    }
+});
+
+$('#redo').on('click', () => {
+    redo(client.clientId);
+    if(client.connected) {
+        client.sendRedo();
+    }
+});
 
 $("#clear").on('click', function(e) {
     if(confirm("Clear all layers? This can not be undone. All history will be lost.")) {
@@ -57,7 +68,6 @@ $("#clear").on('click', function(e) {
             layers[i].updatePreview();
         }
         changes = [];
-        currentChange = 0;
     }
 });
 

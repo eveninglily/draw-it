@@ -166,7 +166,7 @@ function move(x, y, p) {
 
 function end() {
     layers[currentLayer].canvas.completeStroke(layers[currentLayer].canvas.strokes['local']);
-    addChange(layers[currentLayer].canvas.strokes['local']);
+    addChange(layers[currentLayer].canvas.strokes['local'], client.clientId);
     for(var i = 0; i < layers[currentLayer].activeStrokes.length; i++) {
         if(layers[currentLayer].activeStrokes[i] == 'local') {
             layers[currentLayer].activeStrokes.splice(i, 1);

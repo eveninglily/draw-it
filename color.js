@@ -1,5 +1,5 @@
-var color1 = '#e73955';
-var color2 = '#50cfbb';
+var color1 = '#000000';
+var color2 = '#ffffff';
 var activeColor = 1;
 
 var colorWheel = new ColorWheel('wheel', 250, function() {

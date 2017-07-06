@@ -18,16 +18,18 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-
-    display: flex;
-    background: #2a2a2a;
+    background: #191919;
     font-family: 'Montserrat', sans-serif;
     min-height: 100%;
+    display: flex;
+    flex-flow: column
 }
 
-img {
-    width:  48px;
-    height: 48px;
+#lower {
+    display: flex;
+    height: 100%;
+    flex-grow: 1;
+
 }
 
 .contextmenu {
@@ -43,10 +45,6 @@ img {
 .context-item:hover {
     color: white;
     background: #50cfbb;
-}
-
-.nyi {
-    display: none !important;
 }
 
 .err {
@@ -73,57 +71,27 @@ input[type="file"] {
     display: none;
 }
 
-.right {
-    display: inline-block;
-    float: right;
-}
-
 /* Toolbox
 ***********/
 
 #toolbox {
     display: flex;
-    flex-flow: column;
+    flex-flow: row;
     justify-content: flex-start;
-    background: #e73955;
-    min-height: 100%;
+    background: #191919;
+    border-bottom: 2px solid #2f2f2f;
 }
 
-#toolbox img {
-    width: 3.25em;
-    height: 3.25em;
-    border: 3px solid white;
-}
-
-#clear {
-    background: #e73955;
-}
-
-#back:before {
-    width: 80%;
-    padding-bottom: .12em;
-    border-bottom: 3px solid white;
-}
-
-#back:hover {
-    background: #e73955;
-    color: white;
-}
-
-.tool {
-    color: white;
-}
-
-.tool, .action {
+.action {
     margin: 0px;
     padding: .075em;
-    font-size: 3em;
-    width: 1.1em;
-    height: 1.1em;
+    font-size: 2em;
+    width: 1.2em;
+    height: 1.2em;
     text-align: center;
     vertical-align: middle;
-    line-height: 1.5em;
-
+    color: white;
+    transition: .3s color;
 }
 
 .action:before {
@@ -132,43 +100,13 @@ input[type="file"] {
     line-height: 1.5em;
 }
 
-.active, .tool:hover, #clear:hover {
-    background: white;
-    color: #e73955;
+.active, .action:hover, .active:before {
+    background: #ffffff;
+    color: #191919;
 }
 
-#back {
-    margin-bottom: .4em;
-}
-
-#undo:hover {
-    color: #e73955;
-}
-
-#redo:hover {
-    color: #50cfbb;
-}
-
-.action {
-    color: #777777;
-    font-size: 2.3em;
-    transition: .3s color;
-}
-
-#invite, #settings,  {
-    font-size: 2.2em;
-}
-
-#load, #save {
-    font-size: 2.6em;
-}
-
-#help {
-    font-size: 2.1em;
-}
-
-.action:hover {
-    color: #50cfbb;
+.right {
+    margin-left: auto
 }
 
 @media (max-device-width: 640px) {
@@ -201,17 +139,28 @@ input[type="file"] {
 
 /* Tool Info
 *************/
-
 #tool-info {
-    width: auto;
-    flex-grow: 1;
-    background: #494949;
-    max-width: 13%;
+    width: 25em;
+    min-height: 100%;
+    background: #191919;
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-start
 }
 
-.tool-meta {
-    background: #777777;
-    margin: 0px 5px 0px 5px;
+.meta-box {
+    margin-bottom: .4em;
+    margin-top: .4em;
+    margin-left: 1em;
+    padding-bottom: .1em;
+    background: #2f2f2f;
+    color: white;
+}
+
+.meta-box h1 {
+    font-weight: 400;
+    border-bottom: 1px solid white;
+    margin: 4px;
 }
 
 #wheel {
@@ -241,11 +190,6 @@ input[type="file"] {
 
 .tool-meta div {
     padding: 10px;
-}
-
-.tool-meta h1 {
-    border-bottom: 1px solid black;
-    margin: 4px;
 }
 
 input[type="number"] {
@@ -289,7 +233,12 @@ input[type="number"] {
 **********/
 
 #center {
-    width: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
 }
 
 #layers {
@@ -308,31 +257,12 @@ input[type="number"] {
 }
 
 #layers, .layer {
-    width: 70vw;
-    height: calc(70vw * .5625);
-}
-
-.layer-expanded {
-    width: calc(100vh * 1.777777778) !important;
-    height: 100vh !important;
-    align-self: center;
-}
-
-/* Right Bar
-*************/
-
-#right-bar {
-    display: inline-block;
-    width: 100%;
+    width: calc(100vw - 26em);
+    height: calc((100vw - 26em) * .5625);
 }
 
 /* Layer Controls
 ******************/
-
-#layer-controls {
-    background: #494949;
-    width: 100%;
-}
 
 #layer-controls-opacity {
     margin-left: auto;
@@ -349,12 +279,7 @@ input[type="number"] {
     height: 20em;
     max-height: 20em;
     overflow-y: auto;
-    background: #494949
-}
 
-#layer-list tr {
-    border: 1px solid black;
-    background: #777777;
 }
 
 .layer-opacity {
@@ -367,27 +292,14 @@ input[type="number"] {
 }
 
 .selected {
-    background-color: #494949 !important;
+    color: #191919;
+    background-color: white;
     font-weight: bold;
 }
 
 .layer-actions img {
     width: 24px;
     height: 24px;
-}
-
-#layer-tools .action {
-    font-size: 3em;
-    color: #50cfbb;
-    transition: .3s all;
-}
-
-#layer-tools .action:hover {
-    color: #fbfbfb;
-}
-
-#layer-remove:hover {
-    color: #e73955 !important;
 }
 
 /* Eyedropper
@@ -537,10 +449,4 @@ input[type="number"] {
 
 .button-blue {
     background: #50cfbb;
-}
-
-
-
-#users-list {
-    background: #494949;
 }

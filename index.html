@@ -14,21 +14,25 @@
     </head>
     <body>
         <div id='toolbox'>
-            <span id='back' class='icon-arrow tool'></span>
-            <span id='brush' class='icon-brush active tool' data-options='brush-settings'></span>
-            <span id='eraser' class='icon-eraser tool' data-options='eraser-settings'></span>
-            <span id='eyedropper' class='icon-eyedropper tool'></span>
-            <!--<span id='select' class='icon-select tool'></span>
-            <span id='shapes' class='icon-shapes tool'></span>
-            <span id='line' class='icon-line tool'></span>
-            <span id='bucket' class='icon-fill tool'></span>
-            <span id='blur' class='icon-blur tool'></span>-->
-            <span id='text' class='icon-text1 tool' data-options='text-settings'></span>
-            <!--<span id='pointer' class='icon-laser tool'></span>
-            <span id='pan' class='icon-pan tool'></span> -->
-            <span id='clear' class='icon-trash tool'></span>
+            <span id='back' class='icon-arrow tool action'></span>
+            <span id='brush' class='icon-brush active tool action' data-options='brush-settings'></span>
+            <span id='eraser' class='icon-eraser tool  action' data-options='eraser-settings'></span>
+            <span id='eyedropper' class='icon-eyedropper tool  action'></span>
+            <span id='text' class='icon-text1 tool action' data-options='text-settings'></span>
+            <span id='clear' class='icon-trash action'></span>
+            <div class='right'>
+                <span id="undo" class='action icon-undo'></span>
+                <span id="redo" class='action icon-redo'></span>
+                <span id="invite" class='action icon-invite'></span>
+                <span id="save" class='action icon-save'></span>
+                <label><span id="load" class='action icon-upload'></span><input id="loadFile" type='file' accept='.json'></label>
+                <span id="settings" class='action icon-settings'></span>
+                <span id="help" class='action icon-help'></span>
+            </div>
         </div>
+        <div id="lower">
         <div id='tool-info'>
+            <div class='meta-box'>
             <div id='wheel-holder'></div>
             <div id='color-settings'>
                 <div id="hex-val-container">
@@ -59,7 +63,8 @@
                 <label> V <input id='value' max='100' min='0' value='0' type='range' /> </label>
                 <input type='number' id='value-value' value='0' max='100'><br/>
             </div>
-            <div id="brush-settings" class='tool-meta activeTool'>
+            </div>
+            <div id="brush-settings" class='tool-meta activeTool meta-box'>
                 <h1>Brush</h1>
                 <div>
                     <label> Size <input type='number' id='brush-size-value' value='5'> </label><br/>
@@ -68,7 +73,7 @@
                     <input id='brush-opacity' max='100' min='0' value='100' type='range' /><br/>
                 </div>
             </div>
-            <div id="eraser-settings" class='tool-meta'>
+            <div id="eraser-settings" class='tool-meta meta-box'>
                 <h1>Eraser</h1>
                 <div>
                     <label> Size <input type='number' id='eraser-size-value' value='5'> </label><br/>
@@ -77,35 +82,12 @@
                     <input id='eraser-opacity' max='100' min='0' value='100' type='range' /><br/>
                 </div>
             </div>
-            <div id="text-settings" class='tool-meta'>
+            <div id="text-settings" class=' tool-meta meta-box'>
                 <h1>Text</h1>
                 <label> Size <input type='number' id='font-size-value' value='32'>px </label><br/>
                 <input id='font-size' min='12' max='64' value='32' type='range' /><br/>
             </div>
-        </div>
-        <div id="center">
-            <div id="actions">
-                <span id="undo" class='action icon-undo'></span>
-                <span id="redo" class='action icon-redo'></span>
-                <div class='right'>
-                    <div id='server-status' style='display: none'>Connected to #<span id='server-name'></span></div>
-                    <span id="invite" class='action icon-invite'></span>
-                    <span id="save" class='action icon-save'></span>
-                    <label><span id="load" class='action icon-upload'></span><input id="loadFile" type='file' accept='.json'></label>
-                    <span id="settings" class='action icon-settings'></span>
-                    <span id="help" class='action icon-help'></span>
-                </div>
-            </div>
-            <div id='layers'></div>
-        </div>
-        <div id="right-bar">
-            <div id='users-list'>
-                <h1>Board Users</h1>
-                <ul id='connected-users'>
-
-                </ul>
-            </div>
-            <div id='layer-controls'>
+            <div id='layer-controls' class='meta-box'>
             <h1>Layers</h1>
             <table id="layer-controls-opacity">
                 <tr>
@@ -127,6 +109,11 @@
                 <span id='layer-remove' class='icon-trash action'></span>
             </div>
         </div>
+        </div>
+        <div id="center">
+            <div id='layers'></div>
+        </div>
+
         </div>
         <div id="eyedropper-holder" class="eyedropper-wheel">
             <div id="eyedropper-outer" class="eyedropper-wheel">&nbsp;</div>

@@ -18,8 +18,8 @@ class Tool {
     }
 }
 
-var pencil = new Tool("Pencil", 10, "source-over", "#e73955");
-var eraser = new Tool("Eraser", 3, "source-over", "#ffffff");
+var pencil = new Tool("Pencil", 5, "source-over", color1);
+var eraser = new Tool("Eraser", 3, "source-over", color2);
 var text = new Tool("Text", "32px serif", "", "#e73955");
 var eyedropper = new Tool("Eyedropper");
 

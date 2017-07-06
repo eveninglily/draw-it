@@ -1,4 +1,4 @@
-"use strict";
+//"use strict";
 
 /**
  * A wrapper class for canvases that make user drawing much easier
@@ -222,6 +222,10 @@ class DrawingCanvas {
         this.sCtx.save();
         this.sCtx.clearRect(0, 0, this.width, this.height);
         this.sCtx = this.setContextValues(stroke.tool, this.sCtx); //Ensures that all the context values are correct
+        this.sCtx.mozImageSmoothingEnabled = false;
+        this.sCtx.webkitImageSmoothingEnabled = false;
+        this.sCtx.msImageSmoothingEnabled = false;
+        this.sCtx.imageSmoothingEnabled = false;
         this.sCtx.beginPath();
         if(stroke.path.length > 3) {
             var len = stroke.path.length;

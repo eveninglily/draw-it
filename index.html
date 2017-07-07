@@ -141,7 +141,10 @@
             <div id="dialog-invite" class='modal'>
                 <div id='room-create'>
                     <h1> Create Board </h1>
-                    <label> Board name <input type='text' id='new-room-name'/></label>
+                    <div class='input-holder'>
+                        <input type='text' id='new-room-name' class='inp' name='board-name' placeholder="Board name" required/>
+                        <label for="new-room-name" class="label">Board Name</label>
+                    </div>
                     <div class='button-holder'>
                         <input class="button button-red cancel" type="button" value="Cancel" />
                         <input class='button button-blue' type="button" value="Create" id='create-room'/>

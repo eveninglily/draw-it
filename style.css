@@ -101,8 +101,8 @@ input[type="file"] {
 }
 
 .active, .action:hover, .active:before {
-    background: #ffffff;
     color: #191919;
+    background: #ffffff;
 }
 
 .right {
@@ -433,7 +433,7 @@ input[type="number"] {
     font-size: 1em;
     padding: .5em;
     width: 5em;
-    border-radius: 4px;
+    /*border-radius: 4px;*/
     margin: 0em .1em 0em .1em;
     transition: all .5s;
 }
@@ -444,9 +444,43 @@ input[type="number"] {
 }
 
 .button-red {
-    background: #e73955;
+    background: #E55E5B;
 }
 
 .button-blue {
-    background: #50cfbb;
+    background: #2264AA;
 }
+
+.inp {
+    padding: 10px;
+    padding-bottom: 4px;
+    border: none;
+    border-bottom: solid 3px #f1f1f1;
+    transition: border 0.3s;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.inp:focus {
+    border-color: #2264AA;
+    outline: none;
+}
+
+.input-holder {
+    position: relative;
+    padding: 10px;
+}
+
+.input-holder label {
+    color: #2264AA;
+    position: absolute;
+    top: 0;
+    size: 70%;
+    visibility: hidden;
+    transition: transform .2s;
+}
+
+  .inp:valid + label {
+    visibility: visible;
+    transform: translate(0, -40%);
+  }

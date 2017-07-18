@@ -484,3 +484,30 @@ input[type="number"] {
     visibility: visible;
     transform: translate(0, -40%);
   }
+
+#user-list {
+    display: inline-flex;
+    flex-direction: row;
+    padding-right: 10px;
+    height: 100%;
+    align-content: center;
+    align-items: center;
+}
+
+#user-list span {
+    color: white;
+    background: #2264AA;
+
+    border: 1px solid #2264AA;
+    border-radius: 50%;
+
+    width: 1.2em;
+    height: 1.2em;
+    margin-right: 10px;
+    padding: .075em;
+
+    font-size: 1.50em;
+
+    text-align: center;
+    vertical-align: middle;
+  }

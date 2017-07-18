@@ -228,10 +228,10 @@ class Client {
     }
 
     _recieveUserJoin(data) {
-        $('<li>')
-            .html(data.username)
+        $('<span>')
+            .html(data.username.charAt(0))
             .attr('id', data.id)
-            .appendTo('#connected-users');
+            .appendTo('#user-list');
     }
 
     _recieveUserLeave(data) {

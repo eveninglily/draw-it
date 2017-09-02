@@ -55,9 +55,6 @@ function getDefaultBindings() {
         }),
         new KeyBinding('text', 84, false, false, false, function () {
             $('#text').click();
-        }),
-        new KeyBinding('fullscreen', 27, false, false, false, function () {
-            fullscreen();
         })
     ];
 }

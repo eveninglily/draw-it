@@ -59,9 +59,9 @@ function allowReorder(container, selector, upCallback, downCallback) {
 
 //TODO: All jQuery events in this file should be here
 $(document).ready(function() {
+
     /* Modals
     **********/
-
     $('#modal-bg').on('click', function(evt) {
         if(evt.target.id == 'modal-bg') {
             hideModals()
@@ -128,6 +128,8 @@ $(document).ready(function() {
         client.joinRoom('');
         $('#modal-bg').hide();
         $('#dialog-invite').hide();
+
+        $('#edit-room-name').val($('#new-room-name').val());
     });
 
     $('#new-room-name').on('keydown', evt => {
@@ -201,15 +203,3 @@ $('#fileType').on('change', function() {
         $('#dl-link').attr('href', saveLayersToJSON());
     }
 });
-
-$('#toolbox').on('dblclick', () => {
-    fullscreen();
-});
-
-function fullscreen() {
-    $('#tool-info').toggle();
-    $('#right-bar').toggle();
-    $('#actions').toggle();
-    $('#toolbox').toggle();
-    $('.layer, #layers').toggleClass('layer-expanded');
-}

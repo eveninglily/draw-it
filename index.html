@@ -14,7 +14,9 @@
     </head>
     <body>
         <div id='toolbox'>
-            <span id='back' class='icon-arrow tool action'></span>
+            <a class='nostyle' href='https://amidraw.com'>
+                <span id='back' class='icon-arrow tool action'></span>
+            </a>
             <span id='brush' class='icon-brush active tool action' data-options='brush-settings'></span>
             <span id='eraser' class='icon-eraser tool  action' data-options='eraser-settings'></span>
             <span id='eyedropper' class='icon-eyedropper tool  action'></span>
@@ -152,7 +154,15 @@
                     </div>
                 </div>
                 <div id='room-manage'>
-                    <h1> Manage </h1>
+                    <h1> Manage Board </h1>
+                    <div class='input-holder'>
+                        <input type='text' id='edit-room-name' class='inp' name='board-name' placeholder="Board name" required/>
+                        <label for="edit-room-name" class="label">Board Name</label>
+                    </div>
+                    <div class='button-holder'>
+                        <input class="button button-red cancel" type="button" value="Delete" id="delete-board" />
+                        <input class='button button-blue' type="button" value="Update" id='Update-room'/>
+                    </div>
                 </div>
             </div>
             <div id='dialog-settings' class='modal'>
@@ -183,6 +193,5 @@
         <script src="color.js"></script>
         <script src="keybinds.js"></script>
         <script src="io.js"></script>
-
     </body>
 </html>

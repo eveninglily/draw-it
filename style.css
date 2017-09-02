@@ -78,18 +78,19 @@ input[type="file"] {
     display: flex;
     flex-flow: row;
     justify-content: flex-start;
+
+    align-content: center;
+
     background: #191919;
     border-bottom: 2px solid #2f2f2f;
 }
 
 .action {
     margin: 0px;
-    padding: .075em;
     font-size: 2em;
     width: 1.2em;
     height: 1.2em;
     text-align: center;
-    vertical-align: middle;
     color: white;
     transition: .3s color;
 }
@@ -97,7 +98,7 @@ input[type="file"] {
 .action:before {
     text-align: center;
     vertical-align: middle;
-    line-height: 1.5em;
+    line-height: 2em;
 }
 
 .active, .action:hover, .active:before {
@@ -276,8 +277,8 @@ input[type="number"] {
 }
 
 #layer-scroll {
-    height: 20em;
-    max-height: 20em;
+    height: 16em;
+    max-height: 16em;
     overflow-y: auto;
 
 }
@@ -499,15 +500,19 @@ input[type="number"] {
     background: #2264AA;
 
     border: 1px solid #2264AA;
-    border-radius: 50%;
 
-    width: 1.2em;
-    height: 1.2em;
+
+    width: 1.30em;
+
     margin-right: 10px;
-    padding: .075em;
 
-    font-size: 1.50em;
+    font-size: 1.30em;
+    line-height: 1.30em;
 
     text-align: center;
-    vertical-align: middle;
-  }
+    margin-bottom: auto;
+}
+
+.nostyle {
+    text-decoration: none;
+}

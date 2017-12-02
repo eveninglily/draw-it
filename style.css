@@ -107,7 +107,7 @@ input[type="file"] {
 }
 
 .right {
-    margin-left: auto
+    margin-left: auto;
 }
 
 @media (max-device-width: 640px) {
@@ -115,26 +115,26 @@ input[type="file"] {
         flex-flow: column wrap;
     }
 
-    #toolbox{
-        flex-flow: row;
-        min-height: 0%;
-    }
-
     #tool-info {
-        order: 2;
-        max-width: 100% !important;
-        flex-grow: 0 !important;
+        display: none !important;
     }
 
-    #right-bar {
-        order: 3;
-        max-width: 49%;
+    .right {
+        display: none;
+        position: absolute;
+        bottom: 0px;
+        margin: 0px;
+    }
+
+    #user-list {
         display: none !important;
     }
 
     #layers, .layer {
         width: 100vw !important;
-        height: calc(100vw * .5625) !important;
+        height: calc(100vw * calc(1920/1080)) !important;
+        margin: 0px;
+
     }
 }
 
@@ -500,8 +500,6 @@ input[type="number"] {
     background: #2264AA;
 
     border: 1px solid #2264AA;
-
-
     width: 1.30em;
 
     margin-right: 10px;

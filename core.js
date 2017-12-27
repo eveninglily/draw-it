@@ -9,7 +9,7 @@ var down = false;
 
 var currentLayer = 0;
 var layers = [];
-var currTool = pencil;
+var currTool = pen;
 
 var settings = {
     showLeaveMessage: false,
@@ -28,8 +28,12 @@ $(document).ready(function() {
         $('#' + n.id + '-control').trigger('mouseup');
     }, 0);
 
-    initMouseEvents();
-    initTouchEvents();
+    if(settings.pointerEvents) {
+        initPointerEvents();
+    } else {
+        initMouseEvents();
+        initTouchEvents();
+    }
 
     $(document).on('mouseup touchend touchcancel pointercancel pointerup', () => {
         if(down) {
@@ -48,6 +52,7 @@ $(document).ready(function() {
 function initMouseEvents() {
     $("#layers").on('mousedown', evt => {
         if(evt.which == 1) {
+            normalizeEvt(evt);
             var n = normalize(evt.offsetX, evt.offsetY);
             start(n.x, n.y, .5);
         }
@@ -58,30 +63,12 @@ function initMouseEvents() {
             evt.preventDefault();
             move(n.x, n.y,.5);
         }
-        //TODO: Move this; rewrite tools
-        if(currTool.name == "Eyedropper") {
-            $('#eyedropper-holder').css({left: evt.pageX - 55, top: evt.pageY - 55});
-            var l = $('#layers').position();
-            var c = $('#mergedLayer').get(0).getContext('2d').getImageData(n.x, n.y, 1, 1).data;
-            var nC = 'rgb(' + c[0] +', ' + c[1] + ', ' + c[2] + ')';
-
-            $('#eyedropper-bottom').css({'border-color': pencil.color});
-            $('#eyedropper-top').css({'border-color': nC});
-        }
     }).on('mouseenter', evt => {
-        //TODO: Move this; rewrite tools
-        if(currTool.name == "Eyedropper") {
-            $('.eyedropper-wheel').css({display:'block'});
-        }
         if(down) {
             var n = normalize(evt.offsetX, evt.offsetY);
             start(n.x, n.y, .5);
         }
     }).on('mouseleave', () => {
-        //TODO: Move this, rewrite tools
-        if(currTool.name == "Eyedropper") {
-            $('.eyedropper-wheel').css({display:'none'});
-        }
         if(down) {
             end();
         }
@@ -125,37 +112,13 @@ function initPointerEvents() {
     client._initPointers();
 }
 
-//TODO: Rewrite inside of this along with tools
 function start(x, y, p) {
-    if($('#hidden-input').val() != "") {
-        layers[currentLayer].canvas.finalizeText($('#hidden-input').val(), currTool, $('#hidden-input').data('tx'), $('#hidden-input').data('ty'));
-        layers[currentLayer].canvas.clear();
-        layers[currentLayer].canvas.drawBuffer();
-        $('#hidden-input').remove();
-    }
-
-    if(currTool.name == "Pencil" || currTool.name == "Eraser") {
+    down = false;
+    if(currTool.name == "Pen" || currTool.name == "Eraser") {
         down = true;
         layers[currentLayer].canvas.beginStroke(currTool, x, y, .5, 'local');
         layers[currentLayer].activeStrokes.push('local');
         layers[currentLayer].stroke();
-    } else {
-        if(currTool.name == "Eyedropper") {
-            var c = $('#mergedLayer').get(0).getContext('2d').getImageData(x, y, 1, 1).data;
-            var nC = 'rgb(' + c[0] +', ' + c[1] + ', ' + c[2] + ')';
-            pencil.color = nC;
-            colorWheel.setColor(c[0], c[1], c[2]);
-            updateColorDisplays('#' + colorWheel.getHex());
-        } else if (currTool.name == "Text") {
-            $('#hidden-input').remove();
-            $('<input>').attr('id', 'hidden-input').data('tx', x).data('ty', y).on('input',function(){
-                layers[currentLayer].canvas.clear();
-                layers[currentLayer].canvas.drawBuffer();
-                layers[currentLayer].canvas.createText($(this).val(), currTool, x, y);
-            }).appendTo('body');
-            setTimeout(function(){$('#hidden-input').focus();}, 100);
-        }
-        down = false;
     }
 }
 
@@ -188,6 +151,14 @@ function normalize(x, y) {
         x: x * xR,
         y: y * yR
     };
+}
+
+function normalizeEvt(evt) {
+    if(evt.type == "mousedown" || evt.type == "mousemove") {
+        return normalize(evt.offsetX, evt.offsetY);
+    } else {
+        console.log("Unsupported event type");
+    }
 }
 
 /**

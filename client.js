@@ -71,7 +71,7 @@ class Client {
                             //console.log(data.strokes[key]);
                             if(data.strokes.hasOwnProperty(key)) {
                                 var layer = data.strokes[key].layer;
-                                var stroke = new Stroke(data.strokes[key].tool);
+                                var stroke = new OIStroke(data.strokes[key].tool, layers[layer].canvas.partitions);
                                 stroke.addPoints(data.strokes[key].path);
                                 layers[layer].canvas.completeStroke(stroke);
                             }

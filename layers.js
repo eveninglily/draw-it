@@ -28,7 +28,7 @@ class Layer {
             'z-index', nLayer
         );
 
-        this.canvas = new DrawingCanvas(newCan.get(0));
+        this.canvas = new OICanvas(newCan.get(0), id);
 
         $('#layers').prepend(newCan);
 

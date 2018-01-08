@@ -117,8 +117,12 @@ class Layer {
     }
 
     select() {
+        clearDraggable('.layer-list', '.selected');
         $('.selected').removeClass('selected');
+
         $('#' + this.id + '-control').addClass('selected');
+        initDrag();
+
         if (this.isVisible) {
             $('#layer-visible').html('<img src="img/icons/layervisible.png" />');
         } else {
@@ -224,8 +228,8 @@ function duplicate(pos) {
     //layers.splice(pos, 0, layers[pos].)
 }
 
-$(document).ready(function(){
-    allowReorder('#layer-list', '.selected', function(){
+function initDrag() {
+    setDraggable('#layer-list', '.selected', function(){
         layers.splice(currentLayer + 1, 0, layers.splice(currentLayer, 1)[0]);
         $('#' + layers[currentLayer].id).css('z-index', currentLayer);
         currentLayer++;
@@ -236,7 +240,9 @@ $(document).ready(function(){
         currentLayer--;
         $('#' + layers[currentLayer].id).css('z-index', currentLayer);
     });
+}
 
+$(document).ready(function(){
     $('#layer-add').on('click', function() {
         if(client.inRoom) {
             client.sendAddLayer('layer' + nLayer);
@@ -247,6 +253,7 @@ $(document).ready(function(){
             $('#' + n.id + '-control').trigger('mousedown'); //TODO: this is hacky. Fix?
             $('#' + n.id + '-control').trigger('mouseup');
         }, 0);
+        initDrag();
     });
 
     $('#layer-remove').on('click', function() {

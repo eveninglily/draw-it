@@ -30,31 +30,64 @@ function detectLongClick(selector) {
     });
 }
 
-//TODO: Extend extend functionality to move left and right
-function allowReorder(container, selector, upCallback, downCallback) {
-    $(container).on('mousemove', function(evt) {
-        if($(selector).data('dragging')) {
-            var r = $(selector);
+var drag = false;
+
+$('.layer-list tr').attr('draggable', "true");
+
+//TODO: Extend functionality to left and right
+function setDraggable(parent, child, onDragUp, onDragDown) {
+    function dragCancel(evt) {
+        if (evt.preventDefault) {
             evt.preventDefault();
-            document.getSelection().removeAllRanges();
-            var y = evt.pageY;
-            if(!(r.index() == 0)) {
-                var prev = r.prev();
-                if(y < (prev.offset().top + (prev.height() / 2))) {
-                    r.insertBefore(prev);
-                    upCallback();
+        }
+        return false;
+    }
+
+    $(child).attr('draggable', 'true');
+    $(child).on('dragstart', evt => {
+        evt.originalEvent.dataTransfer.effectAllowed = 'move';
+        evt.originalEvent.dataTransfer.setData('text/plain', evt.target.id);
+        drag = true;
+        $(child).css('opacity', .4)
+    });
+
+    $(parent).on('dragover', dragCancel);
+    $(parent).on('dragenter', dragCancel);
+
+    $(parent).on('drop', evt => {
+        evt.preventDefault();
+        if(!drag) { return; }
+        $(child).css('opacity', 1)
+        var data = evt.originalEvent.dataTransfer.getData("text");
+        // Clear the drag data cache (for all formats/types)
+        //evt.originalEvent.dataTransfer.clearData();
+
+        var r = $(child);
+        var y = evt.pageY;
+        if(!(r.index() == 0)) {
+            var prev = r.prev();
+            if(y < (prev.offset().top + (prev.height() / 2))) {
+                r.insertBefore(prev);
+                    onDragUp();
                 }
             }
 
-            if(!(r.index() == layers.length - 1)) {
-                var next = r.next();
-                if(y > (next.offset().top + (next.height() / 2))) {
-                    r.insertAfter(next);
-                    downCallback();
-                }
+        if(!(r.index() == layers.length - 1)) {
+            var next = r.next();
+            if(y > (next.offset().top + (next.height() / 2))) {
+                r.insertAfter(next);
+                onDragDown();
             }
         }
     });
+}
+
+function clearDraggable(parent, child) {
+    $(child).attr('draggable', 'false');
+    $(child).off('dragstart');
+    $(parent).off('dragover');
+    $(parent).off('dragenter');
+    $(parent).off('drop');
 }
 
 //TODO: All jQuery events in this file should be here

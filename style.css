@@ -29,7 +29,6 @@ body {
     display: flex;
     height: 100%;
     flex-grow: 1;
-
 }
 
 .contextmenu {
@@ -63,7 +62,7 @@ input[type="file"] {
 }
 
 #server-status {
-    display: inline-block;
+    display: inline;
     color: #ffffff;
 }
 
@@ -150,8 +149,8 @@ input[type="file"] {
 }
 
 .meta-box {
-    margin-bottom: .4em;
-    margin-top: .4em;
+    margin-bottom: .3em;
+    margin-top: .3em;
     margin-left: 1em;
     padding-bottom: .1em;
     background: #2f2f2f;

@@ -72,12 +72,11 @@ io.on('connection', function(socket) {
 
         for(var key in room.clients) {
             if(room.clients.hasOwnProperty(key)) {
-                if(key != socket.id) {
+                if(key != socket.id && room.clients[key] != "") {
                     socket.emit('uj', {'id': key, 'username': room.clients[key]});
                 }
             }
         }
-
     }).on('disconnect', function() {
         console.log('Client ' + this.id + ' disconnected from #' + roomId);
         if(room == null) {
@@ -87,6 +86,7 @@ io.on('connection', function(socket) {
             'id': socket.id,
             'username': room.clients[socket.id]
         });
+        room.clients[socket.id] = "";
     }).on('s', data => {
         socket.broadcast.to(roomId).emit('s', data);
         room.strokes[data.cId] = {};

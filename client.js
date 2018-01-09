@@ -5,6 +5,7 @@
 var client;
 
 $(document).ready(function() {
+    $('#server-status').hide();
     client = new Client('https://amidraw.com');
     client.connect();
     var l = window.location.href.split('#');
@@ -42,6 +43,10 @@ class Client {
             console.log('[Connected]')
         }).on('disconnect', function() {
             _t.connected = false;
+        });
+
+        $(document).on('unload', () => {
+            this.socket.emit('disconnect');
         });
     }
 
@@ -228,14 +233,25 @@ class Client {
     }
 
     _recieveUserJoin(data) {
-        $('<span>')
+        var el = $('<span>')
             .html(data.username.charAt(0))
             .attr('id', data.id)
-            .appendTo('#user-list');
+            .appendTo('#user-list').hide();
+        el.animate({
+                height: "toggle",
+                opacity: "toggle"
+              }, {
+                duration: "slow"
+              });
     }
 
     _recieveUserLeave(data) {
-        $('#' + data.id).remove();
+        $('#' + data.id).animate({
+            height: "toggle",
+            opacity: "toggle"
+          }, {
+            duration: "slow"
+          }, () => {$('#' + data.id).remove();});
     }
 
     _recieveUpdateName(data) {

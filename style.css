@@ -43,12 +43,12 @@ body {
 
 .context-item:hover {
     color: white;
-    background: #50cfbb;
+    background: #2264AA;
 }
 
 .err {
     display: none;
-    color: #e73955;
+    color: #E55E5B;
 }
 
 input[type="file"] {
@@ -475,6 +475,7 @@ input[type="number"] {
     color: #2264AA;
     position: absolute;
     top: 0;
+    left: 0;
     size: 70%;
     visibility: hidden;
     transition: transform .2s;

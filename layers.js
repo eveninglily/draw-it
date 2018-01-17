@@ -6,7 +6,8 @@ var nLayer = 0;
  */
 class Layer {
     constructor(id) {
-        this.isLocked = false; //Unused for now
+        /** TODO: Unused */
+        this.isLocked = false;
         this.isVisible = true;
 
         this.opacity = 1.0;
@@ -224,6 +225,7 @@ function mergeDown(pos) {
     }
 }
 
+/** TODO: Unimplemented */
 function duplicate(pos) {
     //layers.splice(pos, 0, layers[pos].)
 }
@@ -257,12 +259,14 @@ $(document).ready(function(){
     });
 
     $('#layer-remove').on('click', function() {
-        if(layers.length > 1) {
-            removeLayer(currentLayer);
-            if(currentLayer >= layers.length) {
-                currentLayer--;
+        if(confirm('Delete current layer?')) {
+            if(layers.length > 1) {
+                removeLayer(currentLayer);
+                if(currentLayer >= layers.length) {
+                    currentLayer--;
+                }
+                layers[currentLayer].select();
             }
-            layers[currentLayer].select();
         }
     });
 

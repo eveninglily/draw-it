@@ -93,8 +93,7 @@ function clearDraggable(parent, child) {
 //TODO: All jQuery events in this file should be here
 $(document).ready(function() {
 
-    /* Modals
-    **********/
+    /** Modals */
     $('#modal-bg').on('click', function(evt) {
         if(evt.target.id == 'modal-bg') {
             hideModals()
@@ -102,8 +101,7 @@ $(document).ready(function() {
     }).hide();
     $('.cancel').on('click', hideModals);
 
-    /* Settings
-    ************/
+    /** Settings */
     if(localStorage.getItem('settings')) {
         settings = JSON.parse(localStorage.getItem('settings'));
         for(var key in settings) {
@@ -143,6 +141,7 @@ $(document).ready(function() {
         localStorage.setItem('settings', JSON.stringify(settings));
     });
 
+    /** Online */
     $('#invite').on('click', function() {
         $('#dialog-invite').show().css('display','flex');
         $('#modal-bg').show().css('display','flex');
@@ -171,6 +170,7 @@ $(document).ready(function() {
         }
     });
 
+    /** Misc */
     $('#fileName').on('input', () => {
         var name = $('#fileName').val();
 

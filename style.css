@@ -391,7 +391,7 @@ input[type="number"] {
     margin-bottom: .5em;
 }
 
-.modal div, #room-create div {
+#room-create div {
     align-self: center;
     margin-top: .4em;
     margin-bottom: .4em;
@@ -455,7 +455,7 @@ input[type="number"] {
     padding: 10px;
     padding-bottom: 4px;
     border: none;
-    border-bottom: solid 3px #f1f1f1;
+    border-bottom: solid 3px #c1c1c1;
     transition: border 0.3s;
     font-size: 18px;
     margin-bottom: 20px;
@@ -509,8 +509,74 @@ input[type="number"] {
 
     text-align: center;
     margin-bottom: auto;
+    position: relative
+}
+
+#user-list span:hover .user-expanded {
+    display: block;
 }
 
 .nostyle {
     text-decoration: none;
+}
+
+.user-expanded {
+    position: absolute;
+    top: 100%;
+    display: none;
+
+    background: #2264AA;
+
+    border: 1px solid #2264AA;
+}
+
+/** Checkbox */
+.cch input {
+    position: absolute;
+    opacity: 0;
+}
+
+.cch label {
+    position: relative;
+    cursor: pointer;
+    padding: 0;
+    vertical-align: middle
+}
+
+.cch label:before{
+    content: '';
+    margin-right: .3em;
+    display: inline-block;
+    vertical-align: middle;
+    width: 1em;
+    height: 1em;
+    border: 2px solid #2264AA;
+    border-radius: 20%;
+    background: white;
+}
+
+.cch:hover label:before {
+    background: #2264AA77;
+}
+
+.cch input:focus + label:before {
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
+}
+
+.cch input:checked + label:before {
+    background: #2264AA;
+}
+
+.cch input:disabled + label {
+    color: #b8b8b8;
+    cursor: auto;
+}
+
+.cch input:disabled + label:before {
+    box-shadow: none;
+    background: #ddd;
+}
+
+.dialog-settings {
+    align-content: flex-start
 }

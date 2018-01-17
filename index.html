@@ -167,20 +167,24 @@
                 </div>
             </div>
             <div id='dialog-settings' class='modal'>
-                <h1> Settings </h1>
+                <h1>User Settings</h1>
                 <div>
-                    <input class='settings-item' data-val='showLeaveMessage' id="setting-showLeaveMessage" type="checkbox" />
-                    Confirm leave page
+                    <div class='input-holder'>
+                        <input type='text' id='setting-username' class='inp' name='username' placeholder="Username" required/>
+                        <label for="setting-username" class="label">Username</label>
+                    </div>
                 </div>
-                <div>
-                    <input class='settings-item' data-val='whiteBg' id="setting-whiteBg" type="checkbox" />
-                    Save images with white background
+                <h1> Application Settings </h1>
+                <div class='cch'>
+                    <input id='setting-showLeaveMessage' class='settings-item' type='checkbox' data-val='showLeaveMessage'/>
+                    <label for="setting-showLeaveMessage" class="">Confirmation on page leave</label>
+                </div>
+                <div class='cch'>
+                    <input id='setting-whiteBg' class='settings-item' type='checkbox' data-val='whiteBg'/>
+                    <label for="setting-whiteBg" class="">Save without transparency</label>
                 </div>
                 <div>
                     <label>Load keybinds<input class='settings-item' data-val='keybinds' id="setting-keybinds" type="file" /></label>
-                </div>
-                <div>
-                    <label>Display Name<input class='settings-item' data-val='username' id="setting-username" type="text" /></label>
                 </div>
             </div>
         </div>

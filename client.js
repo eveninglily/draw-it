@@ -237,6 +237,8 @@ class Client {
             .html(data.username.charAt(0))
             .attr('id', data.id)
             .appendTo('#user-list').hide();
+
+        var expanded = $('<div>').html(data.username).attr('class', 'user-expanded').appendTo(el);
         el.animate({
                 height: "toggle",
                 opacity: "toggle"

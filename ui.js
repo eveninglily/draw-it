@@ -170,6 +170,10 @@ $(document).ready(function() {
         }
     });
 
+    $('#update-room').on('click', () => {
+
+    });
+
     /** Misc */
     $('#fileName').on('input', () => {
         var name = $('#fileName').val();

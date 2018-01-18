@@ -11,13 +11,21 @@ var io = require('socket.io')().listen(3000);
 var rooms = {};
 
 class Room {
-    constructor(id, name, socket) {
+    constructor(id, socket, settings) {
         this.id = id;
-        this.name = name;
         this.socket = socket;
         this.clients = {};
         this.strokes = {};
         this.layers = [];
+
+        this.settings = {
+            'name': settings.name,
+            'public': settings.public
+        }
+    }
+
+    setPublic(public) {
+        this.public = public;
     }
 
     static onConnect(data, socket) {
@@ -34,7 +42,7 @@ class Room {
                 name = id;
             }
 
-            rooms[id] = new Room(id, name, socket);
+            rooms[id] = new Room(id, socket, {'name': name});
             rooms[id].admin = socket.id;
 
             console.log("Room["+ id +"] created, name: " + name);
@@ -44,7 +52,7 @@ class Room {
         socket.join(id);
         socket.emit('join', {
             'id': id,
-            'name': rooms[id].name,
+            'name': rooms[id].settings.name,
             'cId': socket.id
         });
 
@@ -55,6 +63,17 @@ class Room {
 
         console.log("Client[" + socket.id + "] joined Room[" + id + "]");
         return rooms[id];
+    }
+
+    updateSettings(socket, settings) {
+        if(socket.id != this.admin) { return false; }
+
+        this.settings = settings;
+        return true;
+    }
+
+    broadcast(socket, type, data) {
+        socket.broadcast.to(this.id).emit(type, data);
     }
 
     save() {
@@ -140,8 +159,19 @@ io.on('connection', function(socket) {
         socket.broadcast.to(roomId).emit('undo', data);
     }).on('redo', (data) => {
         socket.broadcast.to(roomId).emit('redo', data);
+    }).on('update-settings', data => {
+        var status = room.updateSettings(socket, data);
+        if(status) {
+            socket.broadcast.to(roomId).emit('update-settings', data);
+        } else {
+            socket.emit('error', {'message': 'Only admins can update room settings'});
+        }
     });
 });
+
+function getPublic() {
+
+}
 
 /**
  * UUID generator from https://jsfiddle.net/xg7tek9j/7/, a RFC4122-compliant solution

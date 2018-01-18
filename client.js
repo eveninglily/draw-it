@@ -169,6 +169,10 @@ class Client {
         });
     }
 
+    sendUpdateSettings() {
+
+    }
+
     save() {
         this.socket.emit('save', {'b64': getMergedVisibleCanvas(settings.whiteBg).get(0).toDataURL(), 'title':'', description: ''}, function(data) {
             console.log("Saved to gallery at " + data.url);
@@ -258,6 +262,10 @@ class Client {
 
     _recieveUpdateName(data) {
         $('#' + data.id).html(data.name);
+    }
+
+    _recieveUpdateSettings() {
+        $('#server-name').text(data.name);
     }
 
     _initMouseEvents() {

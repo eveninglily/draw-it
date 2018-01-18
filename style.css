@@ -580,3 +580,11 @@ input[type="number"] {
 .dialog-settings {
     align-content: flex-start
 }
+
+#fileName-holder {
+    display: inline-block;
+}
+
+#dialog-save {
+    width: 15vw;
+}

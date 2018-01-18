@@ -128,7 +128,11 @@
         <div id='modal-bg'>
             <div id="dialog-save" class="modal">
                 <h1>Save</h1>
-                <div><input id="fileName" placeholder="Title"/>
+                <div>
+                    <div id='fileName-holder' class='input-holder'>
+                        <input type='text' id='fileName' class='inp' name='filename' placeholder="Filename" required/>
+                        <label for="fileName" class="label">Filename</label>
+                    </div>
                     <select id='fileType' name="fileType">
                         <option value="png" selected>.png</option>
                         <option value="json">.json</option>
@@ -161,8 +165,13 @@
                         <input type='text' id='edit-room-name' class='inp' name='board-name' placeholder="Board name" required/>
                         <label for="edit-room-name" class="label">Board Name</label>
                     </div>
+                    <div class='cch'>
+                        <input id='room-public' type='checkbox' data-val='roomPublic'/>
+                        <label for="room-public" class="">Public</label>
+                    </div>
+                    <br>
                     <div class='button-holder'>
-                        <input class='button button-blue' type="button" value="Update" id='Update-room'/>
+                        <input class='button button-blue' type="button" value="Update" id='update-room'/>
                     </div>
                 </div>
             </div>

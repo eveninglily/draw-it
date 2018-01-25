@@ -11,7 +11,7 @@ drawing, with advanced features such as undo/redo, layers, and line smoothing.
 - [jQuery](https://github.com/jquery/jquery)
     - Used for a lot of UI interactions
     - MIT License
-- [mithril.js](https://github.com/MithrilJS/mithril.js)
+- [Vue.js](https://github.com/MithrilJS/mithril.js)
     - Used for UI
     - MIT License
 
@@ -24,9 +24,9 @@ drawing, with advanced features such as undo/redo, layers, and line smoothing.
 - [OpenInk](https://github.com/McIntireEvan/openink)
     - Abstraction of HTML5 Canvas; makes complex user drawing easier
     - Unreleased; Planned MIT License
-- [Myth](https://github.com/McIntireEvan/myth)
-    - mithril.js UI components
-    - Unreleased; Planned MIT License
+- [Vial](https://github.com/McIntireEvan/vial)
+    - Vue UI components
+    - MIT License
 
 ## File Overview
 - client.js

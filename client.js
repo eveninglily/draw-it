@@ -50,7 +50,16 @@ class Client {
         });
     }
 
+    requestRoom(name) {
+        this.socket.emit('request-room', {
+            'name': name
+        }).on('created', data => {
+            this.joinRoom(data.id);
+        });
+    }
+
     joinRoom(id) {
+        //TODO: Update this join
         this.socket.emit('join-room', {
             'id': id,
             'name': $('#new-room-name').val(),

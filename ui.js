@@ -92,6 +92,18 @@ function clearDraggable(parent, child) {
 
 //TODO: All jQuery events in this file should be here
 $(document).ready(function() {
+    new Vue({
+        el: '#room-create',
+        methods: {
+            onInput: function(val) {
+                //console.log(val)
+            },
+            onEnter: function(val) {
+                console.log('enter');
+                $('#create-room').click();
+            }
+        }
+    });
 
     /** Modals */
     $('#modal-bg').on('click', function(evt) {
@@ -162,16 +174,6 @@ $(document).ready(function() {
         $('#dialog-invite').hide();
 
         $('#edit-room-name').val($('#new-room-name').val());
-    });
-
-    $('#new-room-name').on('keydown', evt => {
-        if(evt.which == 13) {
-            $('#create-room').click();
-        }
-    });
-
-    $('#update-room').on('click', () => {
-
     });
 
     /** Misc */

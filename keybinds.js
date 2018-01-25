@@ -42,7 +42,7 @@ function getDefaultBindings() {
             }
         }),
         new KeyBinding('input', 13, false, false, false, function () {
-            $('input').trigger('blur');
+            //$('input').trigger('blur');
         }),
         new KeyBinding('brush', 90, false, false, false, function () {
             $('#brush').click();

@@ -28,25 +28,22 @@ class Room {
         this.public = public;
     }
 
+    static CreateRoom(name, socket) {
+        var id = getUUID();
+
+        if(data.name == '') {
+            name = id;
+        }
+
+        rooms[id] = new Room(id, socket, {'name': name});
+        rooms[id].admin = socket.id;
+
+        console.log("Room["+ id +"] created, name: " + name);
+    }
+
     static onConnect(data, socket) {
         var id = data.id;
         var name = data.name;
-
-        if(!(data.id in rooms)) {
-            if(data['id'] == '') {
-                id = getUUID();
-                id = id.split('-')[4];
-            }
-
-            if(data.name == '') {
-                name = id;
-            }
-
-            rooms[id] = new Room(id, socket, {'name': name});
-            rooms[id].admin = socket.id;
-
-            console.log("Room["+ id +"] created, name: " + name);
-        }
 
         rooms[id].clients[socket.id] = data.username;
         socket.join(id);
@@ -85,7 +82,12 @@ io.on('connection', function(socket) {
     var room;
     var roomId = '';
 
-    socket.on('join-room', data => {
+    socket.on('request-room', data => {
+        var room = Room.CreateRoom(data.name, socket);
+        var id = room.id;
+
+        socket.emit('created', {'id': id});
+    }).on('join-room', data => {
         room = Room.onConnect(data, socket);
         roomId = room.id;
 

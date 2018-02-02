@@ -118,7 +118,7 @@ $("#clear").on('click', evt => {
     }
 });
 
-//TODO: Replace this with SliderVar instances
+//TODO: Replace this with Vue
 function initSliders(toolName) {
     $('#' + toolName + '-size').on('input', function () {
        $('#' + toolName + '-size-value').val($(this).val());
@@ -143,4 +143,3 @@ function initSliders(toolName) {
 
 initSliders('brush');
 initSliders('eraser');
-var fontSize = new SliderVar('font-size');

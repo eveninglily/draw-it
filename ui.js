@@ -1,23 +1,3 @@
-/** TODO: Replace with Vue component */
-/** TODO: Check usage, comment here */
-class SliderVar {
-    constructor(id) {
-        this.id = id;
-        this.value = $('#' + id).val();
-        var _t = this;
-
-        $('#' + id).on('input', function () {
-            $('#' + id + '-value').val($(this).val());
-            _t.value = $(this).val();
-        });
-
-        $('#' + id + '-value').on('input', function () {
-            $('#' + id).val($(this).val());
-            _t.value = $(this).val();
-        });
-    }
-}
-
 /** TODO: Deprecated? */
 /** TODO: Find where this is used */
 function detectLongClick(selector) {
@@ -102,8 +82,6 @@ function clearDraggable(parent, child) {
 
 //TODO: All jQuery events in this file should be here
 $(document).ready(function() {
-
-
     new Vue({
         el: '#room-manage',
         methods: {

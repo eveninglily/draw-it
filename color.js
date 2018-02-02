@@ -216,8 +216,3 @@ $('#gradient-toggle').on('click', function() {
 $('#palette-toggle').on('click', function() {
     $('#palette-holder').toggle();
 });
-
-//TODO: Make these actually do something
-var hue = new SliderVar('hue');
-var saturation = new SliderVar('saturation');
-var value = new SliderVar('value');

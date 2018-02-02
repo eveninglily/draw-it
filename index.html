@@ -159,33 +159,28 @@
                 </div>
             </div>
             <div id="dialog-invite" class='modal'>
-                <div id='room-create'>
-                    <h1> Create Board </h1>
-                    <vial-input
-                        @input='onInput'
-                        @enter='onEnter'
-                        id='room-name'
-                        text='Room Name'
-                        name='room-name'>
-                    </vial-input>
-                    <div class='button-holder'>
-                        <input class="button button-red cancel" type="button" value="Cancel" />
-                        <input class='button button-blue' type="button" value="Create" id='create-room'/>
-                    </div>
-                </div>
                 <div id='room-manage'>
-                    <h1> Manage Board </h1>
-                    <div class='input-holder'>
-                        <input type='text' id='edit-room-name' class='inp' name='board-name' placeholder="Board name" required/>
-                        <label for="edit-room-name" class="label">Board Name</label>
-                    </div>
-                    <div class='cch'>
-                        <input id='room-public' type='checkbox' data-val='roomPublic'/>
-                        <label for="room-public" class="">Public</label>
-                    </div>
-                    <br>
-                    <div class='button-holder'>
-                        <input class='button button-blue' type="button" value="Update" id='update-room'/>
+                    <h1 v-if='inRoom'> Manage Room </h1>
+                    <h1 v-else> Create Room </h1>
+                    <div class='body'>
+                        <vial-input
+                            @input='onInput'
+                            @enter='onEnter'
+                            id='room-name'
+                            text='Room Name'
+                            name='room-name'>
+                        </vial-input>
+                        <vial-checkbox
+                            @change="togglePrivate"
+                            id="room-public"
+                            text="Public"
+                            name="room-public">
+                        </vial-checkbox>
+                        <div class='button-holder'>
+                            <input class="button button-red cancel" type="button" value="Cancel" />
+                            <input v-if='inRoom' class='button button-blue' type="button" value="Update" id='update-room'/>
+                            <input v-else class='button button-blue' type="button" value="Create" id='create-room'/>
+                        </div>
                     </div>
                 </div>
             </div>

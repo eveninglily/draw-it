@@ -1,7 +1,3 @@
-/* General Styles
-* https://i.imgur.com/MEhG0k7.png
-******************/
-
 @import url(https://fonts.googleapis.com/css?family=Montserrat);
 
 html {
@@ -587,4 +583,12 @@ input[type="number"] {
 
 #dialog-save {
     width: 15vw;
+}
+
+#room-manage .body > * {
+    margin: 10px;
+}
+
+#room-manage input[type=text] {
+    padding: 10px;
 }

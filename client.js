@@ -34,15 +34,13 @@ class Client {
 
     connect() {
         this.socket = io(this.server);
-        var _t = this;
 
-        console.log("Connecting");
-
-        this.socket.on('connect', function() {
-            _t.connected = true;
-            console.log('[Connected]')
-        }).on('disconnect', function() {
-            _t.connected = false;
+        this.socket.on('connect', () => {
+            this.connected = true;
+            console.log('[Client]: Connected')
+        }).on('disconnect', () => {
+            this.connected = false;
+            console.log('[Client]: Disconnected')
         });
 
         $(document).on('unload', () => {

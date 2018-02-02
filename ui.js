@@ -1,3 +1,5 @@
+/** TODO: Replace with Vue component */
+/** TODO: Check usage, comment here */
 class SliderVar {
     constructor(id) {
         this.id = id;
@@ -16,6 +18,8 @@ class SliderVar {
     }
 }
 
+/** TODO: Deprecated? */
+/** TODO: Find where this is used */
 function detectLongClick(selector) {
     var element = $(selector);
     element.on('mousedown', function(){
@@ -30,8 +34,8 @@ function detectLongClick(selector) {
     });
 }
 
+/** TODO: Move to ready() */
 var drag = false;
-
 $('.layer-list tr').attr('draggable', "true");
 
 //TODO: Extend functionality to left and right
@@ -59,6 +63,7 @@ function setDraggable(parent, child, onDragUp, onDragDown) {
         if(!drag) { return; }
         $(child).css('opacity', 1)
         var data = evt.originalEvent.dataTransfer.getData("text");
+        /** TODO: Why is this commented out? */
         // Clear the drag data cache (for all formats/types)
         //evt.originalEvent.dataTransfer.clearData();
 
@@ -82,6 +87,11 @@ function setDraggable(parent, child, onDragUp, onDragDown) {
     });
 }
 
+/**
+ * Clears dragging event handlers
+ * @param {*} parent - Container
+ * @param {*} child - Element that is dragged
+ */
 function clearDraggable(parent, child) {
     $(child).attr('draggable', 'false');
     $(child).off('dragstart');
@@ -92,8 +102,10 @@ function clearDraggable(parent, child) {
 
 //TODO: All jQuery events in this file should be here
 $(document).ready(function() {
+
+
     new Vue({
-        el: '#room-create',
+        el: '#room-manage',
         methods: {
             onInput: function(val) {
                 //console.log(val)
@@ -101,11 +113,20 @@ $(document).ready(function() {
             onEnter: function(val) {
                 console.log('enter');
                 $('#create-room').click();
+            },
+            togglePrivate: function() {
+
+            }
+        },
+        data() {
+            return {
+                'inRoom': false
             }
         }
     });
 
     /** Modals */
+    /** TODO: Replace with Vial */
     $('#modal-bg').on('click', function(evt) {
         if(evt.target.id == 'modal-bg') {
             hideModals()
@@ -158,10 +179,10 @@ $(document).ready(function() {
         $('#dialog-invite').show().css('display','flex');
         $('#modal-bg').show().css('display','flex');
         if(client.inRoom) {
-            $('#room-create').hide();
-            $('#room-manage').show();localStorage
+            //$('#room-create').hide();
+            //$('#room-manage').show();
         } else {
-            $('#room-manage').hide();
+            //$('#room-manage').hide();
         }
     });
 

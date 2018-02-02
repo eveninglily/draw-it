@@ -109,7 +109,8 @@ class Layer {
         });
 
         $('#layer-list').prepend(nRow);
-        detectLongClick('#' + this.id + '-control');
+        //TODO: Deprecated; Remove if no issues arise
+        //detectLongClick('#' + this.id + '-control');
         this.updatePreview();
     }
 

@@ -98,7 +98,9 @@ $(document).ready(function() {
         },
         data() {
             return {
-                'inRoom': false
+                'inRoom': false,
+                /** TODO: actual do some sort of check here */
+                'connected': true
             }
         }
     });

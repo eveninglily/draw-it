@@ -1,5 +1,13 @@
 @import url(https://fonts.googleapis.com/css?family=Montserrat);
 
+/* General Styles */
+
+.error, .cancel, .red {
+    background: #E55E5B
+}
+
+/* Gloabal Style */
+
 html {
     height: 100%;
 }
@@ -42,6 +50,7 @@ body {
     background: #2264AA;
 }
 
+/* TODO: deprecated, use .error */
 .err {
     display: none;
     color: #E55E5B;
@@ -97,8 +106,7 @@ input[type="file"] {
 }
 
 .active, .action:hover, .active:before {
-    color: #191919;
-    background: #ffffff;
+    background: #2264AA;
 }
 
 .right {
@@ -439,10 +447,6 @@ input[type="number"] {
     color: #fbfbfb;
 }
 
-.button-red {
-    background: #E55E5B;
-}
-
 .button-blue {
     background: #2264AA;
 }
@@ -591,4 +595,13 @@ input[type="number"] {
 
 #room-manage input[type=text] {
     padding: 10px;
+}
+
+.message {
+    width: 100%;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    color: white;
+    margin: 0px !important;
+    text-align: center;
 }

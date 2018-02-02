@@ -152,6 +152,7 @@
                 <textarea placeholder='Add a description'></textarea>
                 <div><label><input id="upload" type="checkbox" /> Upload to gallery</label></div>
                 <div id='gallery-url-holder'><a id='gallery-url'></a></div>
+                <!-- TODO: Replace with Vue -->
                 <div class='err server-error' id='gallery-error'>Unable to connect to server</div>
                 <div class='button-holder'>
                     <input type='button' class=' button button-red cancel' id='cancel-save' value='Cancel'>
@@ -163,6 +164,7 @@
                     <h1 v-if='inRoom'> Manage Room </h1>
                     <h1 v-else> Create Room </h1>
                     <div class='body'>
+                        <div v-if='!connected' class='error message'>No server connection</div>
                         <vial-input
                             @input='onInput'
                             @enter='onEnter'
@@ -177,7 +179,7 @@
                             name="room-public">
                         </vial-checkbox>
                         <div class='button-holder'>
-                            <input class="button button-red cancel" type="button" value="Cancel" />
+                            <input class="button cancel" type="button" value="Cancel" />
                             <input v-if='inRoom' class='button button-blue' type="button" value="Update" id='update-room'/>
                             <input v-else class='button button-blue' type="button" value="Create" id='create-room'/>
                         </div>

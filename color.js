@@ -1,35 +1,61 @@
 var color1 = '#000000';
 var color2 = '#ffffff';
 var activeColor = 1;
+var colorWheel;
+var hexInput;
 
-var colorWheel = new ColorWheel('wheel', 250, function() {
-    currTool.color = "#" + colorWheel.getHex();
-    $('#hexValue').val("#" + colorWheel.getHex());
-    if(activeColor == 1) {
-        $("#color1").css({background: currTool.color});
-        color1 = currTool.color;
-    } else {
-        $("#color2").css({background: currTool.color});
-        color2 = currTool.color;
-    }
-});
-colorWheel.adjustSize();
-
-$(window).resize(() => {
+$(document).ready(() => {
+    /** Colorwheel init */
+    colorWheel = new ColorWheel('wheel', 250, function() {
+        currTool.color = "#" + colorWheel.getHex();
+        hexInput.update(colorWheel.getHex());
+        if(activeColor == 1) {
+            $("#color1").css({background: currTool.color});
+            color1 = currTool.color;
+        } else {
+            $("#color2").css({background: currTool.color});
+            color2 = currTool.color;
+        }
+    });
     colorWheel.adjustSize();
-    if(activeColor == 1) {
-        colorWheel.setColorHex(color1);
-    } else {
-        colorWheel.setColorHex(color2);
-    }
+    $(window).resize(() => {
+        colorWheel.adjustSize();
+        if(activeColor == 1) {
+            colorWheel.setColorHex(color1);
+        } else {
+            colorWheel.setColorHex(color2);
+        }
+    });
+
+    colorWheel.setColorHex(color1);
+    $('#wheel').prependTo('#wheel-holder');
+
+    /** Other UI Init */
+    $('#color1').css({ background: color1 });
+    $('#color2').css({ background: color2 });
+
+    hexInput = new Vue({
+        'el': '#hex-val-container',
+        'data': {
+            color: '#' + colorWheel.getHex()
+        },
+        'methods': {
+            validate: function(inp) {
+                //#([a-f]|[0-9]){6}$
+            },
+            update: function(val) {
+                val = val.replace('#', '');
+                this.color = '#' + val;
+
+            },
+            val: function() {
+                return this.color.replace('#', '');
+            }
+        }
+    })
+
+    hexInput.update(colorWheel.getHex());
 });
-
-colorWheel.setColorHex(color1);
-$('#wheel').prependTo('#wheel-holder');
-$('#color1').css({ background: color1 });
-$('#color2').css({ background: color2 });
-
-$('#hexValue').val('#' + colorWheel.getHex());
 
 function updateColorDisplays(hex) {
     colorWheel.setColorHex(hex);
@@ -42,7 +68,7 @@ function updateColorDisplays(hex) {
         color2 = currTool.color;
     }
 
-    $('#hexValue').val(currTool.color);
+    hexInput.update(currTool.color);
 }
 
 function updateFromHex() {

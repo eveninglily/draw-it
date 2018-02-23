@@ -597,6 +597,16 @@ input[type="number"] {
     padding: 10px;
 }
 
+#hex-val-container input[type=text] {
+    width: 6em;
+    font-size: 20px;
+}
+
+#hex-val-container label {
+    padding-bottom: 2em;
+    color: white;
+}
+
 .message {
     width: 100%;
     padding-top: 1em;

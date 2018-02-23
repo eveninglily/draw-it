@@ -51,8 +51,14 @@
             <div class='meta-box'>
             <div id='wheel-holder'></div>
             <div id='color-settings'>
-                <div id="hex-val-container">
-                    <input type="text" id="hexValue"/>
+                <div id='hex-val-container'>
+                    <vial-input
+                        @input='validate'
+                        :value='color'
+                        id='hex-val'
+                        text='Hex Color'
+                        name='hex-val'>
+                    </vial-input>
                 </div>
                 <!--<button id="colorwheel-toggle">C</button>
                 <button id="hsv-toggle">H</button>
@@ -211,9 +217,9 @@
 
         <!-- External Libraries -->
         <script
-			  src="https://code.jquery.com/jquery-3.3.1.min.js"
-			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-			  crossorigin="anonymous"></script>
+		    src="https://code.jquery.com/jquery-3.3.1.min.js"
+			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			crossorigin="anonymous"></script>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.6/socket.io.min.js'></script>
 
         <!-- Internal Libraries -->

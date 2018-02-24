@@ -1,3 +1,5 @@
+/** Tracks stroke history; allows undo/redo */
+
 "use strict";
 
 /**

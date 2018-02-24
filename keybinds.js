@@ -1,3 +1,7 @@
+/** Handles keyboard shortcuts
+ * TODO: No current frontend for this
+ */
+
 "use strict"
 
 var bindings;

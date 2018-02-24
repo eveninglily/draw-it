@@ -36,7 +36,7 @@ drawing, with advanced features such as undo/redo, layers, and line smoothing.
 - core.js
     - Binds all the canvas events
 - io.js
-    - File IO; saving
+    - Utility functions for file I/O
 - keybinds
     - Sets keybinds; loads from localstorage
 - layers.js
@@ -49,7 +49,6 @@ drawing, with advanced features such as undo/redo, layers, and line smoothing.
     - Interfaces with OITools and other items on the toolbar
 - ui.js
     - Contains a lot of misc UI code and jQuery events
-
 - server.js
     - The server that syncs clients
 

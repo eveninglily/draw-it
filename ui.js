@@ -1,5 +1,12 @@
-/** TODO: Deprecated? */
-/** TODO: Find where this is used */
+/** General UI Code
+ * TODO: Cleanup; Consolidate code that belongs here and move code that doesn't
+*/
+
+
+/**
+ * TODO: DEPRECATED
+ * Used in color palette
+ */
 function detectLongClick(selector) {
     var element = $(selector);
     element.on('mousedown', function(){

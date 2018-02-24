@@ -3,6 +3,7 @@ var nLayer = 0;
 /**
  * Wrapper for DrawingCanvas that also holds metadata
  * TODO: Document more
+ * TODO: Move UI Code to a vue component
  */
 class Layer {
     constructor(id) {

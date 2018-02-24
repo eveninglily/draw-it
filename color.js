@@ -1,3 +1,7 @@
+/** Color Input/Handling
+ * TODO: https://i.imgur.com/QVgYbiZ.gif
+*/
+
 var color1 = '#000000';
 var color2 = '#ffffff';
 var activeColor = 1;
@@ -46,13 +50,13 @@ $(document).ready(() => {
                 if(match[0] != inp) {
                     return;
                 }
-                
+
                 this.update(inp);
             },
             update: function(val) {
                 val = val.replace('#', '');
                 this.color = '#' + val;
-                
+
                 colorWheel.setColorHex(this.color);
                 currTool.color = this.color;
                 if(activeColor == 1) {
@@ -70,22 +74,20 @@ $(document).ready(() => {
     });
 
     hexInput.update(colorWheel.getHex());
+
+    $("#color1").on('click', function() {
+        activeColor = 1;
+        hexInput.update(color1);
+    });
+
+    $("#color2").on('click', function() {
+        activeColor = 2;
+        hexInput.update(color2);
+    });
 });
 
-$("#color1").on('click', function() {
-    activeColor = 1;
-    currTool.color = color1;
-    colorWheel.setColorHex(color1);
-    $('#hexValue').val("#"+colorWheel.getHex());
-});
 
-$("#color2").on('click', function() {
-    activeColor = 2;
-    currTool.color = color2;
-    colorWheel.setColorHex(color2);
-    $('#hexValue').val("#"+colorWheel.getHex());
-});
-
+/** ALL CODE BELOW IS DEPRECATED */
 $('#savePalette').on('click', savePalette);
 
 function savePalette() {
@@ -135,8 +137,6 @@ function addPaletteItem(color) {
         detectLongClick(paletteItem);
 }
 
-//TODO: write common function for this type of thing
-//TODO: Show where outline was and drag a ghost along
 $('#palette-holder').on('mousemove', function(e) {
     if($('.currColor').data('dragging')) {
         var r = $('.currColor');
@@ -206,8 +206,7 @@ $('#hsv-toggle').on('click', function() {
 });
 
 $('#gradient-toggle').on('click', function() {
-    //TODO: Implement a UI for this
-    //https://i.imgur.com/QVgYbiZ.gif
+
 });
 
 $('#palette-toggle').on('click', function() {

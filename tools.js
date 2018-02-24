@@ -92,6 +92,12 @@ $(document).ready(() => {
         }
     });
 
+    $('#load-file').on('change', function() {
+        loadJSONFile($('#load-file').get(0).files[0], loadLayersFromJSON);
+    });
+
+    /** TODO: Write a generic vue component, or wait until Vial-Slider */
+
     penOpts = new Vue({
         'el': '#brush-settings',
         'data': {

@@ -1,3 +1,12 @@
+/** Utility functions for file I/O */
+"use strict";
+
+/**
+ * Saves JSON to a file and download it
+ * TODO: DEPRECATED
+ * @param {String} name
+ * @param {Object} data
+ */
 function saveJSONFile(name, data) {
     var blob = new Blob([JSON.stringify(data)], {type:"application/json"});
     var url = URL.createObjectURL(blob);
@@ -9,6 +18,7 @@ function saveJSONFile(name, data) {
 
 /**
  * Returns a data url containing the PNG data
+ * TODO: DEPRECATED
  */
 function saveToPNG() {
     return getMergedVisibleCanvas(settings.whiteBg).get(0).toDataURL('image/png').replace('image/png', 'image/octet-stream');
@@ -16,6 +26,7 @@ function saveToPNG() {
 
 /**
  * Returns a data url containing the layer data in JSON
+ * TODO: DEPRECATED
  */
 function saveLayersToJSON() {
     var data = {};
@@ -30,6 +41,7 @@ function saveLayersToJSON() {
 
 /**
  * Loads JSON data into the layers
+ * TODO: DEPRECATED
  */
 function loadLayersFromJSON(json) {
     layers.splice(0, layers.length);
@@ -44,6 +56,7 @@ function loadLayersFromJSON(json) {
 
 /**
  * Loads JSON from a file
+ * TODO: DEPRECATED
  */
 function loadJSONFile(file, callback) {
     if(!window.File || !window.FileReader || !window.FileList || !window.Blob) {
@@ -58,9 +71,3 @@ function loadJSONFile(file, callback) {
     }
     reader.readAsText(file);
 }
-
-$(document).ready(function() {
-    $('#loadFile').on('change', function() {
-        loadJSONFile($('#loadFile').get(0).files[0], loadLayersFromJSON);
-    });
-})

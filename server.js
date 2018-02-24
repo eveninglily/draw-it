@@ -1,3 +1,4 @@
+/** Main server; shares strokes through rooms using websockets */
 "use strict";
 
 var fs = require('fs');
@@ -7,6 +8,7 @@ var request = require('request');
 var API_KEY = "7fd895d5-b1a8-441f-b4f1-1cc7995a8218";
 
 var url = 'https://amidraw.com/draw/';
+/** TODO: Replace socket.io */
 var io = require('socket.io')().listen(3000);
 var rooms = {};
 

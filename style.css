@@ -180,18 +180,13 @@ input[type="file"] {
     color: white;
 }
 
-input[type="number"] {
-    min-width: 10px;
-    max-width: 40px;
-    width: auto;
-}
-
 #color-settings {
     margin: 0px 5px 0px 5px;
     display: flex;
     justify-content: space-between;
 }
 
+/* TODO: Deprecated */
 #color-palette {
     max-height: calc(56px * 3);
     overflow-y: scroll;
@@ -216,6 +211,8 @@ input[type="number"] {
 #palette-holder, #hsv-settings {
     display: none;
 }
+
+/* TODO: End Deprecated */
 
 /* Layers
 **********/
@@ -430,6 +427,7 @@ input[type="number"] {
     background: #2264AA;
 }
 
+/* TODO: Deprecated */
 .inp {
     padding: 10px;
     padding-bottom: 4px;
@@ -464,6 +462,8 @@ input[type="number"] {
     visibility: visible;
     transform: translate(0, -40%);
   }
+
+/* TODO: End Deprecated */
 
 #user-list {
     display: inline-flex;
@@ -510,6 +510,7 @@ input[type="number"] {
 }
 
 /** Checkbox */
+/* TODO: Deprecated */
 .cch input {
     position: absolute;
     opacity: 0;
@@ -555,6 +556,7 @@ input[type="number"] {
     box-shadow: none;
     background: #ddd;
 }
+/* TODO: End Deprecated */
 
 .dialog-settings {
     align-content: flex-start
@@ -604,6 +606,7 @@ input[type="number"] {
     text-align: center;
 }
 
+/* TODO: Deprecated */
 @media (max-device-width: 640px) {
     body{
         flex-flow: column wrap;

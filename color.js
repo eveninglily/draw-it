@@ -9,13 +9,6 @@ $(document).ready(() => {
     colorWheel = new ColorWheel('wheel', 250, function() {
         currTool.color = "#" + colorWheel.getHex();
         hexInput.update(colorWheel.getHex());
-        if(activeColor == 1) {
-            $("#color1").css({background: currTool.color});
-            color1 = currTool.color;
-        } else {
-            $("#color2").css({background: currTool.color});
-            color2 = currTool.color;
-        }
     });
     colorWheel.adjustSize();
     $(window).resize(() => {
@@ -42,11 +35,33 @@ $(document).ready(() => {
         'methods': {
             validate: function(inp) {
                 //#([a-f]|[0-9]){6}$
+                var match = inp.toString().match("#([a-f]|[0-9]){6}$");
+
+                // TODO: Error highlight
+                if(match == null) {
+                    return;
+                }
+
+                // TODO: Error highlight
+                if(match[0] != inp) {
+                    return;
+                }
+                
+                this.update(inp);
             },
             update: function(val) {
                 val = val.replace('#', '');
                 this.color = '#' + val;
-
+                
+                colorWheel.setColorHex(this.color);
+                currTool.color = this.color;
+                if(activeColor == 1) {
+                    $("#color1").css({background: currTool.color});
+                    color1 = currTool.color;
+                } else {
+                    $("#color2").css({background: currTool.color});
+                    color2 = currTool.color;
+                }
             },
             val: function() {
                 return this.color.replace('#', '');
@@ -55,50 +70,6 @@ $(document).ready(() => {
     })
 
     hexInput.update(colorWheel.getHex());
-});
-
-function updateColorDisplays(hex) {
-    colorWheel.setColorHex(hex);
-    currTool.color = hex;
-    if(activeColor == 1) {
-        $("#color1").css({background: currTool.color});
-        color1 = currTool.color;
-    } else {
-        $("#color2").css({background: currTool.color});
-        color2 = currTool.color;
-    }
-
-    hexInput.update(currTool.color);
-}
-
-function updateFromHex() {
-    var str = $('#hexValue').val().replace('#','');
-    if(!str.match(/([a-f]|[0-9])+$/ig)) {
-        $('#hexValue').val(currTool.color);
-    }
-
-    if(str.length != 6) {
-        $('#hexValue').val(currTool.color);
-    }
-
-    updateColorDisplays('#' + str);
-}
-
-$('#hexValue').on('keypress', function(e) {
-    var char = String.fromCharCode(e.which);
-
-    if(!char.match(/([a-f]|[0-9])+/ig)) {
-        e.preventDefault();
-        return false;
-    }
-
-    if($(this).val().replace('#', '').length == 6) {
-        e.preventDefault();
-        return false;
-    }
-
-}).on('blur', function() {
-    updateFromHex();
 });
 
 $("#color1").on('click', function() {
@@ -144,7 +115,7 @@ function addPaletteItem(color) {
         .css({background: color})
         .on('click', () => {
             currTool.color = color;
-            updateColorDisplays(color)
+            hexInput.update(color);
         }).on('mousedown', () => {
             $('.currColor').removeClass('currColor');
             $(this).addClass('currColor');

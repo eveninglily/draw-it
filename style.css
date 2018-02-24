@@ -161,18 +161,23 @@ input[type="file"] {
     position: relative;
 }
 
-#hexValue {
-    width: 5em;
-    bottom: 0;
-    position: absolute;
-}
-
 .tool-meta:not(.activeTool) {
     display: none;
 }
 
 .tool-meta div {
     padding: 10px;
+}
+
+.tool-meta .vial-input {
+    padding: 0px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.tool-meta input[type=text] {
+    background: #2f2f2f;
+    color: white;
 }
 
 input[type="number"] {
@@ -576,9 +581,18 @@ input[type="number"] {
     font-size: 20px;
 }
 
-#hex-val-container label {
+.tool-meta input[type=text] {
+    font-size: 20px;
+    width: 2em;
+}
+
+.tool-meta .vial-input {
+    display: inline-block;
+}
+
+#hex-val-container label, .tool-meta label {
     padding-bottom: 2em;
-    color: white;
+    color: white !important;
 }
 
 .message {

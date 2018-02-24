@@ -25,7 +25,7 @@
     </head>
     <body class='black'>
         <div id='toolbox'>
-                <svg id='arrow' class='action' data-options='brush-settings' xmlns="http://www.w3.org/2000/svg" viewBox = "0 0 256 256">
+                <svg id='back' class='action' data-options='brush-settings' xmlns="http://www.w3.org/2000/svg" viewBox = "0 0 256 256">
                 <path data-name="Rounded Rectangle 19 copy 2" d="M239.5 145.988H57.479l48.039 47.879a16.492 16.492 0 1 1-23.361 23.284L4.822 140.074a16.432 16.432 0 0 1 2.5-25.324l75.191-74.942a16.47 16.47 0 1 1 23.332 23.254L55.635 113.1H239.5a16.443 16.443 0 1 1 0 32.888z"/>
             </svg>
             <svg id='brush' class='tool active' data-options='brush-settings' xmlns="http://www.w3.org/2000/svg" viewBox = "0 0 256 256">
@@ -43,7 +43,7 @@
             <div class='conn-info'>
                 <!--
                 <span id='server-status'>Connected to #<span id='server-name'></span></span>
-                <div id='user-list'>&nbsp;</div>    
+                <div id='user-list'>&nbsp;</div>
                 -->
             </div>
             <div class='actions'>
@@ -113,19 +113,45 @@
             <div id="brush-settings" class='tool-meta activeTool meta-box'>
                 <h1>Brush</h1>
                 <div>
-                    <label> Size <input type='number' id='brush-size-value' value='5'> </label><br/>
-                    <input id='brush-size' max='50' min='1' value='5' type='range' /><br/>
-                    <label> Opacity: <input type='number' max='100' min='0' id='brush-opacity-value' value='100'> </label><br/>
-                    <input id='brush-opacity' max='100' min='0' value='100' type='range' /><br/>
+                    <vial-input
+                        @input='updateSize'
+                        :value='size'
+                        id='brush-size'
+                        text='Size'
+                        name='pen-size'>
+                    </vial-input>
+                    <input id='brush-size-slider' max='100' min='1' :value='size' @input='updateSizeSlider' type='range' />
+                    <br/>
+                    <vial-input
+                        @input='updateOpacity'
+                        :value='opacity'
+                        id='brush-opacity'
+                        text='Opacity'
+                        name='pen-opacity'>
+                    </vial-input>
+                    <input id='brush-opacity-slider' max='100' min='1' :value='opacity' @input='updateOpacitySlider' type='range' />
                 </div>
             </div>
             <div id="eraser-settings" class='tool-meta meta-box'>
                 <h1>Eraser</h1>
                 <div>
-                    <label> Size <input type='number' id='eraser-size-value' value='5'> </label><br/>
-                    <input id='eraser-size' max='50' min='1' value='5' type='range' /><br/>
-                    <label> Opacity: <input type='number' max='100' min='0' id='eraser-opacity-value' value='100'> </label><br/>
-                    <input id='eraser-opacity' max='100' min='0' value='100' type='range' /><br/>
+                    <vial-input
+                        @input='updateSize'
+                        :value='size'
+                        id='eraser-size'
+                        text='Size'
+                        name='eraser-size'>
+                    </vial-input>
+                    <input id='eraser-size-slider' max='100' min='1' :value='size' @input='updateSizeSlider' type='range' />
+                    <br/>
+                    <vial-input
+                        @input='updateOpacity'
+                        :value='opacity'
+                        id='eraser-opacity'
+                        text='Opacity'
+                        name='eraser-opacity'>
+                    </vial-input>
+                    <input id='eraser-opacity-slider' max='100' min='1' :value='opacity' @input='updateOpacitySlider' type='range' />
                 </div>
             </div>
             <div id='layer-controls' class='meta-box'>

@@ -67,7 +67,7 @@ $(document).ready(() => {
                 return this.color.replace('#', '');
             }
         }
-    })
+    });
 
     hexInput.update(colorWheel.getHex());
 });

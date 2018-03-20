@@ -186,34 +186,6 @@ input[type="file"] {
     justify-content: space-between;
 }
 
-/* TODO: Deprecated */
-#color-palette {
-    max-height: calc(56px * 3);
-    overflow-y: scroll;
-}
-
-.color {
-    display: inline-block;
-    margin: 3px;
-    border: 1px solid black;
-    width: 36px;
-    height: 36px;
-}
-
-.color:hover {
-    cursor: -webkit-grab;
-}
-
-#color-palette:active {
-    cursor: -webkit-grabbing;
-}
-
-#palette-holder, #hsv-settings {
-    display: none;
-}
-
-/* TODO: End Deprecated */
-
 /* Layers
 **********/
 

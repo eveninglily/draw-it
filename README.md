@@ -56,7 +56,6 @@ drawing, with advanced features such as undo/redo, layers, and line smoothing.
 (This is a non-exhaustive list; it just gives an idea for the next big things)
 - [ ] Replace inputs and custom UI stuff with vial
 - [ ] Cleanup HTML/CSS
-- [ ] Rewrite the server, possibly with uWS
 - [ ] Cleanup internal libraries
 - [ ] Transition over to a ES6/Webpack structure
 - [ ] Better mobile client

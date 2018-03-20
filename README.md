@@ -54,7 +54,7 @@ drawing, with advanced features such as undo/redo, layers, and line smoothing.
 
 ## Todo
 (This is a non-exhaustive list; it just gives an idea for the next big things)
-- [ ] Replace inputs and custom UI stuff with myth
+- [ ] Replace inputs and custom UI stuff with vial
 - [ ] Cleanup HTML/CSS
 - [ ] Rewrite the server, possibly with uWS
 - [ ] Cleanup internal libraries

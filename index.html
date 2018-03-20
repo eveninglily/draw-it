@@ -25,7 +25,7 @@
     </head>
     <body class='black'>
         <div id='toolbox'>
-                <svg id='back' class='action' data-options='brush-settings' xmlns="http://www.w3.org/2000/svg" viewBox = "0 0 256 256">
+            <svg id='back' class='action' data-options='brush-settings' xmlns="http://www.w3.org/2000/svg" viewBox = "0 0 256 256">
                 <path data-name="Rounded Rectangle 19 copy 2" d="M239.5 145.988H57.479l48.039 47.879a16.492 16.492 0 1 1-23.361 23.284L4.822 140.074a16.432 16.432 0 0 1 2.5-25.324l75.191-74.942a16.47 16.47 0 1 1 23.332 23.254L55.635 113.1H239.5a16.443 16.443 0 1 1 0 32.888z"/>
             </svg>
             <svg id='brush' class='tool active' data-options='brush-settings' xmlns="http://www.w3.org/2000/svg" viewBox = "0 0 256 256">
@@ -102,6 +102,7 @@
                 <label>Load <input id="loadPalette" type='file' accept='.json'></label>
                 <div id="color-palette"></div>
             </div>
+            <!-- DEPRECATED -->
             <div id='hsv-settings'>
                 <label> H <input id='hue' max='360' min='0' value='0' type='range' /> </label>
                 <input type='number' id='hue-value' value='0' max='360'><br/>
@@ -198,11 +199,13 @@
             <div id="dialog-save" class="modal">
                 <h1>Save</h1>
                 <div>
-                    <div id='fileName-holder' class='input-holder'>
-                        <input type='text' id='fileName' class='inp' name='filename' placeholder="Filename" required/>
-                        <label for="fileName" class="label">Filename</label>
-                    </div>
-                    <select id='fileType' name="fileType">
+                    <vial-input
+                            @input='onInput'
+                            id='file-name'
+                            text='File Name'
+                            name='file-name'>
+                        </vial-input>
+                    <select id='file-type' name="fileType">
                         <option value="png" selected>.png</option>
                         <option value="json">.json</option>
                     </select>
@@ -247,10 +250,12 @@
             <div id='dialog-settings' class='modal'>
                 <h1>User Settings</h1>
                 <div>
-                    <div class='input-holder'>
-                        <input type='text' id='setting-username' class='inp' name='username' placeholder="Username" required/>
-                        <label for="setting-username" class="label">Username</label>
-                    </div>
+                    <vial-input
+                        @input='onInput'
+                        id='setting-username'
+                        text='Username'
+                        name='settings-username'>
+                    </vial-input>
                 </div>
                 <h1> Application Settings </h1>
                 <div class='cch'>

@@ -50,9 +50,6 @@ function setDraggable(parent, child, onDragUp, onDragDown) {
         if(!drag) { return; }
         $(child).css('opacity', 1)
         var data = evt.originalEvent.dataTransfer.getData("text");
-        /** TODO: Why is this commented out? */
-        // Clear the drag data cache (for all formats/types)
-        //evt.originalEvent.dataTransfer.clearData();
 
         var r = $(child);
         var y = evt.pageY;
@@ -60,11 +57,11 @@ function setDraggable(parent, child, onDragUp, onDragDown) {
             var prev = r.prev();
             if(y < (prev.offset().top + (prev.height() / 2))) {
                 r.insertBefore(prev);
-                    onDragUp();
-                }
+                onDragUp();
             }
+        }
 
-        if(!(r.index() == layers.length - 1)) {
+        if(!(r.index() == $(parent).children().length - 1)) {
             var next = r.next();
             if(y > (next.offset().top + (next.height() / 2))) {
                 r.insertAfter(next);
@@ -109,6 +106,27 @@ $(document).ready(function() {
                 /** TODO: actual do some sort of check here */
                 'connected': true
             }
+        }
+    });
+
+    new Vue({
+        'el': '#dialog-save',
+        'methods': {
+            onInput: function(inp) {
+                var name = $('#file-name').val();
+
+                if(name.length == 0) {
+                    name = "amidraw";
+                }
+                $('#dl-link').attr('download', name + '.' + $('#file-type').val());
+            }
+        }
+    });
+
+    new Vue({
+        'el': '#dialog-settings',
+        'methods': {
+            onInput: function(inp) {}
         }
     });
 
@@ -185,15 +203,6 @@ $(document).ready(function() {
     });
 
     /** Misc */
-    $('#fileName').on('input', () => {
-        var name = $('#fileName').val();
-
-        if(name.length == 0) {
-            name = "amidraw";
-        }
-        $('#dl-link').attr('download', name + '.' + $('#fileType').val());
-    });
-
     $(document).on('mousedown', evt => {
         if(!(evt.target.className == "context-item")) {
             $('.contextmenu').remove();
@@ -239,7 +248,7 @@ function checkGalleryConnection() {
 }
 
 $('#fileType').on('change', function() {
-    var name = $('#fileName').val();
+    var name = $('#file-name').val();
     if(name.length == 0) {
         name = "amidraw";
     }

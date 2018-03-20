@@ -427,44 +427,6 @@ input[type="file"] {
     background: #2264AA;
 }
 
-/* TODO: Deprecated */
-.inp {
-    padding: 10px;
-    padding-bottom: 4px;
-    border: none;
-    border-bottom: solid 3px #c1c1c1;
-    transition: border 0.3s;
-    font-size: 18px;
-    margin-bottom: 20px;
-}
-
-.inp:focus {
-    border-color: #2264AA;
-    outline: none;
-}
-
-.input-holder {
-    position: relative;
-    padding: 10px;
-}
-
-.input-holder label {
-    color: #2264AA;
-    position: absolute;
-    top: 0;
-    left: 0;
-    size: 70%;
-    visibility: hidden;
-    transition: transform .2s;
-}
-
-  .inp:valid + label {
-    visibility: visible;
-    transform: translate(0, -40%);
-  }
-
-/* TODO: End Deprecated */
-
 #user-list {
     display: inline-flex;
     flex-direction: row;
@@ -574,10 +536,6 @@ input[type="file"] {
     margin: 10px;
 }
 
-#room-manage input[type=text] {
-    padding: 10px;
-}
-
 #hex-val-container input[type=text] {
     width: 6em;
     font-size: 20px;
@@ -590,6 +548,14 @@ input[type="file"] {
 
 .tool-meta .vial-input {
     display: inline-block;
+}
+
+.modal .vial-input {
+    padding: 1em 0px 0px 0px;
+}
+
+.vial-input label {
+    margin-bottom: 1em;
 }
 
 #hex-val-container label, .tool-meta label {

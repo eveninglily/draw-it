@@ -1,6 +1,4 @@
-/**
- * Client-side networking code.
- */
+/** Client-side networking code */
 "use strict";
 var client;
 
@@ -22,7 +20,7 @@ class Client {
         this.inRoom = false;
 
         this.down = false;
-        this.id = 'test';
+        this.id = '';
 
         this.currentUUID;
         this.clientId = 'local';
@@ -48,19 +46,12 @@ class Client {
         });
     }
 
-    requestRoom(name) {
-        this.socket.emit('request-room', {
-            'name': name
-        }).on('created', data => {
-            this.joinRoom(data.id);
-        });
-    }
-
     joinRoom(id) {
-        //TODO: Update this join
-        this.socket.emit('join-room', {
+        console.log("Connecting to room " + id)
+
+        this.socket.emit('join', {
             'id': id,
-            'name': $('#new-room-name').val(),
+            'name': $('#room-name').val(),
             'username': this.clientName
         });
 

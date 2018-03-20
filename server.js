@@ -1,67 +1,39 @@
 /** Main server; shares strokes through rooms using websockets */
 "use strict";
 
-var fs = require('fs');
-var request = require('request');
-
-//TODO: Replace if open sourced
-var API_KEY = "7fd895d5-b1a8-441f-b4f1-1cc7995a8218";
-
-var url = 'https://amidraw.com/draw/';
-/** TODO: Replace socket.io */
 var io = require('socket.io')().listen(3000);
 var rooms = {};
 
+console.log("Started server");
+
 class Room {
-    constructor(id, socket, settings) {
+    constructor(id, settings) {
         this.id = id;
-        this.socket = socket;
         this.clients = {};
         this.strokes = {};
         this.layers = [];
 
         this.settings = {
-            'name': settings.name,
-            'public': settings.public
+            'name': settings.name
         }
     }
 
-    setPublic(public) {
-        this.public = public;
-    }
-
-    static CreateRoom(name, socket) {
-        var id = getUUID();
-
-        if(data.name == '') {
-            name = id;
-        }
-
-        rooms[id] = new Room(id, socket, {'name': name});
-        rooms[id].admin = socket.id;
-
-        console.log("Room["+ id +"] created, name: " + name);
-    }
-
-    static onConnect(data, socket) {
-        var id = data.id;
-        var name = data.name;
-
-        rooms[id].clients[socket.id] = data.username;
-        socket.join(id);
+    addClient(socket, username) {
+        this.clients[socket.id] = username;
+        socket.join(this.id);
         socket.emit('join', {
-            'id': id,
-            'name': rooms[id].settings.name,
+            'id': this.id,
+            'name': this.settings.name,
             'cId': socket.id
         });
 
-        io.sockets.in(id).emit('uj', {
+        io.sockets.in(this.id).emit('uj', {
             'id': socket.id,
-            'username': data.username
+            'username': username
         });
 
-        console.log("Client[" + socket.id + "] joined Room[" + id + "]");
-        return rooms[id];
+        log("evt", "Client[" + socket.id + "] joined Room[" + this.id + "]");
+        return this;
     }
 
     updateSettings(socket, settings) {
@@ -75,24 +47,33 @@ class Room {
         socket.broadcast.to(this.id).emit(type, data);
     }
 
-    save() {
+    /** Gets a room or creates a new one if the room is not found */
+    static GetRoom(data, socket) {
+        if(rooms.hasOwnProperty(data.id)) {
+            log("evt", "Retrived room [" + data.id + "]");
+            return rooms[data.id];
+        }
 
+        var id = data.id == '' ? getUUID().split('-')[4] : data.id;
+        var name = data.name != '' ? data.name : id
+
+        rooms[id] = new Room(id, {'name': name});
+        rooms[id].admin = socket.id;
+
+        log("evt", "Room[" + id + "] created, name: " + name);
+        return rooms[id];
     }
 }
 
 io.on('connection', function(socket) {
-    var room;
-    var roomId = '';
+    var room = {};
 
-    socket.on('request-room', data => {
-        var room = Room.CreateRoom(data.name, socket);
-        var id = room.id;
+    socket.on('join', data => {
+        room = Room.GetRoom(data, socket);
+        room.addClient(socket, data.username);
+        socket.emit('connected', {'id': room.id});
 
-        socket.emit('created', {'id': id});
-    }).on('join-room', data => {
-        room = Room.onConnect(data, socket);
-        roomId = room.id;
-
+        /** Notify new client of all other clients */
         for(var key in room.clients) {
             if(room.clients.hasOwnProperty(key)) {
                 if(key != socket.id && room.clients[key] != "") {
@@ -100,85 +81,62 @@ io.on('connection', function(socket) {
                 }
             }
         }
-    }).on('disconnect', function() {
-        console.log('Client ' + this.id + ' disconnected from #' + roomId);
-        if(room == null) {
-            return;
-        }
-        io.sockets.in(roomId).emit('ul', {
-            'id': socket.id,
-            'username': room.clients[socket.id]
-        });
+    }).on('disconnect', () => { safeEvt(room, {}, () => {
+            log("evt", 'Client ' + socket.id + ' disconnected from #' + room.id);
+            io.sockets.in(room.id).emit('ul', {
+                'id': socket.id,
+                'username': room.clients[socket.id]
+            });
         room.clients[socket.id] = "";
-    }).on('s', data => {
-        socket.broadcast.to(roomId).emit('s', data);
+    })}).on('s', data => { safeEvt(room, data, data => {
+        socket.broadcast.to(room.id).emit('s', data);
         room.strokes[data.cId] = {};
         room.strokes[data.cId].layer = data.layer;
         room.strokes[data.cId].tool = data.tool;
         room.strokes[data.cId].path = [];
         room.strokes[data.cId].path.push({ x: data.x, y: data.y, p: data.p });
-    }).on('u', data => {
-        socket.broadcast.to(roomId).emit('u', data);
+    })}).on('u', data => { safeEvt(room, data, data => {
+        socket.broadcast.to(room.id).emit('u', data);
         for(var i = 0; i < data.positions.length; i++) {
             var point = data.positions[i];
             room.strokes[data.cId].path.push({ x: point.x, y: point.y, p: point.p });
         }
-    }).on('e', data => {
-        socket.broadcast.to(roomId).emit('e', data);
+    })}).on('e', data => { safeEvt(room, data, data => {
+        socket.broadcast.to(room.id).emit('e', data);
         room.strokes[data.cId].path.push({ x: data.x, y: data.y, p: data.p });
-    }).on('nl', data => {
-        socket.broadcast.to(roomId).emit('nl', data);
+    })}).on('nl', data => {
+        socket.broadcast.to(room.id).emit('nl', data);
         room.layers.push(data.id);
-    }).on('save', function(data, fn) {
-        var image = data.b64.replace(/^data:image\/\w+;base64,/, "");
-        var buffer = new Buffer(image, 'base64');
-        var uuid = getUUID().split('-')[0];
-
-        fs.writeFile('/var/www/amidraw/amidraw-webservices/public/gallery/img/' + uuid + '.png', buffer);
-        console.log('saving at gallery/img/' + uuid + '.png');
-
-        request.post('https://amidraw.com/api/gallery/create', {
-            'json': {
-                "apikey": API_KEY,
-                "title": data.title,
-                "description": data.description,
-                "path": "https://amidraw.com/gallery/img/" + uuid + ".png",
-                "user": 1
-            }
-        }, function(error, response, body) {
-            if(!error && response.statusCode == 200) {
-                console.log('API Call Accepted');
-            } else {
-                console.log("Error :(")
-            }
-        });
-
-        fn({'url': 'https://amidraw.com/gallery/img/' + uuid + '.png'});
-    }).on('init_data', () => {
+    }).on('init_data', () => { safeEvt(room, {}, () => {
         socket.emit('board_data', {'strokes': room.strokes, 'layers': room.layers });
-    }).on('update-name', function(data) {
-        io.sockets.in(roomId).emit('update-name', {id: socket.id, name: data.name});
+    })}).on('update-name', data => { safeEvt(room, data, data => {
+        io.sockets.in(room.id).emit('update-name', {id: socket.id, name: data.name});
         room.clients[socket.id] = data.name;
-    }).on('undo', (data) => {
-        socket.broadcast.to(roomId).emit('undo', data);
-    }).on('redo', (data) => {
-        socket.broadcast.to(roomId).emit('redo', data);
-    }).on('update-settings', data => {
+    })}).on('undo', data => { safeEvt(room, data, data => {
+        socket.broadcast.to(room.id).emit('undo', data);
+    })}).on('redo', (data) => {
+        socket.broadcast.to(room.id).emit('redo', data);
+    }).on('update-settings', data => { safeEvt(room, data, data => {
         var status = room.updateSettings(socket, data);
         if(status) {
-            socket.broadcast.to(roomId).emit('update-settings', data);
+            socket.broadcast.to(room.id).emit('update-settings', data);
         } else {
             socket.emit('error', {'message': 'Only admins can update room settings'});
         }
-    });
+     })});
 });
 
-function getPublic() {
-
+/** Makes sure the room exists before doing any callbacks */
+function safeEvt(room, data, callback) {
+    if(room == {} || !rooms.hasOwnProperty(room.id)) {
+        log("warn", "Caught null room");
+        return;
+    }
+    callback(data);
 }
 
 /**
- * UUID generator from https://jsfiddle.net/xg7tek9j/7/, a RFC4122-compliant solution
+ * UUID generator from https://jsfiddle.net/xg7tek9j/7/
  */
 function getUUID() {
     var t = new Date().getTime();
@@ -188,4 +146,9 @@ function getUUID() {
         return (c == 'x' ? n : (n&0x3|0x8)).toString(16);
     });
     return uuid;
+}
+
+function log(type, msg) {
+    var time = Date.now();
+    console.log("[" + type + "]::" + time + " - " + msg);
 }

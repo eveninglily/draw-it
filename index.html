@@ -188,14 +188,9 @@
                         <option value="json">.json</option>
                     </select>
                 </div>
-                <textarea placeholder='Add a description'></textarea>
-                <div><label><input id="upload" type="checkbox" /> Upload to gallery</label></div>
-                <div id='gallery-url-holder'><a id='gallery-url'></a></div>
-                <!-- TODO: Replace with Vue -->
-                <div style='display:none' class='red server-error' id='gallery-error'>Unable to connect to server</div>
                 <div class='button-holder'>
                     <input type='button' class=' button button-red cancel' id='cancel-save' value='Cancel'>
-                    <a href = "#" id="dl-link" download="amidraw.png"><button class='button button-blue'>Save</button></a>
+                    <button id='button-save' class='button button-blue'>Save</button>
                 </div>
             </div>
             <div id="dialog-invite" class='modal'>

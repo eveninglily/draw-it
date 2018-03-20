@@ -93,7 +93,7 @@ $(document).ready(() => {
     });
 
     $('#load-file').on('change', function() {
-        loadJSONFile($('#load-file').get(0).files[0], loadLayersFromJSON);
+        loadJSONFile($('#load-file').get(0).files[0], importJSON);
     });
 
     /** TODO: Write a generic vue component, or wait until Vial-Slider */

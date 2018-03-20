@@ -110,8 +110,6 @@ class Layer {
         });
 
         $('#layer-list').prepend(nRow);
-        //TODO: Deprecated; Remove if no issues arise
-        //detectLongClick('#' + this.id + '-control');
         this.updatePreview();
     }
 

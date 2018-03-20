@@ -2,25 +2,6 @@
  * TODO: Cleanup; Consolidate code that belongs here and move code that doesn't
 */
 
-
-/**
- * TODO: DEPRECATED
- * Used in color palette
- */
-function detectLongClick(selector) {
-    var element = $(selector);
-    element.on('mousedown', function(){
-        element.data("longClick", setTimeout(function(){
-            element.data('dragging', true);
-        },200));
-    });
-
-    $(document).on('mouseup', function() {
-        clearTimeout(element.data("longClick"));
-        element.data('dragging', false);
-    });
-}
-
 /** TODO: Move to ready() */
 var drag = false;
 $('.layer-list tr').attr('draggable', "true");
@@ -84,6 +65,9 @@ function clearDraggable(parent, child) {
     $(parent).off('drop');
 }
 
+var name = '';
+var type = 'png';
+
 //TODO: All jQuery events in this file should be here
 $(document).ready(function() {
     new Vue({
@@ -113,12 +97,13 @@ $(document).ready(function() {
         'el': '#dialog-save',
         'methods': {
             onInput: function(inp) {
-                var name = $('#file-name').val();
+                var tname = $('#file-name').val();
 
-                if(name.length == 0) {
+                if(tname.length == 0) {
                     name = "amidraw";
+                } else {
+                    name = tname;
                 }
-                $('#dl-link').attr('download', name + '.' + $('#file-type').val());
             }
         }
     });
@@ -179,6 +164,26 @@ $(document).ready(function() {
         localStorage.setItem('settings', JSON.stringify(settings));
     });
 
+
+    /** Saving */
+    $("#save").on('click', () => {
+        $('#dialog-save').show().css('display','flex');;
+        $('#modal-bg').show().css('display','flex');
+    });
+
+    $('#file-type').on('change', function() {
+        type = $('#file-type').val();
+    });
+
+
+    $('#button-save').on('click', () => {
+        if(type == 'json') {
+            saveBlob(name + '.' + type, layersJsonToBlob());
+        } else {
+            layersToBlob(name + '.' + type);
+        }
+    });
+
     /** Online */
     $('#invite').on('click', function() {
         $('#dialog-invite').show().css('display','flex');
@@ -224,38 +229,3 @@ function hideModals() {
     clearInterval($('#gallery-error').data('interval'));
     clearInterval($('.connection-status').data('interval'));
 }
-
-$("#save").on('click', function(e) {
-    $('#dialog-save').show().css('display','flex');;
-    $('#modal-bg').show().css('display','flex');
-    $('#dl-link').attr('href', saveToPNG())
-
-    $('#gallery-error').data('interval', setInterval(checkGalleryConnection, 500));
-});
-
-/**
- * Checks the connection to the server, shows an error if not connected
- */
-function checkGalleryConnection() {
-    if(client.connected) {
-        $('#gallery-error').hide();
-        $('#upload').prop('disabled', false);
-    } else {
-        $('#gallery-error').show();
-        $('#upload').prop('disabled', true);
-        $('#upload').prop('checked', false);
-    }
-}
-
-$('#fileType').on('change', function() {
-    var name = $('#file-name').val();
-    if(name.length == 0) {
-        name = "amidraw";
-    }
-    $('#dl-link').attr('download', name + '.' + $('#fileType').val());
-    if($('fileType').val() == 'png') {
-        $('#dl-link').attr('href', saveToPNG());
-    } else {
-        $('#dl-link').attr('href', saveLayersToJSON());
-    }
-});

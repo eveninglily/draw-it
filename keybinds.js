@@ -45,9 +45,6 @@ function getDefaultBindings() {
                 client.sendRedo();
             }
         }),
-        new KeyBinding('input', 13, false, false, false, function () {
-            //$('input').trigger('blur');
-        }),
         new KeyBinding('brush', 90, false, false, false, function () {
             $('#brush').click();
         }),

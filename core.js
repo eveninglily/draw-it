@@ -190,3 +190,13 @@ function getMergedVisibleCanvas(whiteBg) {
     }
     return merged;
 }
+
+/**
+ * Basic logging function
+ * @param {String} type The type of the message
+ * @param {String} msg The message to log
+ */
+function log(type, msg) {
+    var time = Date.now();
+    console.log("[" + type + "]::" + time + " - " + msg);
+}

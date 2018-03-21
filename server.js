@@ -7,6 +7,11 @@ var rooms = {};
 console.log("Started server");
 
 class Room {
+    /**
+     * Creates a room
+     * @param {String} id The id of the room
+     * @param {Object} settings JSON containing the settings
+     */
     constructor(id, settings) {
         this.id = id;
         this.clients = {};
@@ -18,6 +23,11 @@ class Room {
         }
     }
 
+    /**
+     * Adds a socket as a user in the room
+     * @param {*} socket
+     * @param {*} username
+     */
     addClient(socket, username) {
         this.clients[socket.id] = username;
         socket.join(this.id);
@@ -36,6 +46,11 @@ class Room {
         return this;
     }
 
+    /**
+     * Updates the room settings if the user is the admin
+     * @param {*} socket
+     * @param {*} settings
+     */
     updateSettings(socket, settings) {
         if(socket.id != this.admin) { return false; }
 
@@ -43,11 +58,21 @@ class Room {
         return true;
     }
 
+    /**
+     * Helper function that broadcasts to the room
+     * @param {*} socket
+     * @param {*} type
+     * @param {*} data
+     */
     broadcast(socket, type, data) {
         socket.broadcast.to(this.id).emit(type, data);
     }
 
-    /** Gets a room or creates a new one if the room is not found */
+    /**
+     * Gets a room or creates a new one if the room is not found
+     * @param {*} data
+     * @param {*} socket
+     */
     static GetRoom(data, socket) {
         if(rooms.hasOwnProperty(data.id)) {
             log("evt", "Retrived room [" + data.id + "]");
@@ -126,7 +151,12 @@ io.on('connection', function(socket) {
      })});
 });
 
-/** Makes sure the room exists before doing any callbacks */
+/**
+ * Makes sure the room exists before doing any callbacks
+ * @param {*} room
+ * @param {*} data
+ * @param {*} callback
+ */
 function safeEvt(room, data, callback) {
     if(room == {} || !rooms.hasOwnProperty(room.id)) {
         log("warn", "Caught null room");
@@ -148,6 +178,11 @@ function getUUID() {
     return uuid;
 }
 
+/**
+ * Basic logging function
+ * @param {String} type The type of the message
+ * @param {String} msg The message to log
+ */
 function log(type, msg) {
     var time = Date.now();
     console.log("[" + type + "]::" + time + " - " + msg);

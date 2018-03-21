@@ -30,15 +30,18 @@ class Client {
         this.sending = {};
     }
 
+    /**
+     * Connects to the server
+     */
     connect() {
         this.socket = io(this.server);
 
         this.socket.on('connect', () => {
             this.connected = true;
-            console.log('[Client]: Connected')
+            log('net', 'Client connected')
         }).on('disconnect', () => {
             this.connected = false;
-            console.log('[Client]: Disconnected')
+            log('net', 'Client disconnected')
         });
 
         $(document).on('unload', () => {
@@ -47,7 +50,7 @@ class Client {
     }
 
     joinRoom(id) {
-        console.log("Connecting to room " + id)
+        log('net', 'Connecting to room ' + id)
 
         this.socket.emit('join', {
             'id': id,
@@ -66,12 +69,13 @@ class Client {
                    .on('undo', data => { console.log("ID:  " + data.cId); undo(data.cId); })
                    .on('redo', data => { console.log(data.cId); redo(data.cId); })
                    .on('board_data', data => {
-                       for(var layer in data.layers) {
-                           addLayer(layer);
-                       }
+                        /** Create all the layers */
+                        for(var layer in data.layers) {
+                            addLayer(layer);
+                        }
 
+                        /** Draw all the strokes */
                         for(var key in data.strokes) {
-                            //console.log(data.strokes[key]);
                             if(data.strokes.hasOwnProperty(key)) {
                                 var layer = data.strokes[key].layer;
                                 var stroke = new OIStroke(data.strokes[key].tool, layers[layer].canvas.partitions);
@@ -80,10 +84,13 @@ class Client {
                             }
                         }
 
+                        /** Update layer previews */
                         for(var i = 0; i < layers.length; i++) {
                             layers[i].updatePreview();
                         }
                    });
+
+        /** Send updates every 40ms */
         setInterval(() => {
             for(var key in this.sending) {
                 if(!this.sending.hasOwnProperty(key)) {
@@ -169,15 +176,6 @@ class Client {
 
     sendUpdateSettings() {
 
-    }
-
-    save() {
-        this.socket.emit('save', {'b64': getMergedVisibleCanvas(settings.whiteBg).get(0).toDataURL(), 'title':'', description: ''}, function(data) {
-            console.log("Saved to gallery at " + data.url);
-            $('#gallery-url-holder').show();
-            $('#gallery-url').text(data.url).attr('href', data.url);
-            $('#modal-bg').show();
-        });
     }
 
     _join(data) {
@@ -345,7 +343,7 @@ class Client {
 }
 
 /**
- * UUID generator from https://jsfiddle.net/xg7tek9j/7/, a RFC4122-compliant solution
+ * UUID generator from https://jsfiddle.net/xg7tek9j/7/
  */
 function getUUID() {
     var t = new Date().getTime();

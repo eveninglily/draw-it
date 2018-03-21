@@ -2,6 +2,13 @@
 
 var drag = false;
 
+/**
+ * Initializes all events for allowing dragging elements
+ * @param {String} parent The selector of the container of the elements
+ * @param {String} child The selector of the element being dragged
+ * @param {Function} onDragUp Callback for moving above the next element
+ * @param {Function} onDragDown Callback for moving below the next element
+ */
 function setDraggable(parent, child, onDragUp, onDragDown) {
     function dragCancel(evt) {
         if (evt.preventDefault) {
@@ -49,8 +56,8 @@ function setDraggable(parent, child, onDragUp, onDragDown) {
 
 /**
  * Clears dragging event handlers
- * @param {*} parent - Container
- * @param {*} child - Element that is dragged
+ * @param {String} parent Selector for container
+ * @param {String} child Selector for dragged element
  */
 function clearDraggable(parent, child) {
     $(child).attr('draggable', 'false');
@@ -60,12 +67,14 @@ function clearDraggable(parent, child) {
     $(parent).off('drop');
 }
 
+/** Hides all modal elements */
 function hideModals() {
     $('#modal-bg').hide();
     $('.modal').hide();
 }
 
-$(document).ready(function() {
+$(document).ready(() => {
+    /** Vue element for room management */
     new Vue({
         el: '#room-manage',
         methods: {
@@ -89,6 +98,7 @@ $(document).ready(function() {
         }
     });
 
+    /** Vue element for save dialog */
     new Vue({
         'el': '#dialog-save',
         'methods': {
@@ -109,6 +119,7 @@ $(document).ready(function() {
         }
     });
 
+    /** Vue element for settings */
     new Vue({
         'el': '#dialog-settings',
         'methods': {

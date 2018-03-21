@@ -75,12 +75,12 @@ $(document).ready(() => {
 
     hexInput.update(colorWheel.getHex());
 
-    $("#color1").on('click', function() {
+    $("#color1").on('click', () => {
         activeColor = 1;
         hexInput.update(color1);
     });
 
-    $("#color2").on('click', function() {
+    $("#color2").on('click', () => {
         activeColor = 2;
         hexInput.update(color2);
     });

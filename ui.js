@@ -1,12 +1,7 @@
-/** General UI Code
- * TODO: Cleanup; Consolidate code that belongs here and move code that doesn't
-*/
+/** General UI Code */
 
-/** TODO: Move to ready() */
 var drag = false;
-$('.layer-list tr').attr('draggable', "true");
 
-//TODO: Extend functionality to left and right
 function setDraggable(parent, child, onDragUp, onDragDown) {
     function dragCancel(evt) {
         if (evt.preventDefault) {
@@ -65,10 +60,11 @@ function clearDraggable(parent, child) {
     $(parent).off('drop');
 }
 
-var name = '';
-var type = 'png';
+function hideModals() {
+    $('#modal-bg').hide();
+    $('.modal').hide();
+}
 
-//TODO: All jQuery events in this file should be here
 $(document).ready(function() {
     new Vue({
         el: '#room-manage',
@@ -97,14 +93,19 @@ $(document).ready(function() {
         'el': '#dialog-save',
         'methods': {
             onInput: function(inp) {
-                var tname = $('#file-name').val();
-
-                if(tname.length == 0) {
-                    name = "amidraw";
+                this.name = inp.length > 0 ? inp : this.name;
+            },
+            save: function() {
+                if(this.type == 'json') {
+                    saveBlob(this.name + '.' + this.type, layersJsonToBlob());
                 } else {
-                    name = tname;
+                    layersToBlob(this.name + '.' + this.type);
                 }
             }
+        },
+        'data' : {
+            'name': 'amidraw',
+            'type': 'png'
         }
     });
 
@@ -171,29 +172,10 @@ $(document).ready(function() {
         $('#modal-bg').show().css('display','flex');
     });
 
-    $('#file-type').on('change', function() {
-        type = $('#file-type').val();
-    });
-
-
-    $('#button-save').on('click', () => {
-        if(type == 'json') {
-            saveBlob(name + '.' + type, layersJsonToBlob());
-        } else {
-            layersToBlob(name + '.' + type);
-        }
-    });
-
     /** Online */
     $('#invite').on('click', function() {
         $('#dialog-invite').show().css('display','flex');
         $('#modal-bg').show().css('display','flex');
-        if(client.inRoom) {
-            //$('#room-create').hide();
-            //$('#room-manage').show();
-        } else {
-            //$('#room-manage').hide();
-        }
     });
 
     $('#create-room').on('click', function() {
@@ -214,18 +196,5 @@ $(document).ready(function() {
         }
     });
 
-    $('#dl-link').on('click', function() {
-        if($('#upload').is(':checked')) {
-            client.save();
-        } else {
-            hideModals();
-        }
-    });
+    $('.layer-list tr').attr('draggable', "true");
 });
-
-function hideModals() {
-    $('#modal-bg').hide();
-    $('.modal').hide();
-    clearInterval($('#gallery-error').data('interval'));
-    clearInterval($('.connection-status').data('interval'));
-}

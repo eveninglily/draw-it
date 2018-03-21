@@ -183,14 +183,14 @@
                             text='File Name'
                             name='file-name'>
                         </vial-input>
-                    <select id='file-type' name="fileType">
+                    <select id='file-type' name="fileType" v-model="type">
                         <option value="png" selected>.png</option>
                         <option value="json">.json</option>
                     </select>
                 </div>
                 <div class='button-holder'>
                     <input type='button' class=' button button-red cancel' id='cancel-save' value='Cancel'>
-                    <button id='button-save' class='button button-blue'>Save</button>
+                    <button id='button-save' class='button button-blue' @click='save'>Save</button>
                 </div>
             </div>
             <div id="dialog-invite" class='modal'>

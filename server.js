@@ -26,7 +26,7 @@ class Room {
     /**
      * Adds a socket as a user in the room
      * @param {*} socket
-     * @param {*} username
+     * @param {String} username
      */
     addClient(socket, username) {
         this.clients[socket.id] = username;
@@ -49,7 +49,7 @@ class Room {
     /**
      * Updates the room settings if the user is the admin
      * @param {*} socket
-     * @param {*} settings
+     * @param {Object} settings
      */
     updateSettings(socket, settings) {
         if(socket.id != this.admin) { return false; }
@@ -61,8 +61,8 @@ class Room {
     /**
      * Helper function that broadcasts to the room
      * @param {*} socket
-     * @param {*} type
-     * @param {*} data
+     * @param {String} type
+     * @param {Object} data
      */
     broadcast(socket, type, data) {
         socket.broadcast.to(this.id).emit(type, data);
@@ -153,9 +153,9 @@ io.on('connection', function(socket) {
 
 /**
  * Makes sure the room exists before doing any callbacks
- * @param {*} room
- * @param {*} data
- * @param {*} callback
+ * @param {Room} room
+ * @param {Object} data
+ * @param {Function} callback
  */
 function safeEvt(room, data, callback) {
     if(room == {} || !rooms.hasOwnProperty(room.id)) {

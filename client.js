@@ -68,27 +68,7 @@ class Client {
                    .on('update-name', data => this._recieveUpdateName(data))
                    .on('undo', data => { console.log("ID:  " + data.cId); undo(data.cId); })
                    .on('redo', data => { console.log(data.cId); redo(data.cId); })
-                   .on('board_data', data => {
-                        /** Create all the layers */
-                        for(var layer in data.layers) {
-                            addLayer(layer);
-                        }
-
-                        /** Draw all the strokes */
-                        for(var key in data.strokes) {
-                            if(data.strokes.hasOwnProperty(key)) {
-                                var layer = data.strokes[key].layer;
-                                var stroke = new OIStroke(data.strokes[key].tool, layers[layer].canvas.partitions);
-                                stroke.addPoints(data.strokes[key].path);
-                                layers[layer].canvas.completeStroke(stroke);
-                            }
-                        }
-
-                        /** Update layer previews */
-                        for(var i = 0; i < layers.length; i++) {
-                            layers[i].updatePreview();
-                        }
-                   });
+                   .on('board_data', data => this._loadBoard(data));
 
         /** Send updates every 40ms */
         setInterval(() => {
@@ -179,15 +159,37 @@ class Client {
     }
 
     _join(data) {
-        console.log('Connected to server! Room ID: ' + data.id);
+        log('net', 'Connected to server! Room ID: ' + data.id);
         window.location.href = "#" + data.id
         this.id = data.id;
         this.clientId = data.cId;
-        console.log("Client ID is " + data.cId);
+        log('net', 'Client ID is ' + data.cId);
         $('#server-status').show();
         $('#server-name').text(data.name);
         this.inRoom = true;
         this.socket.emit('init_data');
+    }
+
+    _loadBoard(data) {
+        /** Create all the layers */
+        for(var layer in data.layers) {
+            addLayer(layer);
+        }
+
+        /** Draw all the strokes */
+        for(var key in data.strokes) {
+            if(data.strokes.hasOwnProperty(key)) {
+                var layer = data.strokes[key].layer;
+                var stroke = new OIStroke(data.strokes[key].tool, layers[layer].canvas.partitions);
+                stroke.addPoints(data.strokes[key].path);
+                layers[layer].canvas.completeStroke(stroke);
+            }
+        }
+
+        /** Update layer previews */
+        for(var i = 0; i < layers.length; i++) {
+            layers[i].updatePreview();
+        }
     }
 
     _recieveStart(data) {
@@ -240,20 +242,20 @@ class Client {
 
         var expanded = $('<div>').html(data.username).attr('class', 'user-expanded').appendTo(el);
         el.animate({
-                height: "toggle",
-                opacity: "toggle"
-              }, {
-                duration: "slow"
-              });
+            height: "toggle",
+            opacity: "toggle"
+        }, {
+            duration: "slow"
+        });
     }
 
     _recieveUserLeave(data) {
         $('#' + data.id).animate({
             height: "toggle",
             opacity: "toggle"
-          }, {
+        }, {
             duration: "slow"
-          }, () => {$('#' + data.id).remove();});
+        }, () => {$('#' + data.id).remove();});
     }
 
     _recieveUpdateName(data) {
@@ -301,9 +303,7 @@ class Client {
                 (evt.originalEvent.touches[0].pageX - $('#layers').offset().left),
                 (evt.originalEvent.touches[0].pageY - $('#layers').offset().top)
             );
-            this.sendMove(
-                n.x, n.y, .5
-            );
+            this.sendMove(n.x, n.y, .5);
         });
 
         $(document).on('touchend touchcancel', evt => {
@@ -316,7 +316,6 @@ class Client {
     }
 
     _initPointers() {
-        var _this = this;
         $('#layers').on('pointerdown', evt => {
             var n = normalize(evt.offsetX, evt.offsetY);
             this.sendStart(n.x, n.y, evt.originalEvent.pressure);

@@ -1,6 +1,4 @@
-/** Color Input/Handling
- * TODO: https://i.imgur.com/QVgYbiZ.gif
-*/
+/** Color Input/Handling */
 
 var color1 = '#000000';
 var color2 = '#ffffff';

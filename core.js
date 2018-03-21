@@ -9,6 +9,7 @@ var currentLayer = 0;
 var layers = [];
 var currTool = pen;
 
+/** TODO: relate to vue obj */
 var settings = {
     showLeaveMessage: false,
     whiteBg: false,
@@ -47,6 +48,9 @@ $(document).ready(function() {
     });
 });
 
+/**
+ * Initializes mouse events to interact with the canvas
+ */
 function initMouseEvents() {
     $("#layers").on('mousedown', evt => {
         if(evt.which == 1) {
@@ -76,6 +80,10 @@ function initMouseEvents() {
     });
 }
 
+/**
+ * Initializes touch events to work with the canvas
+ * TODO: Two finger scroll? Zoom?
+ */
 function initTouchEvents() {
     $('#layers').on('touchstart', evt => {
         var n = normalize(
@@ -95,7 +103,12 @@ function initTouchEvents() {
     });
 }
 
+/**
+ * Initializes Pointer Events
+ * Not fully supported by most browsers! Use with care!
+ */
 function initPointerEvents() {
+    log('evt', 'Enabled Pointer Events');
     $('#layers').on('pointerdown', function(evt) {
         var n = normalize(evt.offsetX, evt.offsetY);
         start(n.x, n.y, evt.originalEvent.pressure);
@@ -110,6 +123,12 @@ function initPointerEvents() {
     client._initPointers();
 }
 
+/**
+ * Starts a stroke
+ * @param {Number} x Normalized x-coord
+ * @param {Number} y Normalized y-coord
+ * @param {Number} p Pressure
+ */
 function start(x, y, p) {
     down = false;
     if(currTool.name == "Pen" || currTool.name == "Eraser") {
@@ -120,11 +139,20 @@ function start(x, y, p) {
     }
 }
 
+/**
+ * Updates a stroke
+ * @param {Number} x Normalized x-coord
+ * @param {Number} y Normalized y-coord
+ * @param {Number} p Pressure
+ */
 function move(x, y, p) {
     layers[currentLayer].canvas.updateStroke(x, y, p, 'local');
     layers[currentLayer].stroke();
 }
 
+/**
+ * Ends a stroke
+ */
 function end() {
     layers[currentLayer].canvas.completeStrokeById('local');
 
@@ -141,6 +169,9 @@ function end() {
 
 /**
  * Normalizes a point to adapt to all display sizes
+ * Each point is adjusted by the ideal width divided by the actual width
+ * @param {Number} x Raw x-coord
+ * @param {Number} y Raw y-coord
  */
 function normalize(x, y) {
     var xR = width / $('#layers').width();
@@ -152,11 +183,15 @@ function normalize(x, y) {
     };
 }
 
+/**
+ * Normalizes the coordinates for an event
+ * @param {Event} evt The event
+ */
 function normalizeEvt(evt) {
     if(evt.type == "mousedown" || evt.type == "mousemove") {
         return normalize(evt.offsetX, evt.offsetY);
     } else {
-        console.log("Unsupported event type");
+        log('err', 'Unsupported event type in normalize');
     }
 }
 

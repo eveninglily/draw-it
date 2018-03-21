@@ -130,13 +130,13 @@ $(document).ready(() => {
         'el': '#dialog-settings',
         'methods': {
             onInput: function(inp) {
-
+                this.username = inp;
             },
             toggleWarn: function(val) {
-                console.log(val)
+                this.warn = (val != null);
             },
             toggleTransparent: function(val) {
-                console.log(val)
+                this.transparent = (val != null);
             }
         },
         'data' : {
@@ -146,16 +146,8 @@ $(document).ready(() => {
         }
     });
 
-    /** Modals */
-    /** TODO: Replace with Vial */
-    $('#modal-bg').on('click', function(evt) {
-        if(evt.target.id == 'modal-bg') {
-            hideModals()
-        }
-    }).hide();
-    $('.cancel').on('click', hideModals);
-
     /** Settings */
+    /** TODO: get this to work with vue? */
     if(localStorage.getItem('settings')) {
         settings = JSON.parse(localStorage.getItem('settings'));
         for(var key in settings) {
@@ -174,11 +166,6 @@ $(document).ready(() => {
         }
     }
 
-    $('#settings').on('click', function() {
-        $('#dialog-settings').show().css('display','flex');
-        $('#modal-bg').show().css('display','flex');
-    });
-
     $('.settings-item').on('change', function() {
         var data = $(this).attr('name');
         if($(this).is(':checkbox')) {
@@ -196,15 +183,27 @@ $(document).ready(() => {
     });
 
 
-    /** Saving */
+    /** Modals */
+    /** TODO: Replace with Vial Modals */
+    $('#modal-bg').on('click', function(evt) {
+        if(evt.target.id == 'modal-bg') {
+            hideModals()
+        }
+    }).hide();
+    $('.cancel').on('click', hideModals);
+
     $("#save").on('click', () => {
         $('#dialog-save').show().css('display','flex');;
         $('#modal-bg').show().css('display','flex');
     });
 
-    /** Online */
     $('#invite').on('click', function() {
         $('#dialog-invite').show().css('display','flex');
+        $('#modal-bg').show().css('display','flex');
+    });
+
+    $('#settings').on('click', function() {
+        $('#dialog-settings').show().css('display','flex');
         $('#modal-bg').show().css('display','flex');
     });
 

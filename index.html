@@ -2,11 +2,11 @@
 
 <html>
     <head>
-        <title> AmiDraw 🖌</title>
-
         <!-- Meta -->
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title> AmiDraw 🖌</title>
 
         <meta name="twitter:card" content="summary">
         <meta name="twitter:url" content="https://amidraw.com/draw">
@@ -41,10 +41,8 @@
                 <path d="M230 57.726H26a5 5 0 0 1-5-5V43.9a5 5 0 0 1 5-5h7.588v-8.8a5 5 0 0 1 5-5h44.094V8a8 8 0 0 1 8-8h74.636a8 8 0 0 1 8 8v17.1h44.094a5 5 0 0 1 5 5v8.8H230a5 5 0 0 1 5 5v8.823a5 5 0 0 1-5 5.003zM101.565 15.059V25.1h52.87V15.059h-52.87zM44.882 67.765h166.236a5 5 0 0 1 5 5V251a5 5 0 0 1-5 5H44.882a5 5 0 0 1-5-5V72.765a5 5 0 0 1 5-5z"/>
             </svg>
             <div class='conn-info'>
-                <!--
                 <span id='server-status'>Connected to #<span id='server-name'></span></span>
                 <div id='user-list'>&nbsp;</div>
-                -->
             </div>
             <div class='actions'>
                 <svg id='undo' class='action' xmlns="http://www.w3.org/2000/svg" viewBox = "0 0 256 256">
@@ -190,7 +188,7 @@
                 </div>
                 <div class='button-holder'>
                     <input type='button' class=' button button-red cancel' id='cancel-save' value='Cancel'>
-                    <button id='button-save' class='button button-blue' @click='save'>Save</button>
+                    <button id='button-save' class='button blue' @click='save'>Save</button>
                 </div>
             </div>
             <div id="dialog-invite" class='modal'>
@@ -214,8 +212,8 @@
                         </vial-checkbox>
                         <div class='button-holder'>
                             <input class="button cancel" type="button" value="Cancel" />
-                            <input v-if='inRoom' class='button button-blue' type="button" value="Update" id='update-room'/>
-                            <input v-else class='button button-blue' type="button" value="Create" id='create-room' @click='create'/>
+                            <input v-if='inRoom' class='button blue' type="button" value="Update" id='update-room'/>
+                            <input v-else class='button blue' type="button" value="Create" id='create-room' @click='create'/>
                         </div>
                     </div>
                 </div>

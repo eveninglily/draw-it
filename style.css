@@ -68,12 +68,6 @@ input[type="file"] {
     display: none;
 }
 
-#hidden-input {
-    top: -999px;
-    left: -999px;
-    position: absolute;
-}
-
 #server-status {
     display: inline;
     color: #ffffff;
@@ -81,10 +75,6 @@ input[type="file"] {
 
 .conn-info {
     margin-left: auto;
-}
-
-#gallery-url-holder {
-    display: none;
 }
 
 /* Toolbox
@@ -350,10 +340,6 @@ input[type="file"] {
     margin: .2em;
 }
 
-#gallery-error {
-    margin-bottom: .9em !important;
-}
-
 #dialog-save label, #dialog-save input {
     display: inline-block;
 }
@@ -395,10 +381,6 @@ input[type="file"] {
     color: #fbfbfb;
 }
 
-.button-blue {
-    background: #2264AA;
-}
-
 #user-list {
     display: inline-flex;
     flex-direction: row;
@@ -421,13 +403,14 @@ input[type="file"] {
     line-height: 1.30em;
 
     text-align: center;
+    margin-top: auto;
     margin-bottom: auto;
     position: relative
 }
 
-#user-list span:hover .user-expanded {
+/*#user-list span:hover .user-expanded {
     display: block;
-}
+}*/
 
 .nostyle {
     text-decoration: none;

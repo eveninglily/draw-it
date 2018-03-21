@@ -178,11 +178,11 @@
                 <h1>Save</h1>
                 <div>
                     <vial-input
-                            @input='onInput'
-                            id='file-name'
-                            text='File Name'
-                            name='file-name'>
-                        </vial-input>
+                        @input='onInput'
+                        id='file-name'
+                        text='File Name'
+                        name='file-name'>
+                    </vial-input>
                     <select id='file-type' name="fileType" v-model="type">
                         <option value="png" selected>.png</option>
                         <option value="json">.json</option>
@@ -215,7 +215,7 @@
                         <div class='button-holder'>
                             <input class="button cancel" type="button" value="Cancel" />
                             <input v-if='inRoom' class='button button-blue' type="button" value="Update" id='update-room'/>
-                            <input v-else class='button button-blue' type="button" value="Create" id='create-room'/>
+                            <input v-else class='button button-blue' type="button" value="Create" id='create-room' @click='create'/>
                         </div>
                     </div>
                 </div>
@@ -231,14 +231,18 @@
                     </vial-input>
                 </div>
                 <h1> Application Settings </h1>
-                <div class='cch'>
-                    <input id='setting-showLeaveMessage' class='settings-item' type='checkbox' data-val='showLeaveMessage'/>
-                    <label for="setting-showLeaveMessage" class="">Confirmation on page leave</label>
-                </div>
-                <div class='cch'>
-                    <input id='setting-whiteBg' class='settings-item' type='checkbox' data-val='whiteBg'/>
-                    <label for="setting-whiteBg" class="">Save without transparency</label>
-                </div>
+                <vial-checkbox
+                    @change="toggleWarn"
+                    id="setting-warn"
+                    text="Warn on Leave"
+                    name="setting-warn">
+                </vial-checkbox>
+                <vial-checkbox
+                    @change="toggleTransparent"
+                    id="setting-transparent"
+                    text="Transparent Background"
+                    name="setting-transparent">
+                </vial-checkbox>
                 <div>
                     <label>Load keybinds<input class='settings-item' data-val='keybinds' id="setting-keybinds" type="file" /></label>
                 </div>

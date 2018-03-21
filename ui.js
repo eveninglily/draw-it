@@ -87,14 +87,20 @@ $(document).ready(() => {
             },
             togglePrivate: function() {
 
+            },
+            create: function() {
+                if(!client.connected) {
+                    client.connect();
+                }
+                client.joinRoom('');
+                this.inRoom = true;
+                $('#modal-bg').hide();
+                $('#dialog-invite').hide();
             }
         },
-        data() {
-            return {
-                'inRoom': false,
-                /** TODO: actual do some sort of check here */
-                'connected': true
-            }
+        data: {
+            'inRoom': false,
+            'connected': true
         }
     });
 
@@ -123,7 +129,20 @@ $(document).ready(() => {
     new Vue({
         'el': '#dialog-settings',
         'methods': {
-            onInput: function(inp) {}
+            onInput: function(inp) {
+
+            },
+            toggleWarn: function(val) {
+                console.log(val)
+            },
+            toggleTransparent: function(val) {
+                console.log(val)
+            }
+        },
+        'data' : {
+            'username': 'Anon',
+            'transparent': false,
+            'warn': false
         }
     });
 
@@ -161,7 +180,7 @@ $(document).ready(() => {
     });
 
     $('.settings-item').on('change', function() {
-        var data = $(this).attr('data-val');
+        var data = $(this).attr('name');
         if($(this).is(':checkbox')) {
             settings[data] = $(this).is(':checked');
         } else if($(this).is(':file')) {
@@ -187,17 +206,6 @@ $(document).ready(() => {
     $('#invite').on('click', function() {
         $('#dialog-invite').show().css('display','flex');
         $('#modal-bg').show().css('display','flex');
-    });
-
-    $('#create-room').on('click', function() {
-        if(!client.connected) {
-            client.connect();
-        }
-        client.joinRoom('');
-        $('#modal-bg').hide();
-        $('#dialog-invite').hide();
-
-        $('#edit-room-name').val($('#new-room-name').val());
     });
 
     /** Misc */

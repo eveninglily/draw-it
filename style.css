@@ -443,55 +443,6 @@ input[type="file"] {
     border: 1px solid #2264AA;
 }
 
-/** Checkbox */
-/* TODO: Deprecated */
-.cch input {
-    position: absolute;
-    opacity: 0;
-}
-
-.cch label {
-    position: relative;
-    cursor: pointer;
-    padding: 0;
-    vertical-align: middle
-}
-
-.cch label:before{
-    content: '';
-    margin-right: .3em;
-    display: inline-block;
-    vertical-align: middle;
-    width: 1em;
-    height: 1em;
-    border: 2px solid #2264AA;
-    border-radius: 20%;
-    background: white;
-}
-
-.cch:hover label:before {
-    background: #2264AA77;
-}
-
-.cch input:focus + label:before {
-    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
-}
-
-.cch input:checked + label:before {
-    background: #2264AA;
-}
-
-.cch input:disabled + label {
-    color: #b8b8b8;
-    cursor: auto;
-}
-
-.cch input:disabled + label:before {
-    box-shadow: none;
-    background: #ddd;
-}
-/* TODO: End Deprecated */
-
 .dialog-settings {
     align-content: flex-start
 }

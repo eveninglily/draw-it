@@ -4,7 +4,7 @@
  * TODO: Create Vial Sliders, and then update brush-settings and eraser-settings
  */
 
-"use strict";
+'use strict';
 
 var pen = new OIBrush("Pen", 10, "source-over", color1);
 var eraser = new OIBrush("Eraser", 10, "source-over", "#ffffff");

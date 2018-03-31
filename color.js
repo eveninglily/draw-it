@@ -9,7 +9,7 @@ var hexInput;
 $(document).ready(() => {
     /** Colorwheel init */
     colorWheel = new ColorWheel('wheel', 250, function() {
-        currTool.color = "#" + colorWheel.getHex();
+        currTool.color = '#' + colorWheel.getHex();
         hexInput.update(colorWheel.getHex());
     });
     colorWheel.adjustSize();
@@ -37,7 +37,7 @@ $(document).ready(() => {
         'methods': {
             validate: function(inp) {
                 //#([a-f]|[0-9]){6}$
-                var match = inp.toString().match("#([a-f]|[0-9]){6}$");
+                var match = inp.toString().match('#([a-f]|[0-9]){6}$');
 
                 // TODO: Error highlight
                 if(match == null) {
@@ -58,10 +58,10 @@ $(document).ready(() => {
                 colorWheel.setColorHex(this.color);
                 currTool.color = this.color;
                 if(activeColor == 1) {
-                    $("#color1").css({background: currTool.color});
+                    $('#color1').css({background: currTool.color});
                     color1 = currTool.color;
                 } else {
-                    $("#color2").css({background: currTool.color});
+                    $('#color2').css({background: currTool.color});
                     color2 = currTool.color;
                 }
             },
@@ -73,12 +73,12 @@ $(document).ready(() => {
 
     hexInput.update(colorWheel.getHex());
 
-    $("#color1").on('click', () => {
+    $('#color1').on('click', () => {
         activeColor = 1;
         hexInput.update(color1);
     });
 
-    $("#color2").on('click', () => {
+    $('#color2').on('click', () => {
         activeColor = 2;
         hexInput.update(color2);
     });

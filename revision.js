@@ -1,6 +1,5 @@
 /** Tracks stroke history; allows undo/redo */
-
-"use strict";
+'use strict';
 
 /**
  * Simple holder class that holds a stroke and the layer it happened on

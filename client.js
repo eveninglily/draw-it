@@ -1,5 +1,5 @@
 /** Client-side networking code */
-"use strict";
+'use strict';
 var client;
 
 $(document).ready(function() {

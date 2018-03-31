@@ -1,6 +1,3 @@
-[submodule "colorwheel.js"]
-	path = colorwheel.js
-	url = git@github.com:McIntireEvan/colorwheel.js.git
 [submodule "openink"]
 	path = openink
 	url = git@github.com:McIntireEvan/openink.git

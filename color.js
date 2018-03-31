@@ -8,13 +8,15 @@ var hexInput;
 
 $(document).ready(() => {
     /** Colorwheel init */
-    colorWheel = new ColorWheel('wheel', 250, function() {
+    var vw = $('#wheel-holder').width() / 2;
+    colorWheel = new HSLPicker('wheel', 'wheel-holder', vw, function() {
         currTool.color = '#' + colorWheel.getHex();
         hexInput.update(colorWheel.getHex());
     });
-    colorWheel.adjustSize();
+
     $(window).resize(() => {
-        colorWheel.adjustSize();
+        vw = $('#wheel-holder').width() / 2;
+        colorWheel = colorWheel.resize(vw);
         if(activeColor == 1) {
             colorWheel.setColorHex(color1);
         } else {
@@ -55,7 +57,7 @@ $(document).ready(() => {
                 val = val.replace('#', '');
                 this.color = '#' + val;
 
-                colorWheel.setColorHex(this.color);
+                //colorWheel.setColorHex(this.color);
                 currTool.color = this.color;
                 if(activeColor == 1) {
                     $('#color1').css({background: currTool.color});

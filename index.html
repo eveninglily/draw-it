@@ -75,7 +75,7 @@
             <div id='color-settings'>
                 <div id='hex-val-container'>
                     <vial-input
-                        @input='validate'
+                        @enter='validate'
                         :value='color'
                         id='hex-val'
                         text='Hex Color'
@@ -257,7 +257,7 @@
         <!-- Internal Libraries -->
         <script src="openink/tools.js"></script>
         <script src="openink/canvas.js"></script>
-        <script src='colorwheel.js/colorwheel.js'></script>
+        <script src='hslpicker/hslpicker.js'></script>
 
         <!-- Main Files -->
         <script src="layers.js"></script>

@@ -4,3 +4,6 @@
 [submodule "vial"]
 	path = vial
 	url = git@github.com:McIntireEvan/vial.git
+[submodule "hslpicker"]
+	path = hslpicker
+	url = git@github.com:McIntireEvan/hslpicker.git

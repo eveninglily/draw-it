@@ -471,9 +471,6 @@ input[type="file"] {
 
 /* TODO: Deprecated */
 @media (max-device-width: 640px) {
-    body{
-        flex-flow: column wrap;
-    }
 
     #tool-info {
         display: none !important;
@@ -492,8 +489,9 @@ input[type="file"] {
 
     #layers, .layer {
         width: 100vw !important;
-        height: calc(100vw * calc(1920/1080)) !important;
+        height: calc(100vh - 40px - .2em) !important;
         margin: 0px;
-
+        padding: 0px;
+        border: 0px solid black !important;
     }
 }

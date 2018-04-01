@@ -3,6 +3,12 @@
 var width = 1920;
 var height = 1080;
 
+if($(window).width() < 480 ) {
+    console.log('mobile');
+    width = 1080;
+    height = 1920;
+};
+
 var down = false;
 
 var currentLayer = 0;

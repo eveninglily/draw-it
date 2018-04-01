@@ -89,15 +89,15 @@ function redrawLayer(id) {
     }
     var layer = layerMap[id];
 
-    layers[layer].canvas.clear();
-    layers[layer].canvas.clearBuffer();
+    layers[layer].canvas.clear(layers[layer].canvas.ctx);
+    layers[layer].canvas.clear(layers[layer].canvas.bCtx);
     for(var i = 0; i < changes.length; i++) {
         if(changes[i].active) {
             if(changes[i].type == "stroke") {
                 layers[layer].canvas.completeStroke(changes[i].data);
             } else if(changes[i].type == "clear") {
-                layers[layer].canvas.clear();
-                layers[layer].canvas.clearBuffer();
+                layers[layer].canvas.clear(layers[layer].canvas.ctx);
+                layers[layer].canvas.clear(layers[layer].canvas.bCtx);
             }
         }
     }

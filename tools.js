@@ -84,8 +84,8 @@ $(document).ready(() => {
     $("#clear").on('click', evt => {
         if(confirm("Clear all layers? This can not be undone. All history will be lost.")) {
             for(var i = 0; i < layers.length; i++) {
-                layers[i].canvas.clear();
-                layers[i].canvas.clearBuffer();
+                layers[i].canvas.clear(layers[i].canvas.ctx);
+                layers[i].canvas.clear(layers[i].canvas.bCtx);
                 layers[i].updatePreview();
             }
             changes = [];

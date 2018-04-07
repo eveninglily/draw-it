@@ -205,9 +205,7 @@ class Client {
             var layer = this.recieving[data.cId].layer;
             this.recieving[data.cId].len += data.positions.length;
             layers[layer].canvas.strokes[data.cId].addPoints(data.positions);
-            setTimeout(() => {
-                layers[layer].stroke();
-            }, 0);
+            layers[layer].stroke();
         }
     }
 

@@ -138,7 +138,9 @@ class Layer {
 
     stroke() {
         if(!this.isLocked) {
-            this.canvas.doStrokes(this.activeStrokes);
+            requestAnimationFrame(() => {
+                this.canvas.doStrokes(this.activeStrokes);
+            });
         }
     }
 

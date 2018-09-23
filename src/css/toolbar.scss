@@ -1,10 +1,37 @@
+@import 'colors.scss';
+
 #toolbar {
     display: flex;
+    justify-content: flex-start;
 
     grid-column-start: 1;
     grid-column-end: 13;
 
     grid-row: 1;
 
-    background: black;
+    background: #2f2f2f;
+
+    svg {
+        fill: white;
+        width: 32px;
+        height: 32px;
+        padding: 4px;
+    }
+
+    svg:hover {
+        background: black;
+    }
+
+    svg.selected, svg:active {
+        background: $blue;
+    }
+}
+
+#toolbar-actions {
+    display: flex;
+    margin-left: auto;
+
+    input {
+        display: none;
+    }
 }

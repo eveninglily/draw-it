@@ -6,7 +6,7 @@ class DrawingApp extends React.Component {
     return (
       <div id="container">
         <Toolbar/>
-        <div id="app-body">B</div>
+        <div id="app-body" />
       </div>
     );
   }

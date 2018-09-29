@@ -4,10 +4,8 @@
     display: flex;
     justify-content: flex-start;
 
-    grid-column-start: 1;
-    grid-column-end: 13;
-
     grid-row: 1;
+    grid-column: span 2;
 
     background: #2f2f2f;
 

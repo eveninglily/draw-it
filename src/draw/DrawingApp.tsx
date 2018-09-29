@@ -1,4 +1,6 @@
 import * as React from 'react';
+import 'src/css/canvas.css';
+import RCanvas from 'src/draw/canvas/RCanvas';
 import Toolbar from 'src/draw/components/Toolbar';
 
 class DrawingApp extends React.Component {
@@ -6,7 +8,12 @@ class DrawingApp extends React.Component {
     return (
       <div id="container">
         <Toolbar/>
-        <div id="app-body" />
+        <div id='colorwheel' />
+        <div id='tool-meta' />
+        <div id='layers' />
+        <div id='canvas'>
+          <RCanvas layers={[]} />
+        </div>
       </div>
     );
   }

@@ -1,6 +1,3 @@
-[submodule "openink"]
-	path = openink
-	url = git@github.com:McIntireEvan/openink.git
 [submodule "vial"]
 	path = vial
 	url = git@github.com:McIntireEvan/vial.git

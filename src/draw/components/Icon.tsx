@@ -4,7 +4,6 @@ interface IconProps {
   id: string,
   icon: string,
   isAction: boolean,
-
   clickHandler: (evt: React.MouseEvent<any>, elem: Icon) => void,
 
   dataOptions?: string,

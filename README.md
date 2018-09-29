@@ -11,9 +11,6 @@ drawing, with advanced features such as undo/redo, layers, and line smoothing.
 - [jQuery](https://github.com/jquery/jquery)
     - Used for a lot of UI interactions
     - MIT License
-- [Vue.js](https://github.com/MithrilJS/mithril.js)
-    - Used for UI
-    - MIT License
 
 ### Internal
 (Libraries written during development and spun off)
@@ -21,9 +18,6 @@ drawing, with advanced features such as undo/redo, layers, and line smoothing.
 - [colorwheel.js](https://github.com/McIntireEvan/colorwheel.js)
     - Dynamic HSV Colorwheel
     - MIT License
-- [OpenInk](https://github.com/McIntireEvan/openink)
-    - Abstraction of HTML5 Canvas; makes complex user drawing easier
-    - Unreleased; Planned MIT License
 - [Vial](https://github.com/McIntireEvan/vial)
     - Vue UI components
     - MIT License

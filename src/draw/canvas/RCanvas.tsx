@@ -40,15 +40,15 @@ class RCanvas extends React.Component<RCanvasProps, RCanvasState> {
     dom.appendChild(this.props.layers[0].canvas);    
   }
 
- public normalize(x: number, y: number) {
-  const xR = 1920 / this.container.current.offsetWidth;
-  const yR = 1080 / this.container.current.offsetHeight;
+  public normalize(x: number, y: number) {
+    const xR = 1920 / this.container.current.offsetWidth;
+    const yR = 1080 / this.container.current.offsetHeight;
 
-  return {
+    return {
       x: x * xR,
       y: y * yR
-  };
-}
+    };
+  }
 
  public normalizeEvt(evt: any) {
   if(evt.type === "mousedown" || evt.type === "mousemove") {

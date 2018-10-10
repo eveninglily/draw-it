@@ -1,10 +1,11 @@
 import * as React from 'react';
 import ExCanvas from 'src/draw/canvas/ExCanvas';
 import RCanvas from 'src/draw/canvas/RCanvas';
-import Toolbar from 'src/draw/components/Toolbar';
+import Toolbar from './ui/Toolbar';
 
 interface DrawingAppState {
   layers: any[];
+  selectedTool: string;
 }
 
 class DrawingApp extends React.Component<{}, DrawingAppState> {
@@ -13,13 +14,20 @@ class DrawingApp extends React.Component<{}, DrawingAppState> {
     
     this.state = {
       layers: [new ExCanvas()],
+      selectedTool: 'brush',
     }
+  }
+
+  public selectTool = (tool: string): void => {
+    this.setState({
+      selectedTool: tool,
+    });
   }
 
   public render() {
     return (
       <div id="container">
-        <Toolbar/>
+        <Toolbar selectedTool={this.state.selectedTool} updateTool={this.selectTool}/>
         <div id='colorwheel' />
         <div id='tool-meta' />
         <div id='layer-options' />

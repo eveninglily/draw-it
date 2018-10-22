@@ -1,8 +1,7 @@
 # Canvas
-This is the core drawing code; it sits as a wrapper over HTMLCanvasElement and CanvasRenderingContext2d
+The files in this directy handle the main canvas
 
-The high level overview is that `RCanvas` is the single entry point for the rest; it sits on the page, draws the layers, and intercepts events to send to the correct canvas.
-
-`ExCanvas` holds extended canvas info, i.e. layer settings
-
-`ExContext` handles drawing, and uses several internal canvases as an attempt to have quicker, safer rendering.
+- `ExCanvas` sits over `HTMLCanvasElement`
+- `ExContext` sits over `CanvasRenderingContext2d`, and handles the complex drawing code, and uses `ExStroke`
+- `ExTool` and `ExBrush` are the tools that are used in `ExContect`
+- `RCanvas` serves as the single entry point that sits on top of those, and deals with layers

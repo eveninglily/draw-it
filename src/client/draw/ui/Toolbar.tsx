@@ -1,6 +1,6 @@
-import 'css/toolbar.css'
+import 'client/css/toolbar.css'
+import Icon from 'client/draw/components/Icon';
 import * as React from 'react';
-import Icon from 'src/draw/components/Icon';
 
 interface ToolbarProps{
   selectedTool: string;
@@ -11,7 +11,7 @@ class Toolbar extends React.Component<ToolbarProps, {}> {
   constructor(props: any) {
     super(props);
   }
-  
+
   public render() {
     return (
       <div id="toolbar">
@@ -34,7 +34,7 @@ class Toolbar extends React.Component<ToolbarProps, {}> {
       </div>
     );
   }
-  
+
   private handleEvt = (evt: React.MouseEvent<any>, elem: Icon) => {
     if(!elem.props.isAction) {
       this.props.updateTool(elem.props.id);

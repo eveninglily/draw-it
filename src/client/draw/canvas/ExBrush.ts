@@ -1,4 +1,4 @@
-import ExTool from "src/draw/canvas/ExTool";
+import ExTool from "client/draw/canvas/ExTool";
 
 export default class ExBrush extends ExTool {
     public name: string;

@@ -1,10 +1,10 @@
+import 'client/css/canvas.css';
+import ExBrush from 'client/draw/canvas/ExBrush';
 import * as React from 'react';
-import 'src/css/canvas.css';
-import ExBrush from 'src/draw/canvas/ExBrush';
 
+import ExCanvas from 'client/draw/canvas/ExCanvas';
+import ExTool from 'client/draw/canvas/ExTool';
 import * as ReactDOM from 'react-dom';
-import ExCanvas from 'src/draw/canvas/ExCanvas';
-import ExTool from 'src/draw/canvas/ExTool';
 
 interface RCanvasProps {
   layers: ExCanvas[]
@@ -37,7 +37,7 @@ class RCanvas extends React.Component<RCanvasProps, RCanvasState> {
 
   public componentDidMount() {
     const dom: Element = ReactDOM.findDOMNode(this) as Element;
-    dom.appendChild(this.props.layers[0].canvas);    
+    dom.appendChild(this.props.layers[0].canvas);
   }
 
   public normalize(x: number, y: number) {
@@ -60,7 +60,7 @@ class RCanvas extends React.Component<RCanvasProps, RCanvasState> {
 
   public start = (x: number, y: number, p: number): void => {
     const tool = this.state.tool;
-    
+
     this.setState({
       drawing: false,
     }, () => {
@@ -83,7 +83,7 @@ class RCanvas extends React.Component<RCanvasProps, RCanvasState> {
 
   public end() {
     // const layer = this.props.layers[this.state.activeLayer];
-    
+
     this.props.layers[this.state.activeLayer].ctx.completeStrokeById('local');
     // addChange(layers[currentLayer].canvas.strokes['local'], client.clientId);
     for(let i = 0; i < this.props.layers[this.state.activeLayer].activeStrokes.length; i++) {

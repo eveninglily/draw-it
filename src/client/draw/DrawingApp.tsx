@@ -1,6 +1,6 @@
+import ExCanvas from 'client/draw/canvas/ExCanvas';
+import RCanvas from 'client/draw/canvas/RCanvas';
 import * as React from 'react';
-import ExCanvas from 'src/draw/canvas/ExCanvas';
-import RCanvas from 'src/draw/canvas/RCanvas';
 import Toolbar from './ui/Toolbar';
 
 interface DrawingAppState {
@@ -11,7 +11,7 @@ interface DrawingAppState {
 class DrawingApp extends React.Component<{}, DrawingAppState> {
   constructor(props: any) {
     super(props);
-    
+
     this.state = {
       layers: [new ExCanvas()],
       selectedTool: 'brush',

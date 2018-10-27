@@ -1,7 +1,7 @@
+import ExTool from 'client/draw/canvas/ExTool';
 import { Guid } from 'guid-typescript';
 import * as socketIo from 'socket.io';
-import ExTool from 'src/draw/canvas/ExTool';
-import { EndPayload, MovePayload, RoomJoinPayload, StartPayload } from 'src/types';
+import { EndPayload, MovePayload, RoomJoinPayload, StartPayload } from 'types';
 
 interface ClientMeta {
     username: string;
@@ -32,6 +32,7 @@ class Client {
     public connect(roomId: string) {
         this.connected = true;
         const payload: RoomJoinPayload = {
+            clientId: '',
             id: roomId,
             username: this.meta.username
         }
@@ -99,11 +100,15 @@ class Client {
       const len = this.currentStrokeLen;
       if(this.meta.down) {
           setTimeout(() => {
-              this.socket.emit('e', {
-                  cId: uuid,
-                  clId: this.clientId,
-                  l: len, p, x, y
-              });
+              const payload :EndPayload = {
+                clientId: this.clientId,
+                len,
+                p,
+                uuid: uuid.toString(),
+                x,
+                y
+              };
+              this.socket.emit('e', payload);
           }, 45);
           this.meta.down = false;
       }

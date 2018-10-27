@@ -1,4 +1,6 @@
-export default class ExTool {
+import { IExTool } from "types";
+
+export default class ExTool implements IExTool {
     public name: string;
     public active: boolean;
 

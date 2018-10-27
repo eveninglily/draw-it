@@ -10,6 +10,14 @@
     "src/setupTests.ts",
     "*.js",
     "*/*.js",
-    "src/server/*"
-  ]
+    "src/client/*"
+  ],
+  "include": [
+    "src/server/*",
+    "src/types.ts",
+  ],
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2017"
+  }
 }

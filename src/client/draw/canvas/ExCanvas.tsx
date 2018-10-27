@@ -1,4 +1,4 @@
-import ExContent from "./ExContext";
+import ExContent from "client/draw/canvas/ExContext";
 
 class ExCanvas {
     public canvas: HTMLCanvasElement;

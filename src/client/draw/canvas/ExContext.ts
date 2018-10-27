@@ -1,5 +1,5 @@
-import ExBrush from "src/draw/canvas/ExBrush";
-import ExStroke from "src/draw/canvas/ExStroke";
+import ExBrush from "client/draw/canvas/ExBrush";
+import ExStroke from "client/draw/canvas/ExStroke";
 
 /**
  * Extended canvas drawing context

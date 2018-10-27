@@ -1,4 +1,7 @@
-import ExTool from "./draw/canvas/ExTool";
+interface IExTool {
+    name: string,
+    active: boolean,
+}
 
 interface StartPayload {
     uuid: string,
@@ -6,7 +9,7 @@ interface StartPayload {
     y: number,
     p: number,
     layer: number,
-    tool: ExTool
+    tool: IExTool
 }
 
 interface MovePayload {
@@ -24,8 +27,14 @@ interface EndPayload {
 }
 
 interface RoomJoinPayload {
+    clientId: string,
     id: string,
     username: string,
 }
 
-export { StartPayload, MovePayload, EndPayload, RoomJoinPayload }
+interface UserJoinPayload {
+    id: string;
+    username: string;
+}
+
+export { IExTool, StartPayload, MovePayload, EndPayload, RoomJoinPayload, UserJoinPayload }

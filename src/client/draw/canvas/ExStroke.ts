@@ -1,4 +1,4 @@
-import ExTool from "src/draw/canvas/ExTool";
+import ExTool from "client/draw/canvas/ExTool";
 
 export default class ExStroke {
     public tool: ExTool;
@@ -10,7 +10,7 @@ export default class ExStroke {
         this.path = [];
         this.controlPoints = [];
     }
-    
+
     public addPoint(x: number, y: number, p: number) {
         this.path.push({
             'p': p,

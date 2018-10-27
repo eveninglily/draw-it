@@ -1,8 +1,8 @@
-import 'css/global.css';
+import 'client/css/global.css';
+import DrawingApp from 'client/draw/DrawingApp';
+import registerServiceWorker from 'client/registerServiceWorker';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import DrawingApp from 'src/draw/DrawingApp';
-import registerServiceWorker from 'src/registerServiceWorker';
 
 ReactDOM.render(
   <DrawingApp />,

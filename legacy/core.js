@@ -33,20 +33,6 @@ $(document).ready(function() {
         $('#' + n.id + '-control').trigger('mouseup');
     }, 0);
 
-    if(settings.pointerEvents) {
-        initPointerEvents();
-    } else {
-        initMouseEvents();
-        initTouchEvents();
-    }
-
-    $(document).on('mouseup touchend touchcancel pointercancel pointerup', () => {
-        if(down) {
-            end();
-            down = false;
-        }
-    });
-
     $(window).on('beforeunload', () => {
         if(settings.showLeaveMessage) {
             return 'Are you sure you want to leave? Your drawing will be lost.';
@@ -110,98 +96,6 @@ function initTouchEvents() {
 }
 
 /**
- * Initializes Pointer Events
- * Not fully supported by most browsers! Use with care!
- */
-function initPointerEvents() {
-    log('evt', 'Enabled Pointer Events');
-    $('#layers').on('pointerdown', function(evt) {
-        var n = normalize(evt.offsetX, evt.offsetY);
-        start(n.x, n.y, evt.originalEvent.pressure);
-    }).on('pointermove', function(evt) {
-        if(down) {
-            window.getSelection().removeAllRanges()
-            evt.preventDefault();
-            var n = normalize(evt.offsetX, evt.offsetY);
-            move(n.x, n.y, evt.originalEvent.pressure);
-        }
-    }).off('mousedown mousemove');
-    client._initPointers();
-}
-
-/**
- * Starts a stroke
- * @param {Number} x Normalized x-coord
- * @param {Number} y Normalized y-coord
- * @param {Number} p Pressure
- */
-function start(x, y, p) {
-    down = false;
-    if(currTool.name == "Pen" || currTool.name == "Eraser") {
-        down = true;
-        layers[currentLayer].canvas.beginStroke(currTool, x, y, .5, 'local');
-        layers[currentLayer].activeStrokes.push('local');
-        layers[currentLayer].stroke();
-    }
-}
-
-/**
- * Updates a stroke
- * @param {Number} x Normalized x-coord
- * @param {Number} y Normalized y-coord
- * @param {Number} p Pressure
- */
-function move(x, y, p) {
-    layers[currentLayer].canvas.updateStroke(x, y, p, 'local');
-    layers[currentLayer].stroke();
-}
-
-/**
- * Ends a stroke
- */
-function end() {
-    layers[currentLayer].canvas.completeStrokeById('local');
-
-    addChange(layers[currentLayer].canvas.strokes['local'], client.clientId);
-    for(var i = 0; i < layers[currentLayer].activeStrokes.length; i++) {
-        if(layers[currentLayer].activeStrokes[i] == 'local') {
-            layers[currentLayer].activeStrokes.splice(i, 1);
-            break;
-        }
-    }
-    layers[currentLayer].stroke();
-    layers[currentLayer].updatePreview();
-}
-
-/**
- * Normalizes a point to adapt to all display sizes
- * Each point is adjusted by the ideal width divided by the actual width
- * @param {Number} x Raw x-coord
- * @param {Number} y Raw y-coord
- */
-function normalize(x, y) {
-    var xR = width / $('#layers').width();
-    var yR = height / $('#layers').height();
-
-    return {
-        x: x * xR,
-        y: y * yR
-    };
-}
-
-/**
- * Normalizes the coordinates for an event
- * @param {Event} evt The event
- */
-function normalizeEvt(evt) {
-    if(evt.type == "mousedown" || evt.type == "mousemove") {
-        return normalize(evt.offsetX, evt.offsetY);
-    } else {
-        log('err', 'Unsupported event type in normalize');
-    }
-}
-
-/**
  * Returns a jQuery object of a canvas that contains all layers merged together
  */
 function getMergedCanvas() {
@@ -230,14 +124,4 @@ function getMergedVisibleCanvas(whiteBg) {
         }
     }
     return merged;
-}
-
-/**
- * Basic logging function
- * @param {String} type The type of the message
- * @param {String} msg The message to log
- */
-function log(type, msg) {
-    var time = Date.now();
-    console.log("[" + type + "]::" + time + " - " + msg);
 }

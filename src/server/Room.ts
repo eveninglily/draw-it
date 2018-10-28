@@ -10,7 +10,7 @@ export default class Room {
 
     private io: SocketIO.Server;
 
-    private clients: {[key: string]: string};
+    private clients: Map<string, string>;
     private strokes: any;
     // private layers: any;
 
@@ -20,7 +20,7 @@ export default class Room {
             isPrivate: true,
         }
 
-        this.clients = {};
+        this.clients = new Map<string, string>();
         this.strokes = {};
         // this.layers = [];
 
@@ -46,13 +46,14 @@ export default class Room {
         this.io.sockets.in(this.id).emit('uj', userJoinPayload);
 
         // Send other clients info to new user
-        for(const client of this.clients.keys) {
+        this.clients.forEach((name, id) => {
             const newPayload: UserJoinPayload = {
-                id: client,
-                username: this.clients[client]
+                id,
+                username: name,
             }
             socket.emit('uj', newPayload);
-        }
+        });
+        console.log('client added!')
     }
 
     public removeClient(socket: SocketIO.Socket): void {
@@ -81,7 +82,7 @@ export default class Room {
 
     public endStroke(socket: SocketIO.Socket, data: EndPayload) {
         socket.broadcast.to(this.id).emit('e', data);
-        this.strokes[data.uuid].path.push({ x: data.x, y: data.y, p: data.p });
+        // this.strokes[data.uuid].path.push({ x: data.x, y: data.y, p: data.p });
     }
 
     public broadcast(socket: SocketIO.Socket, type: string, data: any): void {

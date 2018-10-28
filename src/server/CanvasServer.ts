@@ -10,13 +10,14 @@ export default class CanvasServer {
 
     constructor(io: socketIo.Server) {
         this.io = io;
+        this.rooms = {};
 
         this.io.on('connection', socket => {
             let room: Room;
 
             socket.on('join', (data: RoomJoinPayload) => {
                 const id: string = data.id;
-                if(!this.rooms[id]) {
+                if(!(id in this.rooms)) {
                     this.rooms[id] = new Room(id, this.io);
                 }
 

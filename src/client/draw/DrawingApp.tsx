@@ -1,11 +1,13 @@
 import ExCanvas from 'client/draw/canvas/ExCanvas';
 import RCanvas from 'client/draw/canvas/RCanvas';
+import Client from 'client/draw/Client';
 import * as React from 'react';
 import Toolbar from './ui/Toolbar';
 
 interface DrawingAppState {
   layers: any[];
   selectedTool: string;
+  client: Client;
 }
 
 class DrawingApp extends React.Component<{}, DrawingAppState> {
@@ -13,9 +15,14 @@ class DrawingApp extends React.Component<{}, DrawingAppState> {
     super(props);
 
     this.state = {
+      client: new Client('localhost:3001'),
       layers: [new ExCanvas()],
       selectedTool: 'brush',
     }
+  }
+
+  public componentDidMount(): void {
+    this.state.client.connect('testRoom')
   }
 
   public selectTool = (tool: string): void => {
@@ -32,7 +39,7 @@ class DrawingApp extends React.Component<{}, DrawingAppState> {
         <div id='tool-meta' />
         <div id='layer-options' />
         <div id='canvas'>
-          <RCanvas layers={this.state.layers} />
+          <RCanvas layers={this.state.layers} client={this.state.client}/>
         </div>
       </div>
     );

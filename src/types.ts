@@ -20,9 +20,6 @@ interface MovePayload {
 interface EndPayload {
     uuid: string,
     clientId: string,
-    x: number,
-    y: number,
-    p: number,
     len: number,
 }
 

@@ -1,6 +1,7 @@
 import ExTool from 'client/draw/canvas/ExTool';
+import { EventEmitter } from 'events';
 import { Guid } from 'guid-typescript';
-import * as socketIo from 'socket.io';
+import * as io from 'socket.io-client';
 import { EndPayload, MovePayload, RoomJoinPayload, StartPayload } from 'types';
 
 interface ClientMeta {
@@ -9,25 +10,34 @@ interface ClientMeta {
     down: boolean;
 }
 
-class Client {
-    public url: string;
-    public meta: ClientMeta;
-    public currentUUID: Guid;
-    public clientId: string;
-    public currTool: ExTool;
-    public connected: boolean;
+class Client extends EventEmitter {
+  public url: string;
+  public meta: ClientMeta;
+  public currentUUID: Guid;
+  public clientId: string;
+  public currTool: ExTool;
+  public connected: boolean;
 
-    private socket: socketIo.Server;
-    private recieving: {[uuid: string]: {layer: number; len: number}};
-    private sending: {[uuid: string]: Array<{x: number; y: number; p: number;}>};
-    private currentStrokeLen: number;
+  private socket: SocketIOClient.Socket;
+  private recieving: {[uuid: string]: {layer: number; len: number}};
+  private sending: {[uuid: string]: Array<{x: number; y: number; p: number;}>};
+  private currentStrokeLen: number;
 
-    constructor(url: string) {
-        this.url = url;
-        this.recieving = {};
-        this.socket = socketIo(url);
-        this.currentStrokeLen = 0;
+  constructor(url: string) {
+    super();
+
+    this.url = url;
+    this.recieving = {};
+    this.socket = io(url);
+    this.currentStrokeLen = 0;
+    this.meta = {
+      connected: false,
+      down: false,
+      username: 'Anon',
     }
+    this.sending = {};
+    console.log('Client init');
+  }
 
     public connect(roomId: string) {
         this.connected = true;
@@ -54,15 +64,15 @@ class Client {
         /** Send updates every 40ms */
         setInterval(() => {
           for(const key in this.sending) {
-            if(!this.sending.hasOwnProperty(key)) {
-              continue;
-            }
-            if(!(this.sending[key].length === 0)) {
-              this.socket.emit('u', {
-                cId: key,
-                positions: this.sending[key]
-              });
-              this.sending[key] = [];
+            if(this.sending.hasOwnProperty(key)) {
+              if(!(this.sending[key].length === 0)) {
+                const updatePayload: MovePayload = {
+                  positions: this.sending[key],
+                  uuid: key,
+                }
+                this.socket.emit('u', updatePayload);
+                this.sending[key] = [];
+              }
             }
           }
         }, 40);
@@ -72,12 +82,13 @@ class Client {
         this.socket.emit('disconnect');
     }
 
-    public sendStart = (x: number, y: number, p: number): void => {
+    public sendStart = (x: number, y: number, p: number, tool: ExTool): void => {
+        if(!this.connected) { return; }
         this.currentUUID = Guid.create();
         const payload: StartPayload = {
             layer: 0,
             p,
-            tool: this.currTool,
+            tool,
             uuid: this.currentUUID.toString(),
             x,
             y,
@@ -89,13 +100,17 @@ class Client {
     }
 
     public sendMove(x: number, y: number, p: number) {
+      if(!this.connected) { return; }
+
       if(this.meta.down) {
         this.currentStrokeLen += 1;
         this.sending[this.currentUUID.toString()].push({x, y, p});
       }
     }
 
-    public sendEnd(x: number, y: number, p: number) {
+    public sendEnd() {
+      if(!this.connected) { return; }
+
       const uuid = this.currentUUID;
       const len = this.currentStrokeLen;
       if(this.meta.down) {
@@ -103,10 +118,7 @@ class Client {
               const payload :EndPayload = {
                 clientId: this.clientId,
                 len,
-                p,
                 uuid: uuid.toString(),
-                x,
-                y
               };
               this.socket.emit('e', payload);
           }, 45);
@@ -115,24 +127,28 @@ class Client {
     }
 
     public sendUndo() {
+      if(!this.connected) { return; }
       this.socket.emit('undo', {
         cId: this.clientId
       });
     }
 
     public sendRedo() {
+      if(!this.connected) { return; }
       this.socket.emit('redo', {
           cId: this.clientId
       });
   }
 
   public sendAddLayer(id: string) {
+    if(!this.connected) { return; }
       this.socket.emit('nl', {
           'id': id
       });
   }
 
   public sendUpdateName() {
+    if(!this.connected) { return; }
       this.socket.emit('update-name', {
           name: this.meta.username
       });
@@ -162,46 +178,27 @@ class Client {
     }
 
   private recieveStart(data: StartPayload) {
-      this.recieving[data.uuid] = {'layer': data.layer, 'len': 1};
-
-      // TOOD: dispatch this info elsewhere
-      // const layer: number = data.layer;
-      // layers[layer].canvas.beginStroke(data.tool, data.x, data.y, data.p, data.cId);
-      // layers[layer].activeStrokes.push(data.cId);
-      // layers[layer].stroke();
+    console.log('START')
+    this.recieving[data.uuid] = {'layer': data.layer, 'len': 1};
+    this.emit('start', data);
   }
 
   private recieveMove(data: MovePayload) {
-      if(this.recieving[data.uuid] != null) {
-          this.recieving[data.uuid].len += data.positions.length;
-
-          // TOOD: dispatch this info elsewhere
-          // const layer: number = this.recieving[data.uuid].layer;
-          // layers[layer].canvas.strokes[data.cId].addPoints(data.positions);
-          // layers[layer].stroke();
-      }
+    if(this.recieving[data.uuid] != null) {
+      this.recieving[data.uuid].len += data.positions.length;
+      this.emit('move', data);
+    }
   }
 
   private recieveEnd(data: EndPayload) {
     const interval = setInterval(() => {
-          if(this.recieving[data.uuid].len !== data.len) {
-              return;
-          }
-
-          // TOOD: dispatch this info elsewhere
-          // var layer = layers[this.recieving[data.cId].layer];
-          // layer.canvas.completeStroke(layer.canvas.strokes[data.cId]);
-          // addChange(layer.canvas.strokes[data.cId], data.clId);
-          // for(var i = 0; i < layer.activeStrokes.length; i++) {
-              // if(layer.activeStrokes[i] == data.cId) {
-                 //  layer.activeStrokes.splice(i, 1);
-                 //  break;
-              // }
-          // }
-          // delete this.recieving[data.cId];
-          // layer.updatePreview();
-          clearInterval(interval);
-      }, 50);
+      if(this.recieving[data.uuid].len !== data.len) {
+        return;
+      }
+      this.emit('end', data);
+      clearInterval(interval);
+      delete this.recieving[data.uuid];
+    }, 50);
   }
 
   private recieveUndo(cId: string) {

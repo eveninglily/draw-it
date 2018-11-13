@@ -1,8 +1,9 @@
 import ExCanvas from 'client/draw/canvas/ExCanvas';
 import RCanvas from 'client/draw/canvas/RCanvas';
 import Client from 'client/draw/Client';
+import ColorPicker from 'client/draw/components/ColorPicker';
+import Toolbar from 'client/draw/ui/Toolbar';
 import * as React from 'react';
-import Toolbar from './ui/Toolbar';
 
 interface DrawingAppState {
   layers: any[];
@@ -35,7 +36,9 @@ class DrawingApp extends React.Component<{}, DrawingAppState> {
     return (
       <div id="container">
         <Toolbar selectedTool={this.state.selectedTool} updateTool={this.selectTool}/>
-        <div id='colorwheel' />
+        <div id='colorwheel'>
+          <ColorPicker/>
+        </div>
         <div id='tool-meta' />
         <div id='layer-options' />
         <div id='canvas'>

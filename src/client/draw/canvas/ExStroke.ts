@@ -12,11 +12,7 @@ export default class ExStroke {
     }
 
     public addPoint(x: number, y: number, p: number) {
-        this.path.push({
-            'p': p,
-            'x': x,
-            'y': y,
-        });
+        this.path.push({ p, x, y, });
         /**
          * Adds control points based on the new point
          */

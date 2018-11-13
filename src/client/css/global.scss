@@ -11,7 +11,7 @@ html, body, #root {
     min-width: 100%;
     min-height: 100%;
     font-family: 'Open Sans', sans-serif;
-    
+
     background: black;
 }
 
@@ -29,16 +29,13 @@ html, body, #root {
 #colorwheel {
     grid-column: 1;
     grid-row: 2 / span 3;
-    background: blue;
-
     margin-left: 10px;
-    
 }
 
 #tool-meta {
     grid-column: 1;
     grid-row: 5 / span 4;
-    
+
     background: red;
     margin-left: 10px;
 }
@@ -46,7 +43,7 @@ html, body, #root {
 #layer-options {
     grid-column: 1;
     grid-row: 9 / span 5;
-    
+
     background: green;
     margin-left: 10px;
     margin-bottom: 10px;

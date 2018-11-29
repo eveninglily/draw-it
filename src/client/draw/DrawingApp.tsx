@@ -42,11 +42,8 @@ class DrawingApp extends React.Component<{}, DrawingAppState> {
   }
 
   public render() {
-    const st = {
-      background: this.state.color.hex(),
-    }
     return (
-      <div id="container" style={st}>
+      <div id="container">
         <Toolbar selectedTool={this.state.selectedTool} updateTool={this.selectTool}/>
         <div id='colorwheel'>
           <ColorPicker onColorChange={this.onColorChange}/>

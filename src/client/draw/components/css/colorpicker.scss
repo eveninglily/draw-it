@@ -1,3 +1,34 @@
+.colorpicker-container {
+    background: white;
+
+    height: 100%;
+    margin: auto;
+}
+
+/* Saturation */
+
+.saturation {
+    width: 250px;
+    height: 150px;
+    margin: auto;
+}
+
+.saturation-spacer {
+    width: 250px;
+    height: 150px;
+    position: relative;
+}
+
+.saturation-selector {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+
+    border: 1px solid white;
+    border-radius: 100%;
+    top: 0
+}
+
 .gradient-white {
     background: linear-gradient(to right, #fff, rgba(255,255,255,0));
 }
@@ -6,15 +37,9 @@
     background: linear-gradient(to top, #000, rgba(0,0,0,0));
 }
 
-.color-spacer {
-    width: 100px;
-    height: 100px;
-}
-
-.color-container {
-    background: white;
-
-    height: 100%;
+/* Hue */
+.hue {
+    width: 250px;
     margin: auto;
 }
 
@@ -35,4 +60,27 @@
 .hue-spacer {
     width: 100px;
     height: 20px;
+    position: relative;
+}
+
+.hue-selector, .alpha-selector {
+    position: absolute;
+    width: 3px;
+    height: 100%;
+
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    background: white;
+    top: 0;
+    left: 100;
+}
+
+/* Alpha */
+
+.alpha {
+    width: 250px;
+    margin: auto;
+    background-image: linear-gradient(45deg, #b0b0b0 25%, transparent 25%), linear-gradient(-45deg, #b0b0b0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #b0b0b0 75%), linear-gradient(-45deg, transparent 75%, #b0b0b0 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
 }

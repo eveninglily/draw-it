@@ -1,7 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
 
 /* Reset and Maximize html and body */
-html, body, #root {
+html, body, #root, #drawing-app {
     margin: 0px;
     padding: 0px;
 
@@ -15,11 +15,18 @@ html, body, #root {
     background: white;
 }
 
-#container {
-    width: 100%;
-    height: 100%;
-
+#drawing-app {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+}
+
+#drawing-app nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    padding-bottom: 0px;
+
+    span {
+        border: 1px solid red;
+    }
 }

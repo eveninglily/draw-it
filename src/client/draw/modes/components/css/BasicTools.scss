@@ -1,0 +1,26 @@
+.twitter-picker {
+    box-shadow: none !important;
+
+    input {
+        display: none;
+    }
+
+    div[style^="background: rgb(240, 240, 240)"] {
+        display: none !important;
+    }
+
+    span div{
+        max-width: 30px;
+        max-height: 30px;
+
+        width: 3vw;
+        height: 3vw;
+
+        min-width: 12px;
+        min-height: 12px;
+    }
+
+    > div {
+        padding: 2px !important;
+    }
+}

@@ -26,13 +26,6 @@ var settings = {
 };
 
 $(document).ready(function() {
-    addLayer('layer0');
-    setTimeout(function(){
-        var n = layers[layers.length - 1];
-        $('#' + n.id + '-control').trigger('mousedown'); //TODO: this is hacky. Fix?
-        $('#' + n.id + '-control').trigger('mouseup');
-    }, 0);
-
     $(window).on('beforeunload', () => {
         if(settings.showLeaveMessage) {
             return 'Are you sure you want to leave? Your drawing will be lost.';

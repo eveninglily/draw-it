@@ -5,9 +5,15 @@ class ExCanvas {
     public ctx: ExContent;
     public activeStrokes: string[];
 
-    constructor() {
+    public width: number;
+    public height: number;
+
+    constructor(width: number, height: number) {
+        this.width = width;
+        this.height = height;
+
         this.activeStrokes = [];
-        this.ctx = new ExContent(1920, 1080);
+        this.ctx = new ExContent(width, height);
         this.canvas = this.ctx.canvas;
     }
 

@@ -52,8 +52,11 @@ class RCanvas extends React.Component<RCanvasProps, RCanvasState> {
   }
 
   public normalize(x: number, y: number) {
-    const xR = 1920 / this.container.current.offsetWidth;
-    const yR = 1080 / this.container.current.offsetHeight;
+    const xR = this.props.layers[0].width / this.container.current.offsetWidth;
+    const yR = this.props.layers[0].height / this.container.current.offsetHeight;
+
+    console.log(x);
+    console.log(y);
 
     return {
       x: x * xR,
@@ -105,7 +108,7 @@ class RCanvas extends React.Component<RCanvasProps, RCanvasState> {
     this.props.layers[this.state.activeLayer].stroke();
   }
 
-  public end() {
+  public end = () => {
     this.endDraw('local');
     this.forceUpdate();
     if (this.props.client) { this.props.client.sendEnd(); }
@@ -126,7 +129,14 @@ class RCanvas extends React.Component<RCanvasProps, RCanvasState> {
 
   public render() {
     return (
-      <div onMouseDown={this.onMouseDown} onMouseMove={this.onMouseMove} onMouseUp={this.onMouseUp} ref={this.container} id="layers" />
+      <div
+        onMouseDown={this.onMouseDown}
+        onMouseMove={this.onMouseMove}
+        onMouseUp={this.onMouseUp}
+        onMouseLeave={this.end}
+        onMouseOver={this.onMouseEnter}
+        ref={this.container}
+        id="layers" />
     );
   }
 
@@ -151,6 +161,13 @@ class RCanvas extends React.Component<RCanvasProps, RCanvasState> {
       this.setState({
         drawing: false,
       }, this.end)
+    }
+  }
+
+  private onMouseEnter = (evt: any) => {
+    if(this.state.drawing) {
+      const n = this.normalize(evt.nativeEvent.offsetX, evt.nativeEvent.offsetY);
+      this.start(n.x, n.y, .5);
     }
   }
 }

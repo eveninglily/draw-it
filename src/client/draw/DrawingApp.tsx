@@ -2,6 +2,7 @@ import ExCanvas from 'client/draw/canvas/ExCanvas';
 import Client from 'client/draw/Client';
 import * as Color from 'color';
 import * as React from 'react';
+import UserIcon from '../components/UserIcon';
 import GuessingGame from './modes/GuessingGame';
 
 interface DrawingAppState {
@@ -20,7 +21,7 @@ class DrawingApp extends React.Component<{}, DrawingAppState> {
     this.state = {
       client: new Client('localhost:3001'),
       color,
-      layers: [new ExCanvas()],
+      layers: [new ExCanvas(1000, 800)],
       selectedTool: 'brush',
     }
   }
@@ -41,9 +42,11 @@ class DrawingApp extends React.Component<{}, DrawingAppState> {
 
   public render() {
     return (
-      <div id="container">
-        <GuessingGame />
+      <div id="drawing-app">
+        <nav><span>BACK TO LOBBY</span><span>HELP | SETTINGS | <UserIcon/> Evan </span></nav>
+          <GuessingGame serverName='The Fun House' />
       </div>
+
     );
   }
 }

@@ -4,7 +4,7 @@ import * as React from 'react';
 
 interface PlayerListProps {
     players: GuessingGamePlayer[];
-    self: string;
+    self: GuessingGamePlayer;
 }
 
 class PlayerList extends React.Component<PlayerListProps, {}> {

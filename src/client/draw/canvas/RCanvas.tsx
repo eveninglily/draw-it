@@ -8,14 +8,14 @@ import * as ReactDOM from 'react-dom';
 import { EndPayload, MovePayload, StartPayload } from 'types';
 
 interface RCanvasProps {
-  layers: ExCanvas[],
-  client?: Client
+  tool: ExTool;
+  client?: Client;
 }
 
 interface RCanvasState {
   activeLayer: number;
   drawing: boolean;
-  tool: ExTool;
+  layers: ExCanvas[];
   refs: any[];
 }
 
@@ -25,13 +25,11 @@ class RCanvas extends React.Component<RCanvasProps, RCanvasState> {
   constructor(props: RCanvasProps) {
     super(props);
 
-    const tool: ExBrush = new ExBrush('brush', 10, 'source-over', '#ff0000')
-
     this.state = {
       activeLayer: 0,
       drawing: false,
+      layers: [new ExCanvas(800, 600)],
       refs: [],
-      tool,
     }
 
     this.container = React.createRef();
@@ -50,15 +48,12 @@ class RCanvas extends React.Component<RCanvasProps, RCanvasState> {
 
   public componentDidMount() {
     const dom: Element = ReactDOM.findDOMNode(this) as Element;
-    dom.appendChild(this.props.layers[0].canvas);
+    dom.appendChild(this.state.layers[0].canvas);
   }
 
   public normalize(x: number, y: number) {
-    const xR = this.props.layers[0].width / this.container.current.offsetWidth;
-    const yR = this.props.layers[0].height / this.container.current.offsetHeight;
-
-    console.log(x);
-    console.log(y);
+    const xR = this.state.layers[0].width / this.container.current.offsetWidth;
+    const yR = this.state.layers[0].height / this.container.current.offsetHeight;
 
     return {
       x: x * xR,
@@ -75,7 +70,7 @@ class RCanvas extends React.Component<RCanvasProps, RCanvasState> {
   }
 
   public start = (x: number, y: number, p: number): void => {
-    const tool = this.state.tool;
+    const tool = this.props.tool;
 
     this.setState({
       drawing: false,
@@ -85,29 +80,29 @@ class RCanvas extends React.Component<RCanvasProps, RCanvasState> {
         drawing: true
       }, () => {
         this.startDraw(x, y, p, tool as ExBrush, 'local');
-        if (this.props.client) { this.props.client.sendStart(x, y, p, this.state.tool); }
+        if (this.props.client) { console.log('safsafgas'); this.props.client.sendStart(x, y, p, this.props.tool); }
       });
       }
     });
   }
 
   public startDraw(x: number, y: number, p: number, tool: ExBrush, id: string) {
-    this.props.layers[this.state.activeLayer].ctx.beginStroke(tool, x, y, p, id);
-    this.props.layers[this.state.activeLayer].activeStrokes.push(id);
-    this.props.layers[this.state.activeLayer].stroke();
+    this.state.layers[this.state.activeLayer].ctx.beginStroke(tool, x, y, p, id);
+    this.state.layers[this.state.activeLayer].activeStrokes.push(id);
+    this.state.layers[this.state.activeLayer].stroke();
   }
 
   public move(x: number, y: number, p: number, id?: string) {
-    this.props.layers[this.state.activeLayer].ctx.updateStroke(x, y, p, id || 'local');
-    this.props.layers[this.state.activeLayer].stroke();
+    this.state.layers[this.state.activeLayer].ctx.updateStroke(x, y, p, id || 'local');
+    this.state.layers[this.state.activeLayer].stroke();
     if (this.props.client) { this.props.client.sendMove(x, y, .5); }
   }
 
   public moveMany(positions: Array<{x: number, y: number, p: number}>, id?: string) {
     for(const pos of positions) {
-      this.props.layers[this.state.activeLayer].ctx.updateStroke(pos.x,pos. y, pos.p, id || 'local');
+      this.state.layers[this.state.activeLayer].ctx.updateStroke(pos.x,pos. y, pos.p, id || 'local');
     }
-    this.props.layers[this.state.activeLayer].stroke();
+    this.state.layers[this.state.activeLayer].stroke();
   }
 
   public end = () => {
@@ -118,15 +113,15 @@ class RCanvas extends React.Component<RCanvasProps, RCanvasState> {
 
   public endDraw(id: string) {
     // const layer = this.props.layers[this.state.activeLayer];
-    this.props.layers[this.state.activeLayer].ctx.completeStrokeById(id);
+    this.state.layers[this.state.activeLayer].ctx.completeStrokeById(id);
     // addChange(layers[currentLayer].canvas.strokes['local'], client.clientId);
-    for(let i = 0; i < this.props.layers[this.state.activeLayer].activeStrokes.length; i++) {
-        if(this.props.layers[this.state.activeLayer].activeStrokes[i] === (id)) {
-          this.props.layers[this.state.activeLayer].activeStrokes.splice(i, 1);
+    for(let i = 0; i < this.state.layers[this.state.activeLayer].activeStrokes.length; i++) {
+        if(this.state.layers[this.state.activeLayer].activeStrokes[i] === (id)) {
+          this.state.layers[this.state.activeLayer].activeStrokes.splice(i, 1);
             break;
         }
     }
-    this.props.layers[this.state.activeLayer].stroke();
+    this.state.layers[this.state.activeLayer].stroke();
   }
 
   public render() {

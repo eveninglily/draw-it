@@ -1,4 +1,10 @@
 .playerList {
     border: 1px solid black;
     border-radius: 10px;
+
+    ul {
+        list-style: none;
+        margin: 0px;
+        padding: 0px;
+    }
 }

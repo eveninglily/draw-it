@@ -1,21 +1,3 @@
-/** Sets up the canvas and binds all the core events */
-
-var width = 1920;
-var height = 1080;
-
-if($(window).width() < 480 ) {
-    console.log('mobile');
-    width = 1080;
-    height = 1920;
-};
-
-var down = false;
-
-var currentLayer = 0;
-var layers = [];
-var currTool = pen;
-
-/** TODO: relate to vue obj */
 var settings = {
     showLeaveMessage: false,
     whiteBg: false,
@@ -32,38 +14,6 @@ $(document).ready(function() {
         }
     });
 });
-
-/**
- * Initializes mouse events to interact with the canvas
- */
-function initMouseEvents() {
-    $("#layers").on('mousedown', evt => {
-        if(evt.which == 1) {
-            normalizeEvt(evt);
-            var n = normalize(evt.offsetX, evt.offsetY);
-            start(n.x, n.y, .5);
-        }
-    }).on('mousemove', evt => {
-        var n = normalize(evt.offsetX, evt.offsetY);
-        if(down) {
-            window.getSelection().removeAllRanges()
-            evt.preventDefault();
-            move(n.x, n.y,.5);
-        }
-    }).on('mouseenter', evt => {
-        if(down) {
-            var n = normalize(evt.offsetX, evt.offsetY);
-            start(n.x, n.y, .5);
-        }
-    }).on('mouseleave', () => {
-        if(down) {
-            end();
-        }
-    }).on('contextmenu', evt => {
-        evt.preventDefault();
-        return false;
-    });
-}
 
 /**
  * Initializes touch events to work with the canvas

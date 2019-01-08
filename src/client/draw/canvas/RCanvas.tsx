@@ -44,6 +44,8 @@ class RCanvas extends React.Component<RCanvasProps, RCanvasState> {
         this.endDraw(data.uuid);
       });
     }
+
+    document.addEventListener('mouseup', this.onMouseUp);
   }
 
   public componentDidMount() {
@@ -132,9 +134,9 @@ class RCanvas extends React.Component<RCanvasProps, RCanvasState> {
       <div
         onMouseDown={this.onMouseDown}
         onMouseMove={this.onMouseMove}
-        onMouseUp={this.onMouseUp}
         onMouseLeave={this.end}
         onMouseOver={this.onMouseEnter}
+        onContextMenu={this.onContextMenu}
         ref={this.container}
         id="layers" />
     );
@@ -169,6 +171,11 @@ class RCanvas extends React.Component<RCanvasProps, RCanvasState> {
       const n = this.normalize(evt.nativeEvent.offsetX, evt.nativeEvent.offsetY);
       this.start(n.x, n.y, .5);
     }
+  }
+
+  private onContextMenu = (evt: any) => {
+    evt.preventDefault();
+    return false;
   }
 }
 

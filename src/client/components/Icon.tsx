@@ -4,7 +4,7 @@ interface IconProps {
   id: string,
   icon: string,
   isAction: boolean,
-  clickHandler: (evt: React.MouseEvent<any>, elem: Icon) => void,
+  clickHandler?: (evt: React.MouseEvent<any>, elem: Icon) => void,
 
   dataOptions?: string,
   isSelected?: boolean,
@@ -44,7 +44,9 @@ class Icon extends React.Component<IconProps, {}> {
   }
 
   private onClick = (evt: any) => {
-    this.props.clickHandler(evt, this);
+    if(this.props.clickHandler) {
+      this.props.clickHandler(evt, this);
+    }
   }
 }
 

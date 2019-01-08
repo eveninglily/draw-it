@@ -85,6 +85,10 @@ export default class Room {
         // this.strokes[data.uuid].path.push({ x: data.x, y: data.y, p: data.p });
     }
 
+    public emit(socket: SocketIO.Socket, type: string, data: any): void {
+        this.io.in(this.id).emit(type, data);
+    }
+
     public broadcast(socket: SocketIO.Socket, type: string, data: any): void {
         socket.broadcast.to(this.id).emit(type, data);
     }

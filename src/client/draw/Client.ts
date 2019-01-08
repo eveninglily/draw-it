@@ -2,7 +2,7 @@ import ExTool from 'client/draw/canvas/ExTool';
 import { EventEmitter } from 'events';
 import { Guid } from 'guid-typescript';
 import * as io from 'socket.io-client';
-import { EndPayload, MovePayload, RoomJoinPayload, StartPayload } from 'types';
+import { ChatPayload, EndPayload, MovePayload, RoomJoinPayload, StartPayload, User } from 'types';
 
 interface ClientMeta {
     username: string;
@@ -59,7 +59,8 @@ class Client extends EventEmitter {
           .on('ul', (data: any) => this.recieveUserLeave(data))
           .on('undo', (data: any) => this.recieveUndo(data.cId))
           .on('redo', (data: any) => this.recieveRedo(data.cId))
-          .on('board_data', (data: any) => this.loadBoard(data));
+          .on('board_data', (data: any) => this.loadBoard(data))
+          .on('chat', (data: any) => this.recieveChat(data));
 
         /** Send updates every 40ms */
         setInterval(() => {
@@ -154,6 +155,13 @@ class Client extends EventEmitter {
       });
   }
 
+  public sendChat(message: string, user: User) {
+    this.socket.emit('chat', {
+      message,
+      user,
+    });
+  }
+
   private loadBoard(data: any) {
       /** Create all the layers */
       // for(const layer of data.layers) {
@@ -228,6 +236,10 @@ class Client extends EventEmitter {
     // this.id = data.id;
     this.clientId = data.cId;
     this.socket.emit('init_data');
+  }
+
+  private recieveChat(data: ChatPayload) {
+    this.emit('chat', data);
   }
 }
 

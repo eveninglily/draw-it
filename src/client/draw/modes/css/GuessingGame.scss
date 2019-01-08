@@ -5,6 +5,8 @@
     display: flex;
     flex-direction: row;
 
+    background: #2264AA;
+
     .col {
         display: flex;
         flex-direction: column;
@@ -14,7 +16,20 @@
         text-align: center;
     }
 
-    #right {
-        min-width: 200px;
+    #left, #right {
+        width: 300px;
+        margin: 5px;
+        background: white;
+    }
+
+    #layers {
+        width: calc(100vw - 620px) !important;
+        height: calc((100vw - 620px) * .5625) !important;
+    }
+
+    .chat {
+        ul {
+            list-style: none;
+        }
     }
 }

@@ -1,3 +1,4 @@
+import Icon from 'client/components/Icon';
 import ExCanvas from 'client/draw/canvas/ExCanvas';
 import Client from 'client/draw/Client';
 import * as Color from 'color';
@@ -41,10 +42,14 @@ class DrawingApp extends React.Component<{}, DrawingAppState> {
   }
 
   public render() {
+    const user = {
+      name: 'Evan'
+    }
+
     return (
       <div id="drawing-app">
-        <nav><span>BACK TO LOBBY</span><span>HELP | SETTINGS | <UserIcon/> Evan </span></nav>
-          <GuessingGame serverName='The Fun House' />
+        <nav><span><Icon id='back' icon='back' isAction={true} /> BACK TO LOBBY</span><span>HELP | SETTINGS | <UserIcon user={user}/> Evan </span></nav>
+          <GuessingGame client={this.state.client} serverName='The Fun House' totalRounds={5} />
       </div>
 
     );

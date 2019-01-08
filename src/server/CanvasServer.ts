@@ -1,6 +1,6 @@
 import Room from 'server/Room';
 import * as socketIo from 'socket.io';
-import { EndPayload, MovePayload, RoomJoinPayload, StartPayload } from 'types';
+import { ChatPayload, EndPayload, MovePayload, RoomJoinPayload, StartPayload } from 'types';
 
 export default class CanvasServer {
     public io: socketIo.Server;
@@ -29,9 +29,11 @@ export default class CanvasServer {
             }).on('s', (data: StartPayload) => {
                 room.startStroke(socket, data);
             }).on('u', (data: MovePayload) => {
-                room.updateStroke(socket, data)
+                room.updateStroke(socket, data);
             }).on('e', (data: EndPayload) => {
-                room.endStroke(socket, data)
+                room.endStroke(socket, data);
+            }).on('chat', (data: ChatPayload) => {
+                room.emit(socket, 'chat', data);
             });
         });
     }

@@ -34,4 +34,13 @@ interface UserJoinPayload {
     username: string;
 }
 
-export { IExTool, StartPayload, MovePayload, EndPayload, RoomJoinPayload, UserJoinPayload }
+interface ChatPayload {
+    user: User;
+    message: string;
+}
+
+interface User {
+    name: string;
+}
+
+export { IExTool, StartPayload, MovePayload, EndPayload, RoomJoinPayload, UserJoinPayload, ChatPayload, User }

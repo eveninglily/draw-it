@@ -1,6 +1,6 @@
+import Icon from 'client/components/Icon';
 import 'client/css/toolbar.css'
 import * as React from 'react';
-import Icon from '../../components/Icon';
 
 interface ToolbarProps{
   selectedTool: string;

@@ -43,4 +43,9 @@ interface User {
     name: string;
 }
 
+export enum RoomType {
+    FreeDraw,
+    GuessingGame
+}
+
 export { IExTool, StartPayload, MovePayload, EndPayload, RoomJoinPayload, UserJoinPayload, ChatPayload, User }

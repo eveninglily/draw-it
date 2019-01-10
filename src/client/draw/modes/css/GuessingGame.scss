@@ -7,6 +7,19 @@
 
     background: #2264AA;
 
+    #server-info {
+        font-size: 24px;
+        line-height: 24px;
+
+        border: 1px solid black;
+
+        #server-link, #server-settings {
+            fill: #000;
+            width: 24px;
+            height: 24px;
+        }
+    }
+
     .col {
         display: flex;
         flex-direction: column;
@@ -14,12 +27,25 @@
 
     #word {
         text-align: center;
+        background: #fff;
+        font-size: 28px;
+
+        margin-bottom: 5px;
+    }
+
+    #time {
+        background: #fff;
+        margin-bottom: 5px;
     }
 
     #left, #right {
         width: 300px;
         margin: 5px;
         background: white;
+    }
+
+    #middle {
+        margin-top: 5px;
     }
 
     #layers {

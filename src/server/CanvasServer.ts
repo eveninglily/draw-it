@@ -1,6 +1,6 @@
 import Room from 'server/Room';
 import * as socketIo from 'socket.io';
-import { ChatPayload, EndPayload, MovePayload, RoomJoinPayload, StartPayload } from 'types';
+import { ChatPayload, EndPayload, MovePayload, RoomJoinPayload, RoomType, StartPayload } from 'types';
 
 export default class CanvasServer {
     public io: socketIo.Server;
@@ -18,7 +18,7 @@ export default class CanvasServer {
             socket.on('join', (data: RoomJoinPayload) => {
                 const id: string = data.id;
                 if(!(id in this.rooms)) {
-                    this.rooms[id] = new Room(id, this.io);
+                    this.rooms[id] = new Room(id, this.io, RoomType.GuessingGame);
                 }
 
                 room = this.rooms[id];
@@ -26,6 +26,7 @@ export default class CanvasServer {
             }).on('disconnect', () => {
                 if(!room) { return; }
                 room.removeClient(socket);
+                console.log('Client disconnected');
             }).on('s', (data: StartPayload) => {
                 room.startStroke(socket, data);
             }).on('u', (data: MovePayload) => {

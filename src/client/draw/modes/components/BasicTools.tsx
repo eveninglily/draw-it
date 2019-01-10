@@ -17,6 +17,7 @@ class BasicTools extends React.Component<BasicToolProps, {}> {
   public render() {
     return <div className='basicTools'>
         <TwitterPicker triangle='hide' onChange={this.colorUpdate}/>
+        SIZE | PENCIL | ERASER | BUCKET | CLEAR
     </div>
   }
 

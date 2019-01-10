@@ -43,6 +43,12 @@ class RCanvas extends React.Component<RCanvasProps, RCanvasState> {
       });
     }
 
+    if(this.props.client) {
+      this.props.client.on('load-stroke', (stroke) => {
+        this.state.layers[0].ctx.completeStroke(stroke);
+      });
+    }
+
     document.addEventListener('mouseup', this.onMouseUp);
   }
 

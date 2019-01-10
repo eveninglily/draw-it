@@ -1,4 +1,4 @@
-import { EndPayload, MovePayload, RoomJoinPayload, StartPayload, UserJoinPayload } from 'types';
+import { ChatPayload, EndPayload, MovePayload, RoomJoinPayload, RoomType, StartPayload, UserJoinPayload } from 'types';
 
 interface RoomSettings {
     isPrivate: boolean;
@@ -7,6 +7,7 @@ interface RoomSettings {
 export default class Room {
     public id: string;
     public settings: RoomSettings;
+    public type: RoomType;
 
     private io: SocketIO.Server;
 
@@ -14,7 +15,7 @@ export default class Room {
     private strokes: any;
     // private layers: any;
 
-    constructor(id: string, io: SocketIO.Server) {
+    constructor(id: string, io: SocketIO.Server, type: RoomType) {
         this.id = id;
         this.settings = {
             isPrivate: true,
@@ -53,6 +54,12 @@ export default class Room {
             }
             socket.emit('uj', newPayload);
         });
+
+        // Give new client all the current strokes
+        socket.emit('board_data', {
+            strokes: this.strokes,
+        });
+
         console.log('client added!')
     }
 
@@ -82,7 +89,6 @@ export default class Room {
 
     public endStroke(socket: SocketIO.Socket, data: EndPayload) {
         socket.broadcast.to(this.id).emit('e', data);
-        // this.strokes[data.uuid].path.push({ x: data.x, y: data.y, p: data.p });
     }
 
     public emit(socket: SocketIO.Socket, type: string, data: any): void {
@@ -91,5 +97,11 @@ export default class Room {
 
     public broadcast(socket: SocketIO.Socket, type: string, data: any): void {
         socket.broadcast.to(this.id).emit(type, data);
+    }
+
+    public parseMessage(data: ChatPayload) {
+        if(this.type === RoomType.GuessingGame) {
+            console.log("Guessing game!");
+        }
     }
 }

@@ -1,3 +1,4 @@
+import Icon from 'client/components/Icon';
 import ExBrush from 'client/draw/canvas/ExBrush';
 import Client from 'client/draw/Client';
 import Chat from 'client/draw/modes/components/Chat';
@@ -11,6 +12,10 @@ import BasicTools from './components/BasicTools';
 
 export interface GuessingGamePlayer extends User {
   score: number;
+}
+
+export interface GuessingGameRoundInfo {
+  wordLength: number;
 }
 
 interface GuessingGameProps {
@@ -52,7 +57,11 @@ class GuessingGame extends React.Component<GuessingGameProps, GuessingGameState>
           <div id='gamemodeGraphic'>
             GAMEMODE GRAPHIC
           </div>
-          <div id="server-info">{this.props.serverName} | INVITE | SETTINGS</div>
+          <div id="server-info">
+            {this.props.serverName}
+            <Icon id="server-link" icon="invite" isAction={true}/>
+            <Icon id="server-settings" icon="settings" isAction={true}/>
+          </div>
           <PlayerList players={this.state.players} self={this.state.self} />
         </div>
         <div id='middle' className='col'>

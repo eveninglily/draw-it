@@ -1,3 +1,4 @@
+import ExStroke from 'client/draw/canvas/ExStroke';
 import ExTool from 'client/draw/canvas/ExTool';
 import { EventEmitter } from 'events';
 import { Guid } from 'guid-typescript';
@@ -169,14 +170,13 @@ class Client extends EventEmitter {
 // }
 
       /** Draw all the strokes */
-      /*for(var key in data.strokes) {
+      for(const key in data.strokes) {
           if(data.strokes.hasOwnProperty(key)) {
-              var layer = data.strokes[key].layer;
-              var stroke = new OIStroke(data.strokes[key].tool, layers[layer].canvas.partitions);
+              const stroke = new ExStroke(data.strokes[key].tool);
               stroke.addPoints(data.strokes[key].path);
-              layers[layer].canvas.completeStroke(stroke);
+              this.emit('load-stroke', stroke)
           }
-      }*/
+      }
 
       /** Update layer previews */
       /*for(var i = 0; i < layers.length; i++) {

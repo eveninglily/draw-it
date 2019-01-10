@@ -1,16 +1,16 @@
 import Icon from 'client/components/Icon';
-import ExCanvas from 'client/draw/canvas/ExCanvas';
+import Modal from 'client/components/Modal';
+import UserIcon from 'client/components/UserIcon';
 import Client from 'client/draw/Client';
+import GuessingGame from 'client/draw/modes/GuessingGame';
 import * as Color from 'color';
 import * as React from 'react';
-import UserIcon from '../components/UserIcon';
-import GuessingGame from './modes/GuessingGame';
 
 interface DrawingAppState {
-  layers: any[];
   selectedTool: string;
   client: Client;
   color: Color;
+  settingsModal: boolean;
 }
 
 class DrawingApp extends React.Component<{}, DrawingAppState> {
@@ -22,8 +22,8 @@ class DrawingApp extends React.Component<{}, DrawingAppState> {
     this.state = {
       client: new Client('localhost:3001'),
       color,
-      layers: [new ExCanvas(1000, 800)],
       selectedTool: 'brush',
+      settingsModal: false,
     }
   }
 
@@ -48,11 +48,22 @@ class DrawingApp extends React.Component<{}, DrawingAppState> {
 
     return (
       <div id="drawing-app">
-        <nav><span><Icon id='back' icon='back' isAction={true} /> BACK TO LOBBY</span><span>HELP | SETTINGS | <UserIcon user={user}/> Evan </span></nav>
+        <nav>
+          <span><Icon id='back' icon='back' isAction={true} /> BACK TO LOBBY</span>
+          <span>HELP | <Icon id='settings' icon='settings' isAction={true} clickHandler={this.onSettings}/> <UserIcon user={user}/> Evan </span></nav>
           <GuessingGame client={this.state.client} serverName='The Fun House' totalRounds={5} />
+          <Modal isVisible={this.state.settingsModal} onBackgroundClick={this.onSettingsClose}>Test</Modal>
       </div>
 
     );
+  }
+
+  private onSettings = () => {
+    this.setState({settingsModal: true});
+  }
+
+  private onSettingsClose = () => {
+    this.setState({settingsModal: false});
   }
 }
 

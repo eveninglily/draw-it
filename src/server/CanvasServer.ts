@@ -1,6 +1,6 @@
 import Room from 'server/Room';
 import * as socketIo from 'socket.io';
-import { ChatPayload, EndPayload, MovePayload, RoomJoinPayload, RoomType, StartPayload } from 'types';
+import { ChatPayload, EndPayload, MovePayload, RoomData, RoomJoinPayload, RoomType, StartPayload } from 'types';
 
 export default class CanvasServer {
     public io: socketIo.Server;
@@ -15,7 +15,19 @@ export default class CanvasServer {
         this.io.on('connection', socket => {
             let room: Room;
 
-            socket.on('join', (data: RoomJoinPayload) => {
+            socket.on('info', (data) => {
+                const id: string = data.id;
+                const error = (id in this.rooms) ? undefined : "Room not found";
+                const name = error ? '' : this.rooms[id].name;
+
+                const roomInfo: RoomData = {
+                    error,
+                    id: data.id,
+                    name,
+                }
+
+                socket.emit('server-info', roomInfo);
+            }).on('join', (data: RoomJoinPayload) => {
                 const id: string = data.id;
                 if(!(id in this.rooms)) {
                     this.rooms[id] = new Room(id, this.io, RoomType.GuessingGame);

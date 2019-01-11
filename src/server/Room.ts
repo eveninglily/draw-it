@@ -6,6 +6,7 @@ interface RoomSettings {
 
 export default class Room {
     public id: string;
+    public name: string;
     public settings: RoomSettings;
     public type: RoomType;
 
@@ -17,6 +18,7 @@ export default class Room {
 
     constructor(id: string, io: SocketIO.Server, type: RoomType) {
         this.id = id;
+        this.name = "Test room";
         this.settings = {
             isPrivate: true,
         }

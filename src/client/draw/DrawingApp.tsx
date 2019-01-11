@@ -3,42 +3,48 @@ import Modal from 'client/components/Modal';
 import UserIcon from 'client/components/UserIcon';
 import Client from 'client/draw/Client';
 import GuessingGame from 'client/draw/modes/GuessingGame';
-import * as Color from 'color';
 import * as React from 'react';
+import { RoomData } from 'types';
+import GameLobby from './modes/GameLobby';
+
+enum AppState {
+  CONNECTING,
+  JOINING,
+  LOBBY,
+  GAME,
+  OFFLINE
+}
 
 interface DrawingAppState {
   selectedTool: string;
   client: Client;
-  color: Color;
   settingsModal: boolean;
+  state: AppState;
+  roomInfo: RoomData|null;
 }
 
 class DrawingApp extends React.Component<{}, DrawingAppState> {
   constructor(props: any) {
     super(props);
 
-    const color = new Color({r: 255, b: 0, g: 0});
-
     this.state = {
       client: new Client('localhost:3001'),
-      color,
+      roomInfo: null,
       selectedTool: 'brush',
       settingsModal: false,
+      state: AppState.CONNECTING,
     }
   }
 
   public componentDidMount(): void {
-    this.state.client.connect('testRoom')
-  }
-
-  public selectTool = (tool: string): void => {
-    this.setState({
-      selectedTool: tool,
+    this.state.client.on('server-info', data => {
+      this.setState({
+        roomInfo: data,
+        state: AppState.JOINING
+      });
     });
-  }
 
-  public onColorChange = (color: Color) => {
-    this.setState({color});
+    this.state.client.getRoomInfo('testRoom')
   }
 
   public render() {
@@ -50,20 +56,50 @@ class DrawingApp extends React.Component<{}, DrawingAppState> {
       <div id="drawing-app">
         <nav>
           <span><Icon id='back' icon='back' isAction={true} /> BACK TO LOBBY</span>
-          <span>HELP | <Icon id='settings' icon='settings' isAction={true} clickHandler={this.onSettings}/> <UserIcon user={user}/> Evan </span></nav>
-          <GuessingGame client={this.state.client} serverName='The Fun House' totalRounds={5} />
-          <Modal isVisible={this.state.settingsModal} onBackgroundClick={this.onSettingsClose}>Test</Modal>
+          <span>HELP | <Icon id='settings' icon='settings' isAction={true} clickHandler={this.toggleSettings}/> <UserIcon user={user}/> Evan </span></nav>
+          {this.renderInner()}
+          <Modal isVisible={this.state.settingsModal} onBackgroundClick={this.toggleSettings}>Test</Modal>
       </div>
 
     );
   }
 
-  private onSettings = () => {
-    this.setState({settingsModal: true});
+  private renderInner() {
+    switch(this.state.state) {
+      case AppState.CONNECTING: {
+        return <div><h1>Connecting...</h1></div>;
+      }
+
+      case AppState.JOINING:
+      case AppState.LOBBY: {
+        if(this.state.roomInfo) {
+          return <GameLobby roomInfo={this.state.roomInfo} client={this.state.client} startGame={this.startGame}/>;
+        } else {
+          return <div>Error</div>;
+        }
+
+      }
+
+      case AppState.GAME: {
+        return <GuessingGame client={this.state.client} serverName='The Fun House' totalRounds={5} />;
+      }
+
+      case AppState.OFFLINE: {
+        return <div />;
+      }
+
+    }
   }
 
-  private onSettingsClose = () => {
-    this.setState({settingsModal: false});
+  private startGame = () => {
+    // TOOD: Replace this with client call
+    this.setState({
+      state: AppState.GAME
+    })
+  }
+
+  private toggleSettings = () => {
+    this.setState({settingsModal: !this.state.settingsModal});
   }
 }
 

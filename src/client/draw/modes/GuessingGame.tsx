@@ -3,12 +3,12 @@ import ExBrush from 'client/draw/canvas/ExBrush';
 import Client from 'client/draw/Client';
 import Chat from 'client/draw/modes/components/Chat';
 import PlayerList from 'client/draw/modes/components/PlayerList';
+import Toolbar from 'client/draw/modes/components/Toolbar';
 import 'client/draw/modes/css/GuessingGame.css'
 import * as React from 'react';
 import { User } from 'types';
 import ExTool from '../canvas/ExTool';
 import RCanvas from '../canvas/RCanvas';
-import BasicTools from './components/BasicTools';
 
 export interface GuessingGamePlayer extends User {
   score: number;
@@ -32,14 +32,19 @@ interface GuessingGameState {
 }
 
 class GuessingGame extends React.Component<GuessingGameProps, GuessingGameState> {
+  private tools: {[key: string]: ExTool};
+
   constructor(props: any) {
     super(props);
 
-    const tool: ExBrush = new ExBrush('brush', 10, 'source-over', '#ff0000')
+    this.tools = {
+      'brush': new ExBrush('brush', 10, 'source-over', '#ff0000'),
+      'eraser': new ExBrush('Eraser', 10, 'source-over', '#000000'),
+    }
 
     this.state = {
       currentRound: 1,
-      currentTool: tool,
+      currentTool: this.tools.brush,
       players: [
         {name: 'Andy', score: 200},
         {name: 'Zarin', score: 0},
@@ -71,7 +76,7 @@ class GuessingGame extends React.Component<GuessingGameProps, GuessingGameState>
             <RCanvas tool={this.state.currentTool} client={this.props.client} />
           </div>
           <div id="tools">
-            <BasicTools currentTool={this.state.currentTool} onToolUpdate={this.onToolUpdate} />
+            <Toolbar tools={this.tools} basicMode={true} currentTool={this.state.currentTool} onToolUpdate={this.onToolUpdate} />
           </div>
         </div>
         <div id='right' className='col'>

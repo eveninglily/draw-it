@@ -48,4 +48,10 @@ export enum RoomType {
     GuessingGame
 }
 
-export { IExTool, StartPayload, MovePayload, EndPayload, RoomJoinPayload, UserJoinPayload, ChatPayload, User }
+interface RoomData {
+    id: string;
+    name: string;
+    error?: string;
+}
+
+export { IExTool, StartPayload, MovePayload, EndPayload, RoomJoinPayload, UserJoinPayload, ChatPayload, User, RoomData }

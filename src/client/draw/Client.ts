@@ -3,21 +3,21 @@ import ExTool from 'client/draw/canvas/ExTool';
 import { EventEmitter } from 'events';
 import { Guid } from 'guid-typescript';
 import * as io from 'socket.io-client';
-import { ChatPayload, EndPayload, MovePayload, RoomJoinPayload, StartPayload, User } from 'types';
+import { ChatPayload, EndPayload, MovePayload, RoomData, RoomJoinPayload, StartPayload, User } from 'types';
 
 interface ClientMeta {
-    username: string;
-    connected: boolean;
-    down: boolean;
+  url: string;
+  username: string;
+  connected: boolean;
+  down: boolean;
 }
 
 class Client extends EventEmitter {
-  public url: string;
   public meta: ClientMeta;
+
   public currentUUID: Guid;
   public clientId: string;
   public currTool: ExTool;
-  public connected: boolean;
 
   private socket: SocketIOClient.Socket;
   private recieving: {[uuid: string]: {layer: number; len: number}};
@@ -27,28 +27,34 @@ class Client extends EventEmitter {
   constructor(url: string) {
     super();
 
-    this.url = url;
     this.recieving = {};
     this.socket = io(url);
     this.currentStrokeLen = 0;
     this.meta = {
       connected: false,
       down: false,
+      url,
       username: 'Anon',
     }
     this.sending = {};
     console.log('Client init');
   }
 
-    public connect(roomId: string) {
-        this.connected = true;
-        const payload: RoomJoinPayload = {
-            clientId: '',
-            id: roomId,
-            username: this.meta.username
-        }
+  public getRoomInfo(roomId: string) {
+    this.socket.emit('info', {id: roomId}).on('server-info', (data: RoomData) => {
+      this.emit('server-info', data);
+    });
+  }
 
-        this.socket.emit('join', payload);
+    public connect(roomId: string) {
+      this.meta.connected = true;
+      const payload: RoomJoinPayload = {
+        clientId: '',
+        id: roomId,
+        username: this.meta.username
+      }
+
+      this.socket.emit('join', payload);
 
         this.socket
           .on('join', (data: any) => this.onJoin(data))
@@ -85,7 +91,7 @@ class Client extends EventEmitter {
     }
 
     public sendStart = (x: number, y: number, p: number, tool: ExTool): void => {
-        if(!this.connected) { return; }
+        if(!this.meta.connected) { return; }
         this.currentUUID = Guid.create();
         const payload: StartPayload = {
             layer: 0,
@@ -102,7 +108,7 @@ class Client extends EventEmitter {
     }
 
     public sendMove(x: number, y: number, p: number) {
-      if(!this.connected) { return; }
+      if(!this.meta.connected) { return; }
 
       if(this.meta.down) {
         this.currentStrokeLen += 1;
@@ -111,7 +117,7 @@ class Client extends EventEmitter {
     }
 
     public sendEnd() {
-      if(!this.connected) { return; }
+      if(!this.meta.connected) { return; }
 
       const uuid = this.currentUUID;
       const len = this.currentStrokeLen;
@@ -129,28 +135,28 @@ class Client extends EventEmitter {
     }
 
     public sendUndo() {
-      if(!this.connected) { return; }
+      if(!this.meta.connected) { return; }
       this.socket.emit('undo', {
         cId: this.clientId
       });
     }
 
     public sendRedo() {
-      if(!this.connected) { return; }
+      if(!this.meta.connected) { return; }
       this.socket.emit('redo', {
           cId: this.clientId
       });
   }
 
   public sendAddLayer(id: string) {
-    if(!this.connected) { return; }
+    if(!this.meta.connected) { return; }
       this.socket.emit('nl', {
           'id': id
       });
   }
 
   public sendUpdateName() {
-    if(!this.connected) { return; }
+    if(!this.meta.connected) { return; }
       this.socket.emit('update-name', {
           name: this.meta.username
       });
@@ -164,26 +170,17 @@ class Client extends EventEmitter {
   }
 
   private loadBoard(data: any) {
-      /** Create all the layers */
-      // for(const layer of data.layers) {
-      //    addLayer(layer);
-// }
-
-      /** Draw all the strokes */
-      for(const key in data.strokes) {
-          if(data.strokes.hasOwnProperty(key)) {
-              const stroke = new ExStroke(data.strokes[key].tool);
-              stroke.addPoints(data.strokes[key].path);
-              this.emit('load-stroke', stroke)
-          }
+    /** Draw all the strokes */
+    for(const key in data.strokes) {
+      if(data.strokes.hasOwnProperty(key)) {
+        const stroke = new ExStroke(data.strokes[key].tool);
+        stroke.addPoints(data.strokes[key].path);
+        this.emit('load-stroke', stroke)
       }
-
-      /** Update layer previews */
-      /*for(var i = 0; i < layers.length; i++) {
-          layers[i].updatePreview();
-      }*/
-      console.log('Recieved board info');
     }
+
+    console.log('Recieved board info');
+  }
 
   private recieveStart(data: StartPayload) {
     console.log('START')
@@ -220,11 +217,11 @@ class Client extends EventEmitter {
   }
 
   private recieveUserJoin(data: any) {
-      // TODO: add user, send to parent
+    // TODO: add user, send to parent
   }
 
   private recieveUserLeave(data: any) {
-      // TODO: remove user, send to parent
+    // TODO: remove user, send to parent
   }
 
   private recieveAddLayer(id: string) {

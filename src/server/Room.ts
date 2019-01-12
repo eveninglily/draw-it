@@ -46,16 +46,20 @@ export default class Room {
             id: socket.id,
             username,
         }
-        this.io.sockets.in(this.id).emit('uj', userJoinPayload);
+
+        this.broadcast(socket, 'uj', userJoinPayload);
 
         // Send other clients info to new user
-        this.clients.forEach((name, id) => {
+        const users = Object.keys(this.clients).map(key => this.clients[key]);
+        users.forEach(user => {
             const newPayload: UserJoinPayload = {
-                id,
-                username: name,
+                id: 'user.id',
+                username: user,
             }
+
             socket.emit('uj', newPayload);
-        });
+        })
+
 
         // Give new client all the current strokes
         socket.emit('board_data', {

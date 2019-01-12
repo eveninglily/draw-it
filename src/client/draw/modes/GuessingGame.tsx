@@ -1,5 +1,7 @@
 import Icon from 'client/components/Icon';
 import ExBrush from 'client/draw/canvas/ExBrush';
+import ExTool from 'client/draw/canvas/ExTool';
+import RCanvas from 'client/draw/canvas/RCanvas';
 import Client from 'client/draw/Client';
 import Chat from 'client/draw/modes/components/Chat';
 import PlayerList from 'client/draw/modes/components/PlayerList';
@@ -7,8 +9,6 @@ import Toolbar from 'client/draw/modes/components/Toolbar';
 import 'client/draw/modes/css/GuessingGame.css'
 import * as React from 'react';
 import { User } from 'types';
-import ExTool from '../canvas/ExTool';
-import RCanvas from '../canvas/RCanvas';
 
 export interface GuessingGamePlayer extends User {
   score: number;
@@ -22,10 +22,11 @@ interface GuessingGameProps {
   serverName: string;
   totalRounds: number;
   client: Client;
+  users: User[];
 }
 
 interface GuessingGameState {
-  players: GuessingGamePlayer[];
+  score: {[key: string]: number};
   self: GuessingGamePlayer;
   currentRound: number;
   currentTool: ExTool;
@@ -45,17 +46,15 @@ class GuessingGame extends React.Component<GuessingGameProps, GuessingGameState>
     this.state = {
       currentRound: 1,
       currentTool: this.tools.brush,
-      players: [
-        {name: 'Andy', score: 200},
-        {name: 'Zarin', score: 0},
-        {name: 'Evan', score: 400}
-      ],
+      score: {},
       self: {name: 'Evan', score: 400},
 
     };
   }
 
   public render() {
+    const players = this.props.users.map((user: User) => ({name: user.name, score: this.state.score[user.name]}));
+
     return (
       <div id="game-container">
         <div id='left' className='col'>
@@ -67,7 +66,7 @@ class GuessingGame extends React.Component<GuessingGameProps, GuessingGameState>
             <Icon id="server-link" icon="invite" isAction={true}/>
             <Icon id="server-settings" icon="settings" isAction={true}/>
           </div>
-          <PlayerList players={this.state.players} self={this.state.self} />
+          <PlayerList players={players} self={this.state.self} />
         </div>
         <div id='middle' className='col'>
           <div id='word'> F _ C _</div>

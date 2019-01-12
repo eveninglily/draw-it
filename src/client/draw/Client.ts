@@ -3,7 +3,7 @@ import ExTool from 'client/draw/canvas/ExTool';
 import { EventEmitter } from 'events';
 import { Guid } from 'guid-typescript';
 import * as io from 'socket.io-client';
-import { ChatPayload, EndPayload, MovePayload, RoomData, RoomJoinPayload, StartPayload, User } from 'types';
+import { ChatPayload, EndPayload, MovePayload, RoomData, RoomJoinPayload, StartPayload, User, UserJoinPayload } from 'types';
 
 interface ClientMeta {
   url: string;
@@ -18,6 +18,7 @@ class Client extends EventEmitter {
   public currentUUID: Guid;
   public clientId: string;
   public currTool: ExTool;
+  public users: User[];
 
   private socket: SocketIOClient.Socket;
   private recieving: {[uuid: string]: {layer: number; len: number}};
@@ -37,6 +38,7 @@ class Client extends EventEmitter {
       username: 'Anon',
     }
     this.sending = {};
+    this.users = [];
     console.log('Client init');
   }
 
@@ -216,8 +218,14 @@ class Client extends EventEmitter {
     console.log(cId);
   }
 
-  private recieveUserJoin(data: any) {
-    // TODO: add user, send to parent
+  private recieveUserJoin(data: UserJoinPayload) {
+    const user = {
+      name: data.username,
+    }
+
+    this.users.push(user);
+    this.emit('user-join', user);
+    console.log('sadasdasdsadsadsadsa')
   }
 
   private recieveUserLeave(data: any) {

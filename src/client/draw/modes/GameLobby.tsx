@@ -1,12 +1,13 @@
 import 'client/draw/modes/css/GuessingGameLobby.css'
 import * as React from 'react';
-import { RoomData } from 'types';
+import { RoomData, User } from 'types';
 import Client from '../Client';
 
 interface GameLobbyProps {
   client: Client;
   startGame: any;
-  roomInfo: RoomData
+  roomInfo: RoomData;
+  users: User[];
 }
 
 interface GameLobbyState {
@@ -31,8 +32,16 @@ class GameLobby extends React.Component<GameLobbyProps, GameLobbyState> {
       <input type='button' value='Join' onClick={this.join}/></div>;
     }
 
+    const players = this.props.users.map(user => <li key=''>{user.name}</li>);
+
     return <div id="lobby">
       <h1>LOBBY</h1>
+      <div>
+        <h2>Players</h2>
+        <ul>
+          {players}
+        </ul>
+      </div>
       <input type='button' id='start-game' value='Start Game' onClick={this.props.startGame}/>
     </div>
   }

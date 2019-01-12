@@ -42,6 +42,8 @@ class DrawingApp extends React.Component<{}, DrawingAppState> {
         roomInfo: data,
         state: AppState.JOINING
       });
+    }).on('user-join', () => {
+      this.forceUpdate()
     });
 
     this.state.client.getRoomInfo('testRoom')
@@ -73,7 +75,7 @@ class DrawingApp extends React.Component<{}, DrawingAppState> {
       case AppState.JOINING:
       case AppState.LOBBY: {
         if(this.state.roomInfo) {
-          return <GameLobby roomInfo={this.state.roomInfo} client={this.state.client} startGame={this.startGame}/>;
+          return <GameLobby users={this.state.client.users} roomInfo={this.state.roomInfo} client={this.state.client} startGame={this.startGame}/>;
         } else {
           return <div>Error</div>;
         }
@@ -81,7 +83,7 @@ class DrawingApp extends React.Component<{}, DrawingAppState> {
       }
 
       case AppState.GAME: {
-        return <GuessingGame client={this.state.client} serverName='The Fun House' totalRounds={5} />;
+        return <GuessingGame users={this.state.client.users} client={this.state.client} serverName='The Fun House' totalRounds={5} />;
       }
 
       case AppState.OFFLINE: {

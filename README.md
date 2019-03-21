@@ -33,22 +33,25 @@ There's a ton of related work on my Github that went into it. Here's it all in o
 Here's an old version, and the partly-working website.
 
 https://github.com/McIntireEvan/drawingapp
+
 https://github.com/McIntireEvan/amidraw-web
 
 ## Colorwheel
 Turns out HSL colorwheels like the ones in programs like SAI are hard to find. I wrote three. I hope I don't have to write anymore.
 
 https://github.com/McIntireEvan/colorwheel
+
 https://github.com/McIntireEvan/colorwheel.js
+
 https://github.com/McIntireEvan/hslpicker
 
 ## Windows
 Early on, I thought it'd be cool to have the toolbox, menus, etc. all in windows.
 
 https://github.com/McIntireEvan/windowfy
+
 https://github.com/McIntireEvan/window.js
 
 ## Other
 I was planning on using Vue instead of React, but it turned out I liked React more!
 https://github.com/McIntireEvan/vial
-

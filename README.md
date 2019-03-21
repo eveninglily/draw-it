@@ -1,7 +1,7 @@
 # Draw-it
 Collaborative drawing and games!
 
-This project is discontinued as of this point, but I at least want this repo and readme to serve as a final thought on it.
+This project is discontinued as of this point, but I at least want this repo and readme to serve as a final thought on it. It's quite the ramble, but gets the point across.
 
 ## History
 I started this project in 2013, and have worked on it on and off (mostly off) since then. At the time, there were very few options in the collaborative drawing space, let alone good options. I thought I could do better, and started this project as a result. 
@@ -26,3 +26,29 @@ I also tried to over-optimize and over-abstract before actually finishing what I
 
 # Final Thoughts
 Overall, I have a lot of thoughts about draw-it that are hard to organize, but ultimately, it boils down to this: I learned the difference between exploration and building. Both are super valuable in their own right - but can often be opposing forces. I also very painfully learned why people use frameworks such as React, and how to really leverage existing technology.
+
+# Related Repos
+There's a ton of related work on my Github that went into it. Here's it all in one spot:
+## Core
+Here's an old version, and the partly-working website.
+
+https://github.com/McIntireEvan/drawingapp
+https://github.com/McIntireEvan/amidraw-web
+
+## Colorwheel
+Turns out HSL colorwheels like the ones in programs like SAI are hard to find. I wrote three. I hope I don't have to write anymore.
+
+https://github.com/McIntireEvan/colorwheel
+https://github.com/McIntireEvan/colorwheel.js
+https://github.com/McIntireEvan/hslpicker
+
+## Windows
+Early on, I thought it'd be cool to have the toolbox, menus, etc. all in windows.
+
+https://github.com/McIntireEvan/windowfy
+https://github.com/McIntireEvan/window.js
+
+## Other
+I was planning on using Vue instead of React, but it turned out I liked React more!
+https://github.com/McIntireEvan/vial
+
